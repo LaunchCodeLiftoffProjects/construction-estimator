@@ -2,4 +2,7 @@
 Group project
 
 Team
+
+- Blake
+-Katherine
 - Shaun
