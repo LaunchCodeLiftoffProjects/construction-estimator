@@ -1,4 +1,6 @@
 # construction-estimator
 Group project
 
-Manny
+Team
+-Katherine
+-Manny
