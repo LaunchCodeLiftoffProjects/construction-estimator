@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public class ConstructionEstimatorData {
 
     private static ArrayList<Project> allProjects;
-    private static ArrayList<User> allUsers = new ArrayList<>();
+    private static ArrayList<User> allUsers;
 
 
 //    The REST controller will take POST requests and save new projects / users to the array lists in this Java class!!
@@ -22,17 +22,15 @@ public class ConstructionEstimatorData {
         return projectsByUser;
     }
 
-//    method to find all user objects:
-    public static ArrayList<User> findAllUsers() {
+//    method to find all projects by username:
+    public static ArrayList<Project> getProjectsByUsername(String username) {
+        ArrayList<Project> projectsByUser = new ArrayList<>();
         for (Project project : allProjects) {
-            User user = project.getProjectOwner();
-            if (allUsers.contains(user)) {
-                continue;
-            } else {
-                allUsers.add(user);
+            if (project.getProjectOwner().getName().equals(username)) {
+                projectsByUser.add(project);
             }
         }
-        return allUsers;
+        return projectsByUser;
     }
 
 }
