@@ -3,6 +3,7 @@ package org.launchcode.constructionestimator.controllers;
 import org.launchcode.constructionestimator.models.Project;
 import org.launchcode.constructionestimator.models.data.ProjectRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,7 +18,9 @@ public class ProjectController {
     // Use this with @RequestParam to search all projects by field, leave params empty to return all projects
     @GetMapping
     public ResponseEntity getProjects() {
-        return new ResponseEntity(projectRepository.findAll(), HttpStatus.OK);
+
+        HttpHeaders headers = setHeaders();
+        return new ResponseEntity(projectRepository.findAll(), headers, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
@@ -25,7 +28,8 @@ public class ProjectController {
         if(projectRepository.findById(id).isEmpty()) {
             return new ResponseEntity(HttpStatus.NOT_FOUND); // returns 404 if id does not exist in database
         } else {
-            return new ResponseEntity(projectRepository.findById(id), HttpStatus.OK);
+            HttpHeaders headers = setHeaders();
+            return new ResponseEntity(projectRepository.findById(id), headers, HttpStatus.OK);
         }
     }
 
@@ -37,4 +41,14 @@ public class ProjectController {
 
     // TODO: Delete and put mapping
 
+    /*
+    Use this at the top of every mapping.
+     */
+    private HttpHeaders setHeaders() {
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Access-Control-Allow-Origin", "*");
+        headers.add("Access-Control-Allow-Credentials", "true");
+
+        return headers;
+    }
 }
