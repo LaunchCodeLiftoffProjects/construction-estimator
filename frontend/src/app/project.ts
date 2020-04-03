@@ -1,18 +1,17 @@
 export class Project {
 
+    id: number;
     name: string;
-    type: string;
-    length: number;
-    width: number;
-    height: number;
+    roomType: string;
+    roomLength: number;
+    roomWidth: number;
+    roomHeight: number;
 
-    constructor(name: string, type: string, length: number, width: number, height: number) {
+    constructor(id: number, name: string, roomType: string, roomLength: number, roomWidth: number, roomHeight: number) {
         this.name = name;
-        this.type = type;
-        this.length = length;
-        this.width = width;
-        this.height = height
+        this.roomType = roomType;
+        this.roomLength = roomLength;
+        this.roomWidth = roomWidth;
+        this.roomHeight = roomHeight;
     }
-
-
 }
