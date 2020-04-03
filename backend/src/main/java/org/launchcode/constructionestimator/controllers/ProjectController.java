@@ -19,8 +19,8 @@ public class ProjectController {
     @GetMapping
     public ResponseEntity getProjects() {
 
-        HttpHeaders headers = setHeaders();
-        return new ResponseEntity(projectRepository.findAll(), headers, HttpStatus.OK);
+//        HttpHeaders headers = setHeaders();
+        return new ResponseEntity(projectRepository.findAll(), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
@@ -28,8 +28,7 @@ public class ProjectController {
         if(projectRepository.findById(id).isEmpty()) {
             return new ResponseEntity(HttpStatus.NOT_FOUND); // returns 404 if id does not exist in database
         } else {
-            HttpHeaders headers = setHeaders();
-            return new ResponseEntity(projectRepository.findById(id), headers, HttpStatus.OK);
+            return new ResponseEntity(projectRepository.findById(id), HttpStatus.OK);
         }
     }
 
@@ -41,14 +40,4 @@ public class ProjectController {
 
     // TODO: Delete and put mapping
 
-    /*
-    Use this at the top of every mapping.
-     */
-    private HttpHeaders setHeaders() {
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Access-Control-Allow-Origin", "*");
-        headers.add("Access-Control-Allow-Credentials", "true");
-
-        return headers;
-    }
 }

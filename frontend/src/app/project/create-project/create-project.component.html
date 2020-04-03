@@ -10,27 +10,27 @@
         <div class = "form-group">
             <h5>Select your room type:</h5>
             <div class="form-check indent-left">
-                <label class="form-check-label"><input #type type="radio" class = "form-check-input" value="kitchen" />Kitchen</label>
+                <label class="form-check-label"><input #roomType type="radio" class = "form-check-input" value="kitchen" />Kitchen</label>
             </div>
             <div class="form-check indent-left">
-                <label class="form-check-label"><input #type type="radio" class = "form-check-input" value="bathroom" />Bathroom</label>
+                <label class="form-check-label"><input #roomType type="radio" class = "form-check-input" value="bathroom" />Bathroom</label>
             </div>
             <div class="form-check indent-left">
-                <label class="form-check-label"><input #type type="radio" class = "form-check-input" value="other" />Bedroom, Living Room, Office, Etc.</label>
+                <label class="form-check-label"><input #roomType type="radio" class = "form-check-input" value="other" />Bedroom, Living Room, Office, Etc.</label>
             </div> 
         </div>
 
         <div class="form-group">
             <h5>What are the room's general dimensions (in feet)?</h5>
             <div class = "indent-left inline"> 
-                <label class = "inline-buffer">Length <input #length type="number" class="form-control" step="0.1" /></label>
-                <label class = "inline-buffer">Width <input #width type="number" class="form-control" step="0.1"/></label>
-                <label class = "inline-buffer">Ceiling height <input #height type="number" class="form-control" step="0.1"/></label>
+                <label class = "inline-buffer">Length <input #roomLength type="number" class="form-control" step="0.1" /></label>
+                <label class = "inline-buffer">Width <input #roomWidth type="number" class="form-control" step="0.1"/></label>
+                <label class = "inline-buffer">Ceiling height <input #roomHeight type="number" class="form-control" step="0.1"/></label>
             </div>
         </div>
 
         <div class="form-group">
-            <button (click)='saveItem(name.value, type.value, length.value, width.value, height.value)' class="btn btn-success">Create Project</button>
+            <button (click)='saveItem(name.value, roomType.value, roomLength.value, roomWidth.value, roomHeight.value)' class="btn btn-success">Create Project</button>
         </div>
     </form>
 </div>    

@@ -22,7 +22,7 @@ export class ProjectListComponent implements OnInit {
       response.json().then(function(json) {
         let refreshProjects: Project[] = [];
         json.forEach(obj => {
-          refreshProjects.push(new Project(obj.id, obj.name, obj.roomTypoe, obj.roomLength, obj.roomWidth, obj.RoomHeight));
+          refreshProjects.push(new Project(obj.name, obj.roomType, obj.roomLength, obj.roomWidth, obj.roomHeight));
         });
         this.projects = refreshProjects;
       }.bind(this));
