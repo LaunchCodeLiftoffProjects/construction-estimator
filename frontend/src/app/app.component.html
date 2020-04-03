@@ -1,8 +1,12 @@
-<app-header></app-header>
 
-<h4>This is the root page. The links below use Angular routing to bring the specified component into the view below without refreshing.</h4>
+<div class="container justify-content-center">
+  <app-header></app-header>
+  
+  <h4>This is the root page. The links below use Angular routing to bring the specified component into the view below without refreshing.</h4>
 
-<p><a [routerLink] = "'/create-project'">View "Create Project" form</a> | 
-  <a [routerLink] = "'/project-details'">View "Project Details" form</a></p>
+  <p><a [routerLink] = "'/create-project'">View "Create Project" form</a> | 
+    <a [routerLink] = "'/project-details'">View "Project Details" form</a></p>
+  
+  <router-outlet></router-outlet>
+</div>
 
-<router-outlet></router-outlet>
