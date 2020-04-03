@@ -4,7 +4,7 @@ import javax.persistence.Entity;
 import javax.persistence.OneToOne;
 
 @Entity
-public class Project extends AbstractEntity {
+public class Project extends NamedEntity {
 
     // TODO: Refactor to use sub-object depending on how we want to impliment
     private String roomType;
