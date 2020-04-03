@@ -1,6 +1,7 @@
 package org.launchcode.constructionestimator.models;
 
 import javax.persistence.Entity;
+import javax.persistence.OneToOne;
 
 @Entity
 public class Project extends AbstractEntity {
@@ -11,6 +12,9 @@ public class Project extends AbstractEntity {
     private int roomLength;
     private int roomWidth;
     private int roomHeight;
+
+    @OneToOne
+    private ProjectDetails projectDetails;
 
     // necessary for hibernate to use model binding I think
     public Project() {}
@@ -45,5 +49,13 @@ public class Project extends AbstractEntity {
 
     public void setRoomHeight(int roomHeight) {
         this.roomHeight = roomHeight;
+    }
+
+    public ProjectDetails getProjectDetails() {
+        return projectDetails;
+    }
+
+    public void setProjectDetails(ProjectDetails projectDetails) {
+        this.projectDetails = projectDetails;
     }
 }
