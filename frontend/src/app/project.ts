@@ -14,5 +14,4 @@ export class Project {
         this.roomWidth = roomWidth;
         this.roomHeight = roomHeight;
     }
-
 }
