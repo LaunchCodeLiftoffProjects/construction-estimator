@@ -15,5 +15,4 @@ public abstract class NamedEntity extends AbstractEntity {
     public void setName(String name) {
         this.name = name;
     }
-
 }
