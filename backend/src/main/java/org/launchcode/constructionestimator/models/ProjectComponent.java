@@ -12,7 +12,6 @@ public class ProjectComponent extends AbstractEntity {
 
     // This should be another entity on the database with common item fields
     private String item;
-    private String componentType;
 
     private int quantity;
     private boolean installation;
@@ -35,14 +34,6 @@ public class ProjectComponent extends AbstractEntity {
 
     public void setItem(String item) {
         this.item = item;
-    }
-
-    public String getComponentType() {
-        return componentType;
-    }
-
-    public void setComponentType(String componentType) {
-        this.componentType = componentType;
     }
 
     public int getQuantity() {
