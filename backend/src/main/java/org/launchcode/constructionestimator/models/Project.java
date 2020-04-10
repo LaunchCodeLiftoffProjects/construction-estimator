@@ -52,4 +52,11 @@ public class Project extends NamedEntity {
         this.roomHeight = roomHeight;
     }
 
+    public List<ProjectComponent> getProjectComponents() {
+        return projectComponents;
+    }
+
+    public void setProjectComponents(List<ProjectComponent> projectComponents) {
+        this.projectComponents = projectComponents;
+    }
 }
