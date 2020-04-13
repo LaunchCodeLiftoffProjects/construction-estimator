@@ -26,7 +26,7 @@ public class ProjectController {
         return new ResponseEntity(projectRepository.findAll(), HttpStatus.OK);
     }
 
-    @GetMapping("/{projectIdd}")
+    @GetMapping("/{projectId}")
     public ResponseEntity getProjectById(@PathVariable("projectId") int projectId) {
         if(projectRepository.findById(projectId).isEmpty()) {
             return new ResponseEntity(HttpStatus.NOT_FOUND); // returns 404 if id does not exist in database
