@@ -31,7 +31,7 @@ public class ProjectController {
         if(projectRepository.findById(projectId).isEmpty()) {
             return new ResponseEntity(HttpStatus.NOT_FOUND); // returns 404 if id does not exist in database
         } else {
-            return new ResponseEntity(projectRepository.findById(projectId).get(), HttpStatus.OK);
+            return new ResponseEntity(projectRepository.findById(projectId), HttpStatus.OK);
         }
     }
 
