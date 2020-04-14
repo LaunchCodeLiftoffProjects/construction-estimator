@@ -2,8 +2,10 @@ package org.launchcode.constructionestimator.models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
+import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 
+@Entity
 public class ProjectComponent extends AbstractEntity {
 
     @ManyToOne
@@ -11,7 +13,8 @@ public class ProjectComponent extends AbstractEntity {
     private Project project;
 
     // This should be another entity on the database with common item fields
-    private String item;
+    @ManyToOne
+    private Item item;
 
     private int quantity;
     private boolean installation;
@@ -28,11 +31,11 @@ public class ProjectComponent extends AbstractEntity {
         this.project = project;
     }
 
-    public String getItem() {
+    public Item getItem() {
         return item;
     }
 
-    public void setItem(String item) {
+    public void setItem(Item item) {
         this.item = item;
     }
 

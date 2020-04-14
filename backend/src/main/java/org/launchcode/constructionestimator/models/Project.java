@@ -1,6 +1,7 @@
 package org.launchcode.constructionestimator.models;
 
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +16,7 @@ public class Project extends NamedEntity {
     private int roomHeight;
 
     @OneToMany
+    @JoinColumn(name="project_id")
     private List<ProjectComponent> projectComponents = new ArrayList<>();
 
     // necessary for hibernate to use model binding I think
