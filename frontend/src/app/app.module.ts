@@ -8,6 +8,12 @@ import { HeaderComponent } from './header/header.component';
 import { ProjectDetailsComponent } from './project/project-details/project-details.component';
 import { ProjectListComponent } from './project/project-list/project-list.component';
 import { UserProfileComponent } from './user/user-profile/user-profile.component';
+import { EditProjectComponent } from './project/edit-project/edit-project.component';
+import { RegisterUserComponent } from './user/register-user/register-user.component';
+import { EditUserProfileComponent } from './user/edit-user-profile/edit-user-profile.component';
+import { HowToComponent } from './project/how-to/how-to.component';
+import { LoginComponent } from './login/login.component';
+import { AboutComponent } from './about/about.component';
 
 @NgModule({
   declarations: [
@@ -16,7 +22,13 @@ import { UserProfileComponent } from './user/user-profile/user-profile.component
     HeaderComponent,
     ProjectDetailsComponent,
     ProjectListComponent,
-    UserProfileComponent
+    UserProfileComponent,
+    EditProjectComponent,
+    RegisterUserComponent,
+    EditUserProfileComponent,
+    HowToComponent,
+    LoginComponent,
+    AboutComponent
   ],
   imports: [
     BrowserModule,
