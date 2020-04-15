@@ -7,6 +7,7 @@ import { CreateProjectComponent } from './project/create-project/create-project.
 import { HeaderComponent } from './header/header.component';
 import { ProjectDetailsComponent } from './project/project-details/project-details.component';
 import { ProjectListComponent } from './project/project-list/project-list.component';
+import { UserProfileComponent } from './user/user-profile/user-profile.component';
 
 @NgModule({
   declarations: [
@@ -14,7 +15,8 @@ import { ProjectListComponent } from './project/project-list/project-list.compon
     CreateProjectComponent,
     HeaderComponent,
     ProjectDetailsComponent,
-    ProjectListComponent
+    ProjectListComponent,
+    UserProfileComponent
   ],
   imports: [
     BrowserModule,
