@@ -1,8 +1,8 @@
 <div class = "container">
     <br />
     <h1>Create a New Project</h1>
-
-    <form [formGroup]="createProjectForm" #formDir="ngForm">  
+    <form>
+    <!-- <form [formGroup]="createProjectForm">   -->
         <br />
         <div class = "form-group">
             <h5>What would you like to call your project?</h5>
@@ -32,7 +32,7 @@
         </div>
         <br />
         <div class="form-group">
-            <button (click)='saveItem(name.value, roomType.value, roomLength.value, roomWidth.value, roomHeight.value)' class="btn btn-success" [routerLink] = "'/project-details'">Create Project</button>
+            <button (click)='saveItem(name.value, roomType.value, roomLength.value, roomWidth.value, roomHeight.value)' class="btn btn-success" [routerLink] = "'/project/add-details'">Create Project</button>
         </div>
     </form>
 </div>    
