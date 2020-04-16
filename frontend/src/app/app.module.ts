@@ -7,7 +7,6 @@ import { CreateProjectComponent } from './project/create-project/create-project.
 import { HeaderComponent } from './header/header.component';
 import { ProjectDetailsComponent } from './project/project-details/project-details.component';
 import { ProjectListComponent } from './project/project-list/project-list.component';
-import { UserProfileComponent } from './user/user-profile/user-profile.component';
 
 @NgModule({
   declarations: [
@@ -15,9 +14,7 @@ import { UserProfileComponent } from './user/user-profile/user-profile.component
     CreateProjectComponent,
     HeaderComponent,
     ProjectDetailsComponent,
-    ProjectListComponent,
-    UserProfileComponent
-  ],
+    ProjectListComponent ],
   imports: [
     BrowserModule,
     AppRoutingModule // brings over info from app-routing.module.ts
