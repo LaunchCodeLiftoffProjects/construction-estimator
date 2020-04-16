@@ -6,7 +6,6 @@ import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
 import { CreateProjectComponent } from './project/create-project/create-project.component';
 import { EditProjectComponent } from './project/edit-project/edit-project.component';
-import { HowToComponent } from './project/how-to/how-to.component';
 import { ProjectDetailsComponent } from './project/project-details/project-details.component';
 import { ProjectListComponent } from './project/project-list/project-list.component';
 import { EditUserProfileComponent } from './user/edit-user-profile/edit-user-profile.component';
@@ -19,12 +18,11 @@ const routes: Routes = [
   {path: 'register' , component: RegisterComponent},
   {path: 'project/create' , component: CreateProjectComponent},
   {path: 'project/edit' , component: EditProjectComponent},
-  {path: 'project/how-to' , component: HowToComponent},
   {path: 'project/add-details' , component: ProjectDetailsComponent},
   {path: 'project/list', component: ProjectListComponent},
   {path: 'user/profile/edit' , component: EditUserProfileComponent},
   {path: 'user/profile' , component: UserProfileComponent},
-  {path: '**', component: PageNotFoundComponent}
+  {path: '**', component: PageNotFoundComponent},
 ];
 
 @NgModule({
