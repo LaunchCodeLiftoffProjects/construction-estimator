@@ -34,7 +34,5 @@ public class ProjectComponentController {
             projectRepository.save(project);
             return new ResponseEntity(HttpStatus.CREATED);
         }
-
-
     }
 }

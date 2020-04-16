@@ -17,9 +17,7 @@ public class ProjectComponent extends AbstractEntity {
     private Item item;
 
     private int quantity;
-    private boolean installation;
-
-    private int priceEstimate;
+    private int finalPrice;
 
     public ProjectComponent() {}
 
@@ -47,19 +45,11 @@ public class ProjectComponent extends AbstractEntity {
         this.quantity = quantity;
     }
 
-    public boolean isInstallation() {
-        return installation;
-    }
-
-    public void setInstallation(boolean installation) {
-        this.installation = installation;
-    }
-
     public int getPriceEstimate() {
-        return priceEstimate;
+        return finalPrice;
     }
 
     public void setPriceEstimate(int priceEstimate) {
-        this.priceEstimate = priceEstimate;
+        this.finalPrice = priceEstimate;
     }
 }

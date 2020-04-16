@@ -1,6 +1,7 @@
 package org.launchcode.constructionestimator.models.data;
 
 import org.launchcode.constructionestimator.models.Item;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
