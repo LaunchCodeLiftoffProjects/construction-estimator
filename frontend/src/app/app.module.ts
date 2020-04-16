@@ -14,8 +14,7 @@ import { ProjectListComponent } from './project/project-list/project-list.compon
     CreateProjectComponent,
     HeaderComponent,
     ProjectDetailsComponent,
-    ProjectListComponent
-  ],
+    ProjectListComponent ],
   imports: [
     BrowserModule,
     AppRoutingModule // brings over info from app-routing.module.ts

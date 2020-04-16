@@ -1,12 +1,14 @@
-<div class = "container col-lg-9">
+<div class = "container">
+    <br />
     <h1>Create a New Project</h1>
 
     <form>  
+        <br />
         <div class = "form-group">
             <h5>What would you like to call your project?</h5>
-            <input #name type='text' placeholder="Project Name" class="col-form-label indent-left" />
+            <input #name type='text' placeholder="Project Name" class="form-control"/>
         </div>
-
+        <br />
         <div class = "form-group">
             <h5>Select your room type:</h5>
             <div class="form-check indent-left">
@@ -19,18 +21,18 @@
                 <label class="form-check-label"><input #roomType type="radio" class = "form-check-input" value="other" />Bedroom, Living Room, Office, Etc.</label>
             </div> 
         </div>
-
+        <br />
         <div class="form-group">
             <h5>What are the room's general dimensions (in feet)?</h5>
-            <div class = "indent-left inline"> 
-                <label class = "inline-buffer">Length <input #roomLength type="number" class="form-control" step="0.1" /></label>
-                <label class = "inline-buffer">Width <input #roomWidth type="number" class="form-control" step="0.1"/></label>
-                <label class = "inline-buffer">Ceiling height <input #roomHeight type="number" class="form-control" step="0.1"/></label>
+            <div class = "input-group"> 
+                <label><input #roomLength type="number" class="form-control" step="0.1" min = 0 placeholder="0.0" />Length</label>
+                <label><input #roomWidth type="number" class="form-control" step="0.1" min = 0 placeholder="0.0" />Width</label>
+                <label><input #roomHeight type="number" class="form-control" step="0.1" min = 0 placeholder="0.0" />Ceiling Height</label>
             </div>
         </div>
-
+        <br />
         <div class="form-group">
-            <button (click)='saveItem(name.value, roomType.value, roomLength.value, roomWidth.value, roomHeight.value)' class="btn btn-success">Create Project</button>
+            <button (click)='saveItem(name.value, roomType.value, roomLength.value, roomWidth.value, roomHeight.value)' class="btn btn-success" [routerLink] = "'/project-details'">Create Project</button>
         </div>
     </form>
 </div>    
