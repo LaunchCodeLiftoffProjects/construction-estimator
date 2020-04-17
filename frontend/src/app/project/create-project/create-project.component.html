@@ -1,8 +1,8 @@
 <div class = "container">
     <br />
-    <h1>Create a New Project</h1>
-
-    <form>  
+    <h2 class="text-info mt-5">Create a New Project</h2>
+    <form>
+    <!-- <form [formGroup]="createProjectForm">   -->
         <br />
         <div class = "form-group">
             <h5>What would you like to call your project?</h5>
@@ -23,16 +23,16 @@
         </div>
         <br />
         <div class="form-group">
-            <h5>What are the room's general dimensions (in feet)?</h5>
+            <h5>What are the room's general dimensions?</h5>
             <div class = "input-group"> 
-                <label><input #roomLength type="number" class="form-control" step="0.1" min = 0 placeholder="0.0" />Length</label>
-                <label><input #roomWidth type="number" class="form-control" step="0.1" min = 0 placeholder="0.0" />Width</label>
-                <label><input #roomHeight type="number" class="form-control" step="0.1" min = 0 placeholder="0.0" />Ceiling Height</label>
+                <label><input #roomLength type="number" class="form-control" step="0.1" min = 0 placeholder="0.0" />Length (ft.)</label>
+                <label><input #roomWidth type="number" class="form-control" step="0.1" min = 0 placeholder="0.0" />Width (ft.)</label>
+                <label><input #roomHeight type="number" class="form-control" step="0.1" min = 0 placeholder="0.0" />Ceiling Height (ft.)</label>
             </div>
         </div>
         <br />
         <div class="form-group">
-            <button (click)='saveItem(name.value, roomType.value, roomLength.value, roomWidth.value, roomHeight.value)' class="btn btn-success" [routerLink] = "'/project-details'">Create Project</button>
+            <button (click)='saveItem(name.value, roomType.value, roomLength.value, roomWidth.value, roomHeight.value)' class="btn btn-info" [routerLink] = "'/project/add-details'">Create Project</button>
         </div>
     </form>
 </div>    
