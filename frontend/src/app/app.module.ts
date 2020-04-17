@@ -28,8 +28,7 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
     EditUserProfileComponent,
     LoginComponent,
     AboutComponent,
-    PageNotFoundComponent,
-  ],
+    PageNotFoundComponent],
   imports: [
     BrowserModule,
     AppRoutingModule // brings over info from app-routing.module.ts
