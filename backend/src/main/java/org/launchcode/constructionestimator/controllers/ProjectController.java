@@ -1,16 +1,16 @@
 package org.launchcode.constructionestimator.controllers;
 
 import org.launchcode.constructionestimator.models.Project;
-import org.launchcode.constructionestimator.models.ProjectComponent;
-import org.launchcode.constructionestimator.models.data.ProjectComponentRepository;
 import org.launchcode.constructionestimator.models.data.ProjectRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/project")
@@ -36,9 +36,11 @@ public class ProjectController {
     }
 
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public Project postProject(@RequestBody Project project) {
-        return projectRepository.save(project); // not sure if it's necessary to return json of the created entity
+    public ResponseEntity postProject(@RequestBody Project project) {
+        projectRepository.save(project);
+        Integer id = project.getId();
+        Map<String, String> map = Collections.singletonMap("id", id.toString());
+        return new ResponseEntity(map, HttpStatus.CREATED);
     }
 
 

@@ -6,7 +6,7 @@ import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 
 @Entity
-public class ProjectComponent extends AbstractEntity {
+public class ItemDetails extends AbstractEntity {
 
     @ManyToOne
     @JsonBackReference
@@ -19,7 +19,7 @@ public class ProjectComponent extends AbstractEntity {
     private int quantity;
     private int finalPrice;
 
-    public ProjectComponent() {}
+    public ItemDetails() {}
 
     public Project getProject() {
         return project;
