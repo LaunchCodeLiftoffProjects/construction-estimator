@@ -13,7 +13,7 @@ export class CreateProjectComponent implements OnInit {
   ngOnInit() {
   }
 
-  saveItem(name: string, roomType: string, roomLength: number, roomWidth: number, roomHeight: number) {
+  saveProject(name: string, roomType: string, roomLength: number, roomWidth: number, roomHeight: number) {
     let project = new Project(name, roomType, roomLength, roomWidth, roomHeight);
     console.log("saved project", project);
     // TODO: POST TO SERVER
