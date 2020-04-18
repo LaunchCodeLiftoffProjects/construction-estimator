@@ -22,7 +22,7 @@ public class Item extends NamedEntity {
     @OneToMany
     @JoinColumn(name = "item_id")
     @JsonBackReference
-    private List<ProjectComponent> projectComponents = new ArrayList<>();
+    private List<ItemDetails> itemDetails = new ArrayList<>();
 
     public Item() {}
 
@@ -34,12 +34,12 @@ public class Item extends NamedEntity {
         this.category = category;
     }
 
-    public List<ProjectComponent> getProjectComponents() {
-        return projectComponents;
+    public List<ItemDetails> getItemDetails() {
+        return itemDetails;
     }
 
-    public void setProjectComponents(List<ProjectComponent> projectComponents) {
-        this.projectComponents = projectComponents;
+    public void setItemDetails(List<ItemDetails> itemDetails) {
+        this.itemDetails = itemDetails;
     }
 
     public String getDescription() {

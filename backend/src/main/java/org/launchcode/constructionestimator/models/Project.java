@@ -28,7 +28,7 @@ public class Project extends NamedEntity {
 
     @OneToMany
     @JoinColumn(name="project_id")
-    private List<ProjectComponent> projectComponents = new ArrayList<>();
+    private List<ItemDetails> itemDetails = new ArrayList<>();
 
     // necessary for hibernate to use model binding I think
     public Project() {}
@@ -129,11 +129,11 @@ public class Project extends NamedEntity {
         this.laborCost = laborCost;
     }
 
-    public List<ProjectComponent> getProjectComponents() {
-        return projectComponents;
+    public List<ItemDetails> getItemDetails() {
+        return itemDetails;
     }
 
-    public void setProjectComponents(List<ProjectComponent> projectComponents) {
-        this.projectComponents = projectComponents;
+    public void setItemDetails(List<ItemDetails> itemDetails) {
+        this.itemDetails = itemDetails;
     }
 }

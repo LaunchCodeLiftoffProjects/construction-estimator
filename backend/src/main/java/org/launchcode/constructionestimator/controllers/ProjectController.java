@@ -1,11 +1,8 @@
 package org.launchcode.constructionestimator.controllers;
 
 import org.launchcode.constructionestimator.models.Project;
-import org.launchcode.constructionestimator.models.ProjectComponent;
-import org.launchcode.constructionestimator.models.data.ProjectComponentRepository;
 import org.launchcode.constructionestimator.models.data.ProjectRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
