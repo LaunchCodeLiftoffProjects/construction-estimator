@@ -9,7 +9,7 @@ import { User } from 'src/app/user';
 export class UserProfileComponent implements OnInit {
 
   userUrl = "http://localhost:8080/api/user";
-  user: User[]
+  user: User[];
 
   constructor() { }
 
@@ -24,7 +24,7 @@ export class UserProfileComponent implements OnInit {
         json.forEach(obj => {
           refreshUser.push(new User(obj.firstName, obj.lastName, obj.email, obj.password, obj.userDetails, obj.projects));
         });
-        this.projects = refreshUser;
+        this.user = refreshUser;
       }.bind(this));
     }.bind(this));
   }
