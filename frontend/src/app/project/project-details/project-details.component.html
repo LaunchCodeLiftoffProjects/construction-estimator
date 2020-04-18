@@ -1,1 +1,64 @@
-<p>This will eventually be the second form where the details are added.</p>
+<div class = "container">
+    <br />
+    <h2 class="text-info mt-5">Project Details</h2>
+    <form>
+    <!-- <form [formGroup]="createProjectForm">   -->
+
+    
+        <div class = "form-group">
+            <h5>Fixtures</h5>
+            <div class="form-check indent-left">
+                <label class="form-check-label"><input #item type="checkbox" class = "form-check-input" value="item[i] - the item itself" />Item.name using a for loop</label>
+                <label class="form-check-label"><input #quantity type="number" class = "form-check-input" value="number" />quantity</label>
+            </div>
+            <div class="form-check indent-left">
+                <label class="form-check-label"><input #item type="checkbox" class = "form-check-input" value="item[i] - the item itself" />Item.name using a for loop</label>
+                <label class="form-check-label"><input #quantity type="number" class = "form-check-input" value="number" />quantity</label>
+            </div>
+            <div class="form-check indent-left">
+                <label class="form-check-label"><input #item type="checkbox" class = "form-check-input" value="item[i] - the item itself" />Item.name using a for loop</label>
+                <label class="form-check-label"><input #quantity type="number" class = "form-check-input" value="number" />quantity</label>
+            </div>
+            <div class="form-check indent-left">
+                <label class="form-check-label"><input #item type="checkbox" class = "form-check-input" value="item[i] - the item itself" />Item.name using a for loop</label>
+                <label class="form-check-label"><input #quantity type="number" class = "form-check-input" value="number" />quantity</label>
+            </div>
+        </div>
+        <br />
+        <div class="form-group">
+            <h5>Appliances</h5>
+            <div class="form-check indent-left">
+                <label class="form-check-label"><input #item type="checkbox" class = "form-check-input" value="item[i] - the item itself" />Item.name using a for loop</label>
+                <label class="form-check-label"><input #quantity type="number" class = "form-check-input" value="number" />quantity</label>
+            </div>
+            <div class="form-check indent-left">
+                <label class="form-check-label"><input #item type="checkbox" class = "form-check-input" value="item[i] - the item itself" />Item.name using a for loop</label>
+                <label class="form-check-label"><input #quantity type="number" class = "form-check-input" value="number" />quantity</label>
+            </div>
+            <div class="form-check indent-left">
+                <label class="form-check-label"><input #item type="checkbox" class = "form-check-input" value="item[i] - the item itself" />Item.name using a for loop</label>
+                <label class="form-check-label"><input #quantity type="number" class = "form-check-input" value="number" />quantity</label>
+            </div>
+        </div>
+        <br />
+        <div class="form-group">
+            <h5>Finishes</h5>
+            <div class="form-check indent-left">
+                <label class="form-check-label"><input #item type="checkbox" class = "form-check-input" value="item[i] - the item itself" />Item.name using a for loop</label>
+                <label class="form-check-label"><input #quantity type="number" class = "form-check-input" value="number" />quantity</label>
+            </div>
+            <div class="form-check indent-left">
+                <label class="form-check-label"><input #item type="checkbox" class = "form-check-input" value="item[i] - the item itself" />Item.name using a for loop</label>
+                <label class="form-check-label"><input #quantity type="number" class = "form-check-input" value="number" />quantity</label>
+            </div>
+            <div class="form-check indent-left">
+                <label class="form-check-label"><input #item type="checkbox" class = "form-check-input" value="item[i] - the item itself" />Item.name using a for loop</label>
+                <label class="form-check-label"><input #quantity type="number" class = "form-check-input" value="number" />quantity</label>
+            </div>
+        </div>
+        <br />
+        <div class="form-group">
+            <button (click)='saveProjectComponent()' class="btn btn-info" [routerLink] = "'/project/add-details'">Create Project</button>
+        </div>
+    </form>
+</div> 
