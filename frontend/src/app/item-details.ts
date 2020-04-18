@@ -1,7 +1,7 @@
 import { Item } from './item';
 import { Project } from './project';
 
-export class ProjectComponent {
+export class ItemDetails {
     id: number;
     project: Project;
     item: Item;
