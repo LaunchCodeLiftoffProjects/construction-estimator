@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Project } from 'src/app/project';
 import { Item } from 'src/app/item';
-import { ProjectComponent } from 'src/app/projectcomponent';
+import { ItemDetails } from 'src/app/item-details';
 
 @Component({
   selector: 'app-project-details',
@@ -11,15 +11,34 @@ import { ProjectComponent } from 'src/app/projectcomponent';
 export class ProjectDetailsComponent implements OnInit {
 
   // NEED A WAY TO ACCESS THE PROJECT ID project = ;
+  projectId: number;
   url = "http://localhost:8080/api/item";
+  projectURL = "http://localhost:8080/api/project" + this.projectId;
   items: Item[];
   categories = ["fixture", "appliance", "finish"];
-  projectComponents: ProjectComponent[];
+  kitchenItems = ["stove", "refrigerator"];
+  bedroomItems = [];
+  bathroomItems = [];
+  itemDetails: ItemDetails[];
+  project: Project;
 
   constructor() { }
 
   ngOnInit() {
     this.loadItems();
+    this.loadProject();
+  }
+
+  loadProject() {
+    fetch(this.projectURL).then(function(response) {
+      response.json().then(function(json) {
+        json.forEach(obj => {
+          this.project = new Project(obj.name, obj.roomType, obj.roomLength, obj.roomWidth, obj.roomHeight);
+          this.itemDetails = obj.itemDetails;
+          this.projectId = obj.id;
+        });
+      }.bind(this));
+    }.bind(this));
   }
 
 
@@ -37,24 +56,27 @@ export class ProjectDetailsComponent implements OnInit {
 
 
 
-  saveProjectComponent(project: Project, item: Item, quantity: number) {
-    let projectComponent = new ProjectComponent(project, item, quantity, item.price*quantity);
-    this.projectComponents.push(projectComponent);
-    console.log("saved projectComponent to an array", projectComponent);
+//   saveItemDetails(quantity: number) {
+//     for () {
+      
+//     }
+//     this.itemDetails;
+//     console.log("saved projectComponent to an array", itemDetails);
     
-}
+// }
 
 
-  saveProjectDetails(projectId: number) {
+  saveProjectDetails() {
+
     // TODO: POST TO SERVER
-    fetch('http://localhost:8080/api/project/{projectId}/component', {
+    fetch('http://localhost:8080/api/project/{this.projectId}/component', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Credentials': 'true'
       },
-      body: JSON.stringify(this.projectComponents),
+      body: JSON.stringify(this.itemDetails),
     }).then(function(response) {
       return response.json();
     }).then(function(data) {

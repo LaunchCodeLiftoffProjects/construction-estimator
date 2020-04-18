@@ -1,4 +1,4 @@
-import { ProjectComponent } from './projectcomponent';
+import { ItemDetails } from './item-details';
 
 export class Item {
     id: number;
@@ -7,8 +7,9 @@ export class Item {
     price: number;
     category: string;
 
+
     //Do we need this on the frontend?
-    projectComponents: ProjectComponent[];
+    //itemDetails: ItemDetails[];
 
     constructor(id: number, name: string, description: string, price: number, category: string) {
         this.id = id;
