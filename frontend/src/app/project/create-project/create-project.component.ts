@@ -26,12 +26,14 @@ export class CreateProjectComponent implements OnInit {
       },
       body: JSON.stringify(project),
     }).then(function(response) {
+      // get id number from response here { id: idNumber }
       return response.json();
     }).then(function(data) {
       console.log('Success:', data);
     }).catch(function(error) {
       console.error('Error:', error);
     });
+    
   }
 
 }
