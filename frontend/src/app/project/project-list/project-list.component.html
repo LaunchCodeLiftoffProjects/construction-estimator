@@ -4,14 +4,14 @@
         <h2 class="text-info">All Projects</h2>
     </div>
 
-    <div *ngIf="! projects">
+    <div *ngIf="! user.projects">
         <p class="lead">Hey there! You do not have any projects yet.<br /> 
             Why not <a class="text-info" [routerLink]="'/project/create'">create</a> one?</p>
     </div>
 
     <div>
         <ul>
-            <li class="lead" *ngFor="let project of projects">{{project.name}}</li>
+            <li class="lead" *ngFor="let project of user.projects">{{project.name}}</li>
         </ul>
     </div>
 
