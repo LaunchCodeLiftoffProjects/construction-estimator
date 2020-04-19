@@ -18,7 +18,7 @@
                 <label class="form-check-label"><input #roomType name="roomType" type="radio" class = "form-check-input" value="bathroom" />Bathroom</label>
             </div>
             <div class="form-check indent-left">
-                <label class="form-check-label"><input #roomType name="roomType" type="radio" class = "form-check-input" value="other" />Bedroom, Living Room, Office, Etc.</label>
+                <label class="form-check-label"><input #roomType name="roomType" type="radio" class = "form-check-input" value="living" />Bedroom, Living Room, Office, Etc.</label>
             </div> 
         </div>
         <br />
@@ -32,7 +32,7 @@
         </div>
         <br />
         <div class="form-group">
-            <button (click)='saveItem(name.value, roomType.value, roomLength.value, roomWidth.value, roomHeight.value)' class="btn btn-info" [routerLink] = "'/project/add-details'">Create Project</button>
+            <button (click)='saveProject(name.value, roomType.value, roomLength.value, roomWidth.value, roomHeight.value)' class="btn btn-info" [routerLink]="['/project/add-details']" [queryParams]="{'id': projectId}">Create Project</button>
         </div>
     </form>
 </div>    

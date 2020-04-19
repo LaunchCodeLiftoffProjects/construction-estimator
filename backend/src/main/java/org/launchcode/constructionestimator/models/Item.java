@@ -16,8 +16,8 @@ public class Item extends NamedEntity {
 
     // Maybe an enum here. Will be either Fixture, appliance, or finish
     private String category;
-    // removing this for now, was originally things like "flooring"
-    //private String type;
+
+    private String roomTypes;
 
     @OneToMany
     @JoinColumn(name = "item_id")
@@ -58,11 +58,11 @@ public class Item extends NamedEntity {
         this.price = price;
     }
 
-//    public String getType() {
-//        return type;
-//    }
-//
-//    public void setType(String type) {
-//        this.type = type;
-//    }
+    public String getRoomTypes() {
+        return roomTypes;
+    }
+
+    public void setRoomTypes(String roomTypes) {
+        this.roomTypes = roomTypes;
+    }
 }

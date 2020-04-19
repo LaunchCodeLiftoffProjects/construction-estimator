@@ -4,61 +4,55 @@
     <form>
     <!-- <form [formGroup]="createProjectForm">   -->
 
-    
+
         <div class = "form-group">
             <h5>Fixtures</h5>
             <div class="form-check indent-left">
-                <label class="form-check-label"><input #item type="checkbox" class = "form-check-input" value="item[i] - the item itself" />Item.name using a for loop</label>
-                <label class="form-check-label"><input #quantity type="number" class = "form-check-input" value="number" />quantity</label>
-            </div>
-            <div class="form-check indent-left">
-                <label class="form-check-label"><input #item type="checkbox" class = "form-check-input" value="item[i] - the item itself" />Item.name using a for loop</label>
-                <label class="form-check-label"><input #quantity type="number" class = "form-check-input" value="number" />quantity</label>
-            </div>
-            <div class="form-check indent-left">
-                <label class="form-check-label"><input #item type="checkbox" class = "form-check-input" value="item[i] - the item itself" />Item.name using a for loop</label>
-                <label class="form-check-label"><input #quantity type="number" class = "form-check-input" value="number" />quantity</label>
-            </div>
-            <div class="form-check indent-left">
-                <label class="form-check-label"><input #item type="checkbox" class = "form-check-input" value="item[i] - the item itself" />Item.name using a for loop</label>
-                <label class="form-check-label"><input #quantity type="number" class = "form-check-input" value="number" />quantity</label>
+                <div *ngFor="let itemDetailsObject of project.itemDetails">
+                    <div *ngIf="itemDetailsObject.item.category == 'fixture'">
+                        {{itemDetailsObject.item.name}}
+                        <label class="form-check-label"><input #quantity (mouseleave)="saveItemDetails(quantity.value, itemDetailsObject)" 
+                            (blur)="saveItemDetails(quantity.value, itemDetailsObject)" type="number" 
+                            value="{{itemDetailsObject.quantity}}" class = "form-check-input" />
+                        </label>
+                    </div>
+                </div>
             </div>
         </div>
         <br />
         <div class="form-group">
             <h5>Appliances</h5>
             <div class="form-check indent-left">
-                <label class="form-check-label"><input #item type="checkbox" class = "form-check-input" value="item[i] - the item itself" />Item.name using a for loop</label>
-                <label class="form-check-label"><input #quantity type="number" class = "form-check-input" value="number" />quantity</label>
+                <div *ngFor="let itemDetailsObject of project.itemDetails">
+                    <div *ngIf="itemDetailsObject.item.category == 'appliance'">
+                        {{itemDetailsObject.item.name}}
+                        <label class="form-check-label"><input #quantity (mouseleave)="saveItemDetails(quantity.value, itemDetailsObject)" 
+                            (blur)="saveItemDetails(quantity.value, itemDetailsObject)" type="number" 
+                            value="{{itemDetailsObject.quantity}}" class = "form-check-input" />
+                        </label>
+                    </div>
+                </div>
             </div>
-            <div class="form-check indent-left">
-                <label class="form-check-label"><input #item type="checkbox" class = "form-check-input" value="item[i] - the item itself" />Item.name using a for loop</label>
-                <label class="form-check-label"><input #quantity type="number" class = "form-check-input" value="number" />quantity</label>
-            </div>
-            <div class="form-check indent-left">
-                <label class="form-check-label"><input #item type="checkbox" class = "form-check-input" value="item[i] - the item itself" />Item.name using a for loop</label>
-                <label class="form-check-label"><input #quantity type="number" class = "form-check-input" value="number" />quantity</label>
-            </div>
+           
         </div>
         <br />
         <div class="form-group">
             <h5>Finishes</h5>
             <div class="form-check indent-left">
-                <label class="form-check-label"><input #item type="checkbox" class = "form-check-input" value="item[i] - the item itself" />Item.name using a for loop</label>
-                <label class="form-check-label"><input #quantity type="number" class = "form-check-input" value="number" />quantity</label>
-            </div>
-            <div class="form-check indent-left">
-                <label class="form-check-label"><input #item type="checkbox" class = "form-check-input" value="item[i] - the item itself" />Item.name using a for loop</label>
-                <label class="form-check-label"><input #quantity type="number" class = "form-check-input" value="number" />quantity</label>
-            </div>
-            <div class="form-check indent-left">
-                <label class="form-check-label"><input #item type="checkbox" class = "form-check-input" value="item[i] - the item itself" />Item.name using a for loop</label>
-                <label class="form-check-label"><input #quantity type="number" class = "form-check-input" value="number" />quantity</label>
+                <div *ngFor="let itemDetailsObject of project.itemDetails">
+                    <div *ngIf="itemDetailsObject.item.category == 'finish'">
+                        {{itemDetailsObject.item.name}}
+                        <label class="form-check-label"><input #quantity (mouseleave)="saveItemDetails(quantity.value, itemDetailsObject)" 
+                            (blur)="saveItemDetails(quantity.value, itemDetailsObject)" type="number" 
+                            value="{{itemDetailsObject.quantity}}" class = "form-check-input" />
+                        </label>
+                    </div>
+                </div>
             </div>
         </div>
         <br />
         <div class="form-group">
-            <button (click)='saveProjectComponent()' class="btn btn-info" [routerLink] = "'/project/add-details'">Create Project</button>
+            <button (click)='saveProjectDetails()' class="btn btn-info" [routerLink] = "'/project/list'">Submit Project Details</button>
         </div>
     </form>
 </div> 
