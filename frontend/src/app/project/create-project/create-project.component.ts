@@ -9,12 +9,12 @@ import { Router, RouterModule, ActivatedRoute, ParamMap, NavigationExtras } from
   styleUrls: ['./create-project.component.css']
 })
 export class CreateProjectComponent implements OnInit {
-  projectId: number;
+  id: string;
 
-  constructor(private route: ActivatedRoute) { }
+  constructor(private route: ActivatedRoute, private router: Router) { }
 
   ngOnInit() {
-    
+ 
   }
 
   saveProject(name: string, roomType: string, roomLength: number, roomWidth: number, roomHeight: number) {
@@ -32,14 +32,14 @@ export class CreateProjectComponent implements OnInit {
     }).then(function(response) {
       // get id number from response here { id: idNumber }
       response.json().then(function(json) {
-        json.forEach(element => {
-          this.projectId = Number(element.id);
-        });
+        this.id = json.id;
+        console.log("json id", this.id);
       })
     }).then(function(data) {
       console.log('Success:', data);
     }).catch(function(error) {
       console.error('Error:', error);
     });
+    this.router.navigate(["/project/add-details/", this.id]);
   }
 }
