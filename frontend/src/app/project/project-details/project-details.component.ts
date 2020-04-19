@@ -15,7 +15,7 @@ export class ProjectDetailsComponent implements OnInit {
 
   project: Project;
   projectURL = "http://localhost:8080/api/project/";
-
+  id: string;
 
 
   constructor(
@@ -26,8 +26,11 @@ export class ProjectDetailsComponent implements OnInit {
 
 
   ngOnInit() {
-    let id = this.route.snapshot.paramMap.get('id');
-    this.projectURL = this.projectURL + id;
+    this.id = this.route.snapshot.paramMap.get('id');
+    // this.route.queryParams.subscribe(params => {
+    //   this.id = params['id'];
+    // });
+    this.projectURL = this.projectURL + this.id;
     this.loadProject();
   }
 

@@ -18,7 +18,7 @@ const routes: Routes = [
   {path: 'register' , component: RegisterComponent},
   {path: 'project/create' , component: CreateProjectComponent},
   {path: 'project/edit' , component: EditProjectComponent},
-  {path: 'project/add-details' , component: ProjectDetailsComponent},
+  {path: 'project/add-details/' , component: ProjectDetailsComponent},
   {path: 'project/list', component: ProjectListComponent},
   {path: 'user/profile/edit' , component: EditUserProfileComponent},
   {path: 'user/profile' , component: UserProfileComponent},
