@@ -9,11 +9,9 @@ export class ItemDetails {
     finalPrice: number;
 
 
-    constructor(project: Project, item: Item, quantity: number, finalPrice: number) {
+    constructor(project: Project, item: Item) {
         this.project = project;
         this.item = item;
-        this.quantity = quantity;
-        this.finalPrice = finalPrice;
     }
 
 }

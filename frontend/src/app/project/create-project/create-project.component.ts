@@ -11,6 +11,7 @@ import { bindCallback } from 'rxjs';
 })
 export class CreateProjectComponent implements OnInit {
   id: number = 12;
+  project: Project;
 
   constructor(private route: ActivatedRoute, private router: Router) { }
 
@@ -35,9 +36,9 @@ export class CreateProjectComponent implements OnInit {
       // get id number from response here { id: idNumber }
       response.json().then(function(json) {
         //I tried using a forEach loop and the json wasn't gathering the id. I think it's because the one object isn't stored in an array? Not sure though
-        project.id = Number(json.id);
+        this.project.id = Number(json.id);
         //this project.id gets changed, as it should. I tried using an id field on the component class itself, but I encountered the same issue (see below)
-        console.log("json ids", project.id);
+        console.log("json ids", this.project.id);
       }.bind(this));
     }.bind(this)).then(function(data) {
       console.log('Success:', data);
@@ -45,9 +46,9 @@ export class CreateProjectComponent implements OnInit {
       console.error('Error:', error);
     });
     //This project.id gets set back to its initial value of undefined. The this.id field did the same thing - it changed and then got reset to 12 on this line.
-    console.log('id assigned', project.id);
+    console.log('id assigned', this.project.id);
     //this router link works when the id is given a value before running the fetch, but occassionally it will send you back to the project/create?roomType=whatever which is weird...
-    this.router.navigate([`project/add-details/${project.id}`]);
+    this.router.navigate([`project/add-details/${this.id}`]);
   }
 
 }

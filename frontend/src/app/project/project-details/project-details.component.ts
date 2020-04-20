@@ -26,32 +26,41 @@ export class ProjectDetailsComponent implements OnInit {
 
 
   ngOnInit() {
-    this.id = this.route.snapshot.paramMap.get('id');
+    // this.id = this.route.snapshot.paramMap.get('id');
     // this.route.queryParams.subscribe(params => {
     //   this.id = params['id'];
     // });
-    this.projectURL = this.projectURL + this.id;
+    this.project.itemDetails = [];
+    this.projectURL = this.projectURL + 15;
     this.loadProject();
   }
 
 
   loadProject() {
+    
     fetch(this.projectURL).then(function(response) {
       response.json().then(function(json) {
         let refreshProjectItemDetails = [];
         json.forEach(obj => {
           this.project = new Project(obj.name, obj.roomType, obj.roomLength, obj.roomWidth, obj.roomHeight);
-          this.project.itemDetails = [];
           this.project.id = obj.id;
-          obj.itemDetails.forEach(itemDetailsObject => {
-            if (itemDetailsObject.item.roomTypes.includes(obj.roomType)) {
-              refreshProjectItemDetails.push(itemDetailsObject);
-            }
-          })
-          this.project.itemDetails = refreshProjectItemDetails;
         });
       }.bind(this));
     }.bind(this));
+
+
+
+    fetch("http://localhost:8080/api/item").then(function(response) {
+      response.json().then(function(json) {
+        let detailsArray: ItemDetails[] = [];
+        json.forEach(obj => {
+          let itemDetails = new ItemDetails(this.project, obj);
+          detailsArray.push(itemDetails);
+        });
+        this.project.itemDetails = detailsArray;
+      }.bind(this));
+    }.bind(this));
+
   }
 
 
