@@ -38,6 +38,7 @@ public class ProjectController {
     @PostMapping
     public ResponseEntity postProject(@RequestBody Project project) {
         projectRepository.save(project);
+
         Integer id = project.getId();
         Map<String, String> map = Collections.singletonMap("id", id.toString());
         return new ResponseEntity(map, HttpStatus.CREATED);
