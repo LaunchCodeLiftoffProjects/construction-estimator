@@ -1,37 +1,49 @@
 <div class = "container">
     <br />
     <h2 class="text-info mt-5">Project Details</h2>
-    <form>
-    <!-- <form [formGroup]="createProjectForm">   -->
-
-
+    <div class = "form-group">
+        <div class="form-check indent-left">
+            <div>
+                <p>{{project.id}}</p>
+                <p>{{project.name}}</p>
+                <p>{{project.roomType}}</p>
+                <p>{{project.roomLength}}</p>
+                <p>{{project.roomWidth}}</p>
+                <p>{{project.roomHeight}}</p>
+            </div>
+        </div>
+    </div>
         <div class = "form-group">
             <h5>Fixtures</h5>
             <div class="form-check indent-left">
-                <div *ngFor="let itemDetailsObject of project.itemDetails">
-                    <div *ngIf="itemDetailsObject.item.category == 'fixture'">
-                        {{itemDetailsObject.item.name}}
-                        <label class="form-check-label"><input #quantity (mouseleave)="saveItemDetails(quantity.value, itemDetailsObject)" 
-                            (blur)="saveItemDetails(quantity.value, itemDetailsObject)" type="number" 
-                            value="{{itemDetailsObject.quantity}}" class = "form-check-input" />
-                        </label>
-                    </div>
-                </div>
+                <ul>
+                    <li *ngFor="let itemDetailsObject of project.itemDetails">
+                        Test
+                        <div *ngIf="itemDetailsObject.item.category == 'Fixture'">
+                            Test
+                            {{itemDetailsObject.item.name}}
+                            <label class="input-group"><input #quantity (mouseleave)="saveItemDetails(quantity.value, itemDetailsObject)" 
+                                (blur)="saveItemDetails(quantity.value, itemDetailsObject)" type="number" 
+                                value="{{itemDetailsObject.quantity}}" class = "form-check-input" />
+                            </label>
+                        </div>
+                    </li>
+                </ul>
             </div>
         </div>
         <br />
         <div class="form-group">
             <h5>Appliances</h5>
             <div class="form-check indent-left">
-                <div *ngFor="let itemDetailsObject of project.itemDetails">
-                    <div *ngIf="itemDetailsObject.item.category == 'appliance'">
-                        {{itemDetailsObject.item.name}}
-                        <label class="form-check-label"><input #quantity (mouseleave)="saveItemDetails(quantity.value, itemDetailsObject)" 
+                <li *ngFor="let itemDetailsObject of project.itemDetails">
+                    <div *ngIf="itemDetailsObject.item.category == 'Appliance'">
+                        <p>Test {{itemDetailsObject.item.name}}</p>
+                        <label class="input-group"><input #quantity (mouseleave)="saveItemDetails(quantity.value, itemDetailsObject)" 
                             (blur)="saveItemDetails(quantity.value, itemDetailsObject)" type="number" 
                             value="{{itemDetailsObject.quantity}}" class = "form-check-input" />
                         </label>
                     </div>
-                </div>
+                </li>
             </div>
            
         </div>
@@ -40,9 +52,9 @@
             <h5>Finishes</h5>
             <div class="form-check indent-left">
                 <div *ngFor="let itemDetailsObject of project.itemDetails">
-                    <div *ngIf="itemDetailsObject.item.category == 'finish'">
-                        {{itemDetailsObject.item.name}}
-                        <label class="form-check-label"><input #quantity (mouseleave)="saveItemDetails(quantity.value, itemDetailsObject)" 
+                    <div *ngIf="itemDetailsObject.item.category == 'Finish'">
+                        <p>{{itemDetailsObject.item.name}}</p>
+                        <label class="input-group"><input #quantity (mouseleave)="saveItemDetails(quantity.value, itemDetailsObject)" 
                             (blur)="saveItemDetails(quantity.value, itemDetailsObject)" type="number" 
                             value="{{itemDetailsObject.quantity}}" class = "form-check-input" />
                         </label>
@@ -54,5 +66,6 @@
         <div class="form-group">
             <button (click)='saveProjectDetails()' class="btn btn-info" [routerLink] = "'/project/list'">Submit Project Details</button>
         </div>
-    </form>
+
+
 </div> 

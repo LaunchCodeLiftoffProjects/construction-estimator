@@ -16,7 +16,7 @@ export class ProjectDetailsComponent implements OnInit {
   project: Project;
   projectURL = "http://localhost:8080/api/project/";
   id: string;
-
+  itemsArray: Item[];
 
   constructor(private route: ActivatedRoute) { }
 
@@ -24,39 +24,45 @@ export class ProjectDetailsComponent implements OnInit {
   ngOnInit() {
     this.id = this.route.snapshot.paramMap.get("id");
 
-    console.log(this.id);
+    console.log("Id", this.id);
 
-    console.log("Please display");
+   
 
     this.projectURL = this.projectURL + this.id;
+    this.loadItems();
+    // console.log("Items Loaded", this.itemsArray[0].name);
     this.loadProject();
+    console.log("Project Loaded");
+    
   }
 
 
   loadProject() {
+
     
     fetch(this.projectURL).then(function(response) {
       response.json().then(function(json) {
-        let refreshProjectItemDetails = [];
-        json.forEach(obj => {
-          this.project = new Project(obj.name, obj.roomType, obj.roomLength, obj.roomWidth, obj.roomHeight);
-          this.project.id = obj.id;
-        });
+        this.project = new Project(json.name, json.roomType, json.roomLength, json.roomWidth, json.roomHeight);
+        this.project.id = json.id;
+        // console.log("", this.project.name);
       }.bind(this));
     }.bind(this));
 
+  }
 
+  loadItems() {
 
     fetch("http://localhost:8080/api/item").then(function(response) {
       response.json().then(function(json) {
         let detailsArray: ItemDetails[] = [];
         json.forEach(obj => {
-          let itemDetails = new ItemDetails(this.project, obj);
-          detailsArray.push(itemDetails);
+          this.project.itemDetails.push(new ItemDetails(this.project, new Item(obj.id, obj.name, obj.description, obj.price, obj.category, obj.roomTypes)));
         });
-        this.project.itemDetails = detailsArray;
+        // this.project.itemDetails = detailsArray;
+        
       }.bind(this));
     }.bind(this));
+    
 
   }
 
