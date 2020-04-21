@@ -18,20 +18,18 @@ export class ProjectDetailsComponent implements OnInit {
   id: string;
 
 
-  constructor(
-    private route: ActivatedRoute,
-    private router: Router) {
-
-     }
+  constructor(private route: ActivatedRoute) { }
 
 
   ngOnInit() {
-    // this.id = this.route.snapshot.paramMap.get('id');
-    // this.route.queryParams.subscribe(params => {
-    //   this.id = params['id'];
-    // });
-    this.project.itemDetails = [];
-    this.projectURL = this.projectURL + 15;
+    this.id = this.route.snapshot.paramMap.get("id");
+
+    console.log(this.id);
+
+    console.log("Please display");
+
+    // this.project.itemDetails = [];
+    this.projectURL = this.projectURL + this.id;
     this.loadProject();
   }
 
