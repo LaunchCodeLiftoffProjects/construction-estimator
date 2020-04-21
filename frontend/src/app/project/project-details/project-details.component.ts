@@ -28,7 +28,6 @@ export class ProjectDetailsComponent implements OnInit {
 
     console.log("Please display");
 
-    // this.project.itemDetails = [];
     this.projectURL = this.projectURL + this.id;
     this.loadProject();
   }

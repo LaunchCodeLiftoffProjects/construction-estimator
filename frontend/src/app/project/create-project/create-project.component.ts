@@ -12,6 +12,7 @@ import { bindCallback } from 'rxjs';
 export class CreateProjectComponent implements OnInit {
   id: number;
   project: Project;
+  selectedRoom: string = '';
 
   constructor(private route: ActivatedRoute, private router: Router) { }
 
@@ -50,6 +51,12 @@ export class CreateProjectComponent implements OnInit {
     //This project.id gets set back to its initial value of undefined. The this.id field did the same thing - it changed and then got reset to 12 on this line.
     // console.log('id assigned', this.project.id);
     //this router link works when the id is given a value before running the fetch, but occassionally it will send you back to the project/create?roomType=whatever which is weird...
+  }
+
+  //event handler for the radio button's change event
+  radioChangeHandler (event: any) {
+    //update the ui
+    this.selectedRoom = event.target.value;
   }
 
 }

@@ -12,13 +12,13 @@
         <div class = "form-group">
             <h5>Select your room type:</h5>
             <div class="form-check indent-left">
-                <label class="form-check-label"><input #roomType name="roomType" type="radio" class = "form-check-input" value="kitchen" />Kitchen</label>
+                <label class="form-check-label"><input #roomType name="roomType" type="radio" class = "form-check-input" value="kitchen" (change)="radioChangeHandler($event)"/>Kitchen</label>
             </div>
             <div class="form-check indent-left">
-                <label class="form-check-label"><input #roomType name="roomType" type="radio" class = "form-check-input" value="bathroom" />Bathroom</label>
+                <label class="form-check-label"><input #roomType name="roomType" type="radio" class = "form-check-input" value="bathroom" (change)="radioChangeHandler($event)"/>Bathroom</label>
             </div>
             <div class="form-check indent-left">
-                <label class="form-check-label"><input #roomType name="roomType" type="radio" class = "form-check-input" value="living" />Bedroom, Living Room, Office, Etc.</label>
+                <label class="form-check-label"><input #roomType name="roomType" type="radio" class = "form-check-input" value="living" (change)="radioChangeHandler($event)"/>Bedroom, Living Room, Office, Etc.</label>
             </div> 
         </div>
         <br />
@@ -32,7 +32,7 @@
         </div>
         <br />
         <div class="form-group">
-            <button (click)='saveProject(name.value, roomType.value, roomLength.value, roomWidth.value, roomHeight.value)' class="btn btn-info">Create Project</button>
+            <button (click)='saveProject(name.value, selectedRoom, roomLength.value, roomWidth.value, roomHeight.value)' class="btn btn-info">Create Project</button>
         </div>
     <!-- </form> -->
 </div>    
