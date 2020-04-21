@@ -35,6 +35,7 @@ public class ProjectController {
         }
     }
 
+    // Returns json in form { 'id': project.id }
     @PostMapping
     public ResponseEntity postProject(@RequestBody Project project) {
         projectRepository.save(project);
