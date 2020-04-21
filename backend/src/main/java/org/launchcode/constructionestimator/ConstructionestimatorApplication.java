@@ -20,6 +20,8 @@ public class ConstructionestimatorApplication {
 			@Override
 			public void addCorsMappings(CorsRegistry registry) {
 				registry.addMapping("/api/project").allowedOrigins("http://localhost:4200");
+				registry.addMapping("/api/project/**").allowedOrigins("http://localhost:4200");
+				registry.addMapping("/api/item").allowedOrigins("http://localhost:4200");
 			}
 		};
 	}
