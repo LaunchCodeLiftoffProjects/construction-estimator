@@ -2,7 +2,6 @@ import { Item } from './item';
 import { Project } from './project';
 
 export class ItemDetails {
-    id: number;
     project: Project;
     item: Item;
     quantity: number;
