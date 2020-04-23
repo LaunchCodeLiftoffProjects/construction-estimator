@@ -4,15 +4,41 @@
         <h2 class="text-info">All Projects</h2>
     </div>
 
-    <div *ngIf="! projects">
+    <div *ngIf="!projects || projects.length === 0">
         <p class="lead">Hey there! You do not have any projects yet.<br /> 
             Why not <a class="text-info" [routerLink]="'/project/create'">create</a> one?</p>
     </div>
 
     <div>
         <ul>
-            <li class="lead" *ngFor="let project of projects">{{project.name}}</li>
+            <li class="lead" *ngFor="let project of projects">
+                <a (click)="makeActiveProject(project)" >{{ project.name }}</a>
+                <div *ngIf="project === activeProject">
+                    <div *ngFor="let itemDetail of project.itemDetails">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Item Name</th>
+                                    <th>Quantity</th>
+                                    <th>Per Unit Price</th>
+                                    <th>Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>{{ itemDetail.item }}</td>
+                                    <td>{{ itemDetail.quantity }}</td>
+                                    <td>{{ itemDetail.finalPrice }}</td>
+                                    <td>{{(itemDetail.finalPrice * itemDetail.quantity) | number:'1.2-2' }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        Total Cost of Project &bull; {{ project.finalCost | number:'1.2-2' }}
+
+                    </div>
+                </div>
+            </li>
         </ul>
     </div>
-
+    
 </div>
