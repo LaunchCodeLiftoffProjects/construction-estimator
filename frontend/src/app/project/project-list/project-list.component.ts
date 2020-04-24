@@ -37,6 +37,11 @@ export class ProjectListComponent implements OnInit {
                   item: 'Brackets',
                   quantity: 6,
                   finalPrice: 0.30
+              },
+              {
+                item: 'Wire' ,
+                quantity: 4,
+                finalPrice: 0.75
               }
           ]
       }
