@@ -12,24 +12,27 @@ import java.util.Optional;
 @RequestMapping("/api/item")
 public class ItemController {
 
-    @Autowired
-    ItemRepository itemRepository;
 
-    @GetMapping
-    public ResponseEntity getItems(@RequestParam Optional<String> category) {
 
-        if(category.isPresent()) {
-            return new ResponseEntity(itemRepository.findByCategory(category.get()), HttpStatus.OK);
-        }
-        return new ResponseEntity(itemRepository.findAll(), HttpStatus.OK);
-    }
 
-    @GetMapping("/{itemId}")
-    public ResponseEntity getItemById(@PathVariable int itemId) {
-        if(itemRepository.findById(itemId).isEmpty()) {
-            return new ResponseEntity(HttpStatus.NOT_FOUND);
-        } else {
-            return new ResponseEntity(itemRepository.findById(itemId), HttpStatus.OK);
-        }
-    }
+//    @Autowired
+//    ItemRepository itemRepository;
+//
+//    @GetMapping
+//    public ResponseEntity getItems(@RequestParam Optional<String> category) {
+//
+//        if(category.isPresent()) {
+//            return new ResponseEntity(itemRepository.findByCategory(category.get()), HttpStatus.OK);
+//        }
+//        return new ResponseEntity(itemRepository.findAll(), HttpStatus.OK);
+//    }
+//
+//    @GetMapping("/{itemId}")
+//    public ResponseEntity getItemById(@PathVariable int itemId) {
+//        if(itemRepository.findById(itemId).isEmpty()) {
+//            return new ResponseEntity(HttpStatus.NOT_FOUND);
+//        } else {
+//            return new ResponseEntity(itemRepository.findById(itemId), HttpStatus.OK);
+//        }
+//    }
 }
