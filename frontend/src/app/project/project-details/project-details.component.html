@@ -1,64 +1,97 @@
-<div class = "container">
+<div class="container">
     <br />
     <h2 class="text-info mt-5">Project Details</h2>
-    <form>
-    <!-- <form [formGroup]="createProjectForm">   -->
+    <br>
+    <div class="form-group">
+        <div>
+            <h5>Edit Basic Information</h5>
+            <div>
+                <label>Update Project Name
+                    <input #name (change)="updateProjectName(name.value)"
+                        type="text" value="{{project.name}}" class="form-control" />
+                </label>
+            </div>
+            <div>
+                <div class = "form-group">
+                    <h5>Update Room Type</h5>
+                    <div class="form-check indent-left">
+                        <label class="form-check-label"><input #roomType name="roomType" type="radio" class = "form-check-input" value="kitchen" [checked]="project.roomType == 'kitchen'" (change)="radioChangeHandler($event)"/>Kitchen</label>
+                    </div>
+                    <div class="form-check indent-left">
+                        <label class="form-check-label"><input #roomType name="roomType" type="radio" class = "form-check-input" value="bathroom" [checked]="project.roomType == 'bathroom'" (change)="radioChangeHandler($event)"/>Bathroom</label>
+                    </div>
+                    <div class="form-check indent-left">
+                        <label class="form-check-label"><input #roomType name="roomType" type="radio" class = "form-check-input" value="living" [checked]="project.roomType == 'living'" (change)="radioChangeHandler($event)"/>Bedroom, Living Room, Office, Etc.</label>
+                    </div> 
+                </div>
+            </div>
+            <div>
+                <label>Update Room Length
+                    <input #roomLength (change)="updateProjectRoomLength(roomLength.value)" type="number" value="{{project.roomLength}}"
+                        class="form-control" />
+                </label>
+            </div>
+            <div>
+                <label>Update Room Width
+                    <input #roomWidth (change)="updateProjectRoomWidth(roomWidth.value)"
+                    type="number" value="{{project.roomWidth}}" class="form-control" />
+                </label>
+            </div>
+            <div>
+                <label>Update Room Height
+                    <input #roomHeight
+                        (change)="updateProjectRoomHeight(roomHeight.value)" type="number" value="{{project.roomHeight}}"
+                        class="form-control" />
+                </label>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <h5>Fixtures</h5>
+        <div>
+            <ul *ngFor="let itemDetailsObject of project.itemDetails">
+                <li class="input-group" *ngIf="itemDetailsObject.item.category == 'Fixture'">
+                    <label>{{itemDetailsObject.item.name}}
+                        <input #quantity (change)="saveItemDetails(quantity.value, itemDetailsObject)" type="number"
+                            value="{{itemDetailsObject.quantity}}" class="form-control" />
+                    </label>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <br />
+    <div class="form-group">
+        <h5>Appliances</h5>
+        <div>
+            <ul *ngFor="let itemDetailsObject of project.itemDetails">
+                <li class="input-group" *ngIf="itemDetailsObject.item.category == 'Appliance'">
+                    <label>{{itemDetailsObject.item.name}}
+                        <input #quantity (change)="saveItemDetails(quantity.value, itemDetailsObject)" type="number"
+                            value="{{itemDetailsObject.quantity}}" class="form-control" />
+                    </label>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <br />
+    <div class="form-group">
+        <h5>Finishes</h5>
+        <div>
+            <ul *ngFor="let itemDetailsObject of project.itemDetails">
+                <li class="input-group" *ngIf="itemDetailsObject.item.category == 'Finish'">
+                    <label>{{itemDetailsObject.item.name}}<br>{{itemDetailsObject.item.description}}<input class="form-control" #quantity
+                            (change)="saveItemDetails(quantity.value, itemDetailsObject)" type="number"
+                            value="{{itemDetailsObject.quantity}}" />
+                    </label>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <br />
+    <div class="form-group">
+        <button (click)='saveProjectDetails()' class="btn btn-info" [routerLink]="'/project/list'">Submit Project
+            Details</button>
+    </div>
 
-    
-        <div class = "form-group">
-            <h5>Fixtures</h5>
-            <div class="form-check indent-left">
-                <label class="form-check-label"><input #item type="checkbox" class = "form-check-input" value="item[i] - the item itself" />Item.name using a for loop</label>
-                <label class="form-check-label"><input #quantity type="number" class = "form-check-input" value="number" />quantity</label>
-            </div>
-            <div class="form-check indent-left">
-                <label class="form-check-label"><input #item type="checkbox" class = "form-check-input" value="item[i] - the item itself" />Item.name using a for loop</label>
-                <label class="form-check-label"><input #quantity type="number" class = "form-check-input" value="number" />quantity</label>
-            </div>
-            <div class="form-check indent-left">
-                <label class="form-check-label"><input #item type="checkbox" class = "form-check-input" value="item[i] - the item itself" />Item.name using a for loop</label>
-                <label class="form-check-label"><input #quantity type="number" class = "form-check-input" value="number" />quantity</label>
-            </div>
-            <div class="form-check indent-left">
-                <label class="form-check-label"><input #item type="checkbox" class = "form-check-input" value="item[i] - the item itself" />Item.name using a for loop</label>
-                <label class="form-check-label"><input #quantity type="number" class = "form-check-input" value="number" />quantity</label>
-            </div>
-        </div>
-        <br />
-        <div class="form-group">
-            <h5>Appliances</h5>
-            <div class="form-check indent-left">
-                <label class="form-check-label"><input #item type="checkbox" class = "form-check-input" value="item[i] - the item itself" />Item.name using a for loop</label>
-                <label class="form-check-label"><input #quantity type="number" class = "form-check-input" value="number" />quantity</label>
-            </div>
-            <div class="form-check indent-left">
-                <label class="form-check-label"><input #item type="checkbox" class = "form-check-input" value="item[i] - the item itself" />Item.name using a for loop</label>
-                <label class="form-check-label"><input #quantity type="number" class = "form-check-input" value="number" />quantity</label>
-            </div>
-            <div class="form-check indent-left">
-                <label class="form-check-label"><input #item type="checkbox" class = "form-check-input" value="item[i] - the item itself" />Item.name using a for loop</label>
-                <label class="form-check-label"><input #quantity type="number" class = "form-check-input" value="number" />quantity</label>
-            </div>
-        </div>
-        <br />
-        <div class="form-group">
-            <h5>Finishes</h5>
-            <div class="form-check indent-left">
-                <label class="form-check-label"><input #item type="checkbox" class = "form-check-input" value="item[i] - the item itself" />Item.name using a for loop</label>
-                <label class="form-check-label"><input #quantity type="number" class = "form-check-input" value="number" />quantity</label>
-            </div>
-            <div class="form-check indent-left">
-                <label class="form-check-label"><input #item type="checkbox" class = "form-check-input" value="item[i] - the item itself" />Item.name using a for loop</label>
-                <label class="form-check-label"><input #quantity type="number" class = "form-check-input" value="number" />quantity</label>
-            </div>
-            <div class="form-check indent-left">
-                <label class="form-check-label"><input #item type="checkbox" class = "form-check-input" value="item[i] - the item itself" />Item.name using a for loop</label>
-                <label class="form-check-label"><input #quantity type="number" class = "form-check-input" value="number" />quantity</label>
-            </div>
-        </div>
-        <br />
-        <div class="form-group">
-            <button (click)='saveProjectComponent()' class="btn btn-info" [routerLink] = "'/project/add-details'">Create Project</button>
-        </div>
-    </form>
-</div> 
+
+</div>

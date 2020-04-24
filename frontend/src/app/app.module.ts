@@ -1,7 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
-import { AppRoutingModule } from './app-routing.module';
+
 import { AppComponent } from './app.component';
 import { CreateProjectComponent } from './project/create-project/create-project.component';
 import { HeaderComponent } from './header/header.component';
@@ -14,6 +14,8 @@ import { EditUserProfileComponent } from './user/edit-user-profile/edit-user-pro
 import { LoginComponent } from './login/login.component';
 import { AboutComponent } from './about/about.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
+import { AppRoutingModule } from './app-routing.module';
+
 
 @NgModule({
   declarations: [
