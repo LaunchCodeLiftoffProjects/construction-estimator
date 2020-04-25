@@ -2,15 +2,16 @@ import { Item } from './item';
 import { Project } from './project';
 
 export class ItemDetails {
-    project: Project;
-    item: Item;
+
+    itemId: number;
     quantity: number;
     finalPrice: number;
 
 
-    constructor(project: Project, item: Item) {
-        this.project = project;
-        this.item = item;
+    constructor(id: number) {
+        this.itemId = id;
+        this.quantity = 0;
+        this.finalPrice = 0;
     }
 
 }

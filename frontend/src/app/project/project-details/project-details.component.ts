@@ -17,6 +17,7 @@ export class ProjectDetailsComponent implements OnInit {
   projectURL = "http://localhost:8080/api/project/";
   id: string;
   itemsArray: Item[];
+  detailsArray: ItemDetails[];
 
   constructor(private route: ActivatedRoute) { }
 
@@ -29,18 +30,20 @@ export class ProjectDetailsComponent implements OnInit {
     this.projectURL = this.projectURL + this.id;
     this.loadProject();
     console.log("Project Loaded");
-    this.loadItems();
-    console.log("Items loaded.");
+
   }
 
 
   loadProject() {
 
-    fetch(this.projectURL).then(function(response) {
-      response.json().then(function(json) {
+    fetch(this.projectURL).then(function (response) {
+      response.json().then(function (json) {
         this.project = new Project(json.name, json.roomType, json.roomLength, json.roomWidth, json.roomHeight);
         this.project.id = json.id;
         this.project.itemDetails = json.itemDetails;
+
+        this.loadItems();
+        console.log("Items loaded.");
       }.bind(this));
     }.bind(this));
 
@@ -48,32 +51,48 @@ export class ProjectDetailsComponent implements OnInit {
 
   loadItems() {
 
-    fetch("http://localhost:8080/api/item").then(function(response) {
-      response.json().then(function(json) {
-        let detailsArray: ItemDetails[] = [];
-        let item: Item;
-        let itemDetails: ItemDetails;
+    fetch("http://localhost:8080/api/item").then(function (response) {
+      response.json().then(function (json) {
         this.itemsArray = [];
+        this.detailsArray = [];
         json.forEach(obj => {
-          item = new Item(obj.id, obj.name, obj.description, obj.price, obj.category, obj.room);
-          console.log(item);
+          let item = new Item(obj.id, obj.name, obj.description, obj.price, obj.category, obj.room);
+
           this.itemsArray.push(item);
-          // itemDetails = new ItemDetails(this.project, item);
-          // detailsArray.push(itemDetails);
         });
-        // this.project.itemDetails = detailsArray;
       }.bind(this));
     }.bind(this));
-    
+
 
   }
 
 
 
 
-  saveItemDetails(quantity: number, itemDetailsObject: ItemDetails) {
-      itemDetailsObject.quantity = quantity;
-      console.log("changed quantity of " + itemDetailsObject.item.name + "and added it to the Project ItemDetails array", itemDetailsObject);
+  saveItemDetails(quantity: number, item: Item) {
+
+    // find the itemDetails.itemId index matching item.id
+    let detailsIndex = this.project.findItemDetailsByItemId(item.id);
+
+    // check and see if details already exist, if not create a new ItemDetails object
+    if (detailsIndex === -1) {
+      let newDetails = new ItemDetails(item.id);
+      newDetails.quantity = quantity;
+      this.project.itemDetails.push(newDetails);
+    } else { // the details already exist, update existing quantity
+      this.project.itemDetails[detailsIndex].quantity = quantity;
+    }
+  }
+
+  getQuantity(item:Item): number {
+    let detailsIndex = this.project.findItemDetailsByItemId(item.id);
+
+    if (detailsIndex === -1) {
+      return 0;
+    } else {
+      return this.project.itemDetails[detailsIndex].quantity;
+    }
+
   }
 
 
@@ -105,8 +124,8 @@ export class ProjectDetailsComponent implements OnInit {
 
 
   saveProjectDetails() {
-  
-    fetch("http://localhost:8080/api/project/" + this.project.id + "/component", {
+
+    fetch("http://localhost:8080/api/project/" + this.project.id + "/details", {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -114,11 +133,11 @@ export class ProjectDetailsComponent implements OnInit {
         'Access-Control-Allow-Credentials': 'true'
       },
       body: JSON.stringify(this.project.itemDetails),
-    }).then(function(response) {
+    }).then(function (response) {
       return response.json();
-    }).then(function(data) {
+    }).then(function (data) {
       console.log('Success:', data);
-    }).catch(function(error) {
+    }).catch(function (error) {
       console.error('Error:', error);
     });
 
@@ -132,11 +151,11 @@ export class ProjectDetailsComponent implements OnInit {
         'Access-Control-Allow-Credentials': 'true'
       },
       body: JSON.stringify(this.project),
-    }).then(function(response) {
+    }).then(function (response) {
       return response.json();
-    }).then(function(data) {
+    }).then(function (data) {
       console.log('Success:', data);
-    }).catch(function(error) {
+    }).catch(function (error) {
       console.error('Error:', error);
     });
 

@@ -50,25 +50,24 @@
         <h5>Fixtures</h5>
         <div>
             <ul *ngFor="let item of itemsArray">
-                <li class="input-group" *ngIf="item.category == 'fixture'">
+                <li class="input-group" *ngIf="item.category == 'fixture' && item.room.includes(project.roomType)">
                     <label>{{item.name}}
-                       <!-- <input #quantity (change)="saveItemDetails(quantity.value, itemDetailsObject)" type="number"
-                            value="{{itemDetailsObject.quantity}}" class="form-control" /> -->
+                       <input #quantity (change)="saveItemDetails(quantity.value, item)" type="number"
+                            value="{{getQuantity(item)}}" class="form-control" />
                     </label>
                 </li>
             </ul>
         </div>
     </div>
     <br />
-    <!--
     <div class="form-group">
         <h5>Appliances</h5>
         <div>
-            <ul *ngFor="let itemDetailsObject of project.itemDetails">
-                <li class="input-group" *ngIf="itemDetailsObject.item.category == 'Appliance'">
-                    <label>{{itemDetailsObject.item.name}}
-                        <input #quantity (change)="saveItemDetails(quantity.value, itemDetailsObject)" type="number"
-                            value="{{itemDetailsObject.quantity}}" class="form-control" />
+            <ul *ngFor="let item of itemsArray">
+                <li class="input-group" *ngIf="item.category == 'appliance' && item.room.includes(project.roomType)">
+                    <label>{{item.name}}
+                        <input #quantity (change)="saveItemDetails(quantity.value, item)" type="number"
+                            value="{{getQuantity(item)}}" class="form-control" />
                     </label>
                 </li>
             </ul>
@@ -78,11 +77,11 @@
     <div class="form-group">
         <h5>Finishes</h5>
         <div>
-            <ul *ngFor="let itemDetailsObject of project.itemDetails">
-                <li class="input-group" *ngIf="itemDetailsObject.item.category == 'Finish'">
-                    <label>{{itemDetailsObject.item.name}}<br>{{itemDetailsObject.item.description}}<input class="form-control" #quantity
-                            (change)="saveItemDetails(quantity.value, itemDetailsObject)" type="number"
-                            value="{{itemDetailsObject.quantity}}" />
+            <ul *ngFor="let item of itemsArray">
+                <li class="input-group" *ngIf="item.category == 'finish' && item.room.includes(project.roomType)">
+                    <label>{{item.name}}<br>{{item.description}}<input class="form-control" #quantity
+                            (change)="saveItemDetails(quantity.value, item)" type="number"
+                            value="{{getQuantity(item)}}" />
                     </label>
                 </li>
             </ul>
@@ -93,6 +92,6 @@
         <button (click)='saveProjectDetails()' class="btn btn-info" [routerLink]="'/project/list'">Submit Project
             Details</button>
     </div>
--->
+
 
 </div>
