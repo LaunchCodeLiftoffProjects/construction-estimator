@@ -1,20 +1,13 @@
 package org.launchcode.constructionestimator.controllers;
 
-import org.launchcode.constructionestimator.models.Item;
-import org.launchcode.constructionestimator.models.ItemDetails;
 import org.launchcode.constructionestimator.models.Project;
-import org.launchcode.constructionestimator.models.data.ItemDetailsRepository;
 import org.launchcode.constructionestimator.models.data.ProjectRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.launchcode.constructionestimator.models.data.ItemRepository;
 
-import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -23,12 +16,6 @@ public class ProjectController {
 
     @Autowired
     ProjectRepository projectRepository;
-
-    @Autowired
-    ItemRepository itemRepository;
-
-    @Autowired
-    ItemDetailsRepository itemDetailsRepository;
 
     // Use this with @RequestParam to search all projects by field, leave params empty to return all projects
     @GetMapping
@@ -49,14 +36,7 @@ public class ProjectController {
     // Returns json in form { 'id': project.id }
     @PostMapping
     public ResponseEntity postProject(@RequestBody Project project) {
-        List<ItemDetails> detailsArray = new ArrayList<>();
-        projectRepository.save(project);
-        for (Item item : itemRepository.findAll()) {
-            ItemDetails details = new ItemDetails(project, item);
-            detailsArray.add(details);
-        }
-        project.setItemDetails(detailsArray);
-        itemDetailsRepository.saveAll(detailsArray);
+
         projectRepository.save(project);
 
         Integer id = project.getId();
