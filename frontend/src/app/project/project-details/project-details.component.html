@@ -49,17 +49,18 @@
     <div class="form-group">
         <h5>Fixtures</h5>
         <div>
-            <ul *ngFor="let itemDetailsObject of project.itemDetails">
-                <li class="input-group" *ngIf="itemDetailsObject.item.category == 'Fixture'">
-                    <label>{{itemDetailsObject.item.name}}
-                        <input #quantity (change)="saveItemDetails(quantity.value, itemDetailsObject)" type="number"
-                            value="{{itemDetailsObject.quantity}}" class="form-control" />
+            <ul *ngFor="let item of itemsArray">
+                <li class="input-group" *ngIf="item.category == 'fixture'">
+                    <label>{{item.name}}
+                       <!-- <input #quantity (change)="saveItemDetails(quantity.value, itemDetailsObject)" type="number"
+                            value="{{itemDetailsObject.quantity}}" class="form-control" /> -->
                     </label>
                 </li>
             </ul>
         </div>
     </div>
     <br />
+    <!--
     <div class="form-group">
         <h5>Appliances</h5>
         <div>
@@ -92,6 +93,6 @@
         <button (click)='saveProjectDetails()' class="btn btn-info" [routerLink]="'/project/list'">Submit Project
             Details</button>
     </div>
-
+-->
 
 </div>

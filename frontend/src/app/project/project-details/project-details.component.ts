@@ -26,18 +26,16 @@ export class ProjectDetailsComponent implements OnInit {
 
     console.log("Id", this.id);
 
-   
-
     this.projectURL = this.projectURL + this.id;
     this.loadProject();
     console.log("Project Loaded");
-    
+    this.loadItems();
+    console.log("Items loaded.");
   }
 
 
   loadProject() {
 
-    
     fetch(this.projectURL).then(function(response) {
       response.json().then(function(json) {
         this.project = new Project(json.name, json.roomType, json.roomLength, json.roomWidth, json.roomHeight);
@@ -48,24 +46,27 @@ export class ProjectDetailsComponent implements OnInit {
 
   }
 
-  // loadItems() {
+  loadItems() {
 
-  //   fetch("http://localhost:8080/api/item").then(function(response) {
-  //     response.json().then(function(json) {
-  //       let detailsArray: ItemDetails[] = [];
-  //       let item: Item;
-  //       let itemDetails: ItemDetails;
-  //       json.forEach(obj => {
-  //         item = new Item(obj.id, obj.name, obj.description, obj.price, obj.category, obj.roomTypes);
-  //         itemDetails = new ItemDetails(this.project, item);
-  //         detailsArray.push(itemDetails);
-  //       });
-  //       this.project.itemDetails = detailsArray;
-  //     }.bind(this));
-  //   }.bind(this));
+    fetch("http://localhost:8080/api/item").then(function(response) {
+      response.json().then(function(json) {
+        let detailsArray: ItemDetails[] = [];
+        let item: Item;
+        let itemDetails: ItemDetails;
+        this.itemsArray = [];
+        json.forEach(obj => {
+          item = new Item(obj.id, obj.name, obj.description, obj.price, obj.category, obj.room);
+          console.log(item);
+          this.itemsArray.push(item);
+          // itemDetails = new ItemDetails(this.project, item);
+          // detailsArray.push(itemDetails);
+        });
+        // this.project.itemDetails = detailsArray;
+      }.bind(this));
+    }.bind(this));
     
 
-  // }
+  }
 
 
 
