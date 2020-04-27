@@ -21,6 +21,11 @@ public class ItemDetails extends AbstractEntity {
 
     public ItemDetails() {}
 
+    public ItemDetails(Project project, Item item) {
+        this.project = project;
+        this.item = item;
+    }
+
     public Project getProject() {
         return project;
     }

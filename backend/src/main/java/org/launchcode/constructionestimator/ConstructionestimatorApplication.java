@@ -11,6 +11,7 @@ public class ConstructionestimatorApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(ConstructionestimatorApplication.class, args);
+
 	}
 
 	@Bean
@@ -19,6 +20,9 @@ public class ConstructionestimatorApplication {
 			@Override
 			public void addCorsMappings(CorsRegistry registry) {
 				registry.addMapping("/api/project").allowedOrigins("http://localhost:4200");
+				registry.addMapping("/api/project/**").allowedOrigins("http://localhost:4200");
+				registry.addMapping("/api/item").allowedOrigins("http://localhost:4200");
+				registry.addMapping("/api/project/**/details").allowedOrigins("http://localhost:4200");
 			}
 		};
 	}

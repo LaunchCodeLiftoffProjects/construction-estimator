@@ -19,7 +19,7 @@ const routes: Routes = [
   {path: 'user/profile' , component: UserProfileComponent},
   {path: 'user/profile/edit' , component: EditUserProfileComponent},
   {path: 'project/create' , component: CreateProjectComponent},
-  {path: 'project/add-details' , component: ProjectDetailsComponent},
+  {path: 'project/add-details/:id' , component: ProjectDetailsComponent},
   {path: 'project/list', component: ProjectListComponent},
   {path: 'project/edit' , component: EditProjectComponent},
   {path: '**', component: PageNotFoundComponent},

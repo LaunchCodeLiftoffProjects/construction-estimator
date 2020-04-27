@@ -1,4 +1,4 @@
-import { ProjectComponent } from './projectcomponent';
+import { ItemDetails } from './item-details';
 
 export class Project {
 
@@ -8,7 +8,7 @@ export class Project {
     roomLength: number;
     roomWidth: number;
     roomHeight: number;
-    projectComponents: ProjectComponent[];
+    itemDetails: ItemDetails[];
 
     constructor(name: string, roomType: string, roomLength: number, roomWidth: number, roomHeight: number) {
         this.name = name;
@@ -18,8 +18,19 @@ export class Project {
         this.roomHeight = roomHeight;
     }
 
-    addProjectComponent(projectComponent: ProjectComponent) {
-        this.projectComponents.push(projectComponent);
+    addItemDetails(itemDetails: ItemDetails) {
+        this.itemDetails.push(itemDetails);
+    }
+
+    // Returns the index of itemDetails matching itemId, -1 if not found
+    findItemDetailsByItemId(itemId: number): number {
+        for(let i = 0; i < this.itemDetails.length; i++) {
+            if(this.itemDetails[i].itemId === itemId) {
+                return i;
+            }
+        }
+
+        return -1;
     }
 }
 
