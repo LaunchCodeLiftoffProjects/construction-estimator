@@ -8,10 +8,10 @@ export class User {
     lastName: string;
     email: string;
     password: string;
-    userDetails: UserDetails[];
+    userDetails: UserDetails;
     projects: Project[];
 
-    constructor (firstName: string, lastName: string, email: string, password: string, userDetails: UserDetails[], projects: Project[]) {
+    constructor (firstName: string, lastName: string, email: string, password: string, userDetails: UserDetails, projects: Project[]) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
