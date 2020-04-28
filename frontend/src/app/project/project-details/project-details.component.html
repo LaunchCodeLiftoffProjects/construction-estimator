@@ -19,7 +19,7 @@
                 <ng-template #editProjectBlock>
                     <div class="form-group">
                         <label class="lead">Project Name <input #name (change)="updateProjectName(name.value)"
-                                type="text" value="{{project.name}}" class="form-control-sm" /></label>
+                                type="text" value="{{project.name}}" class="form-control form-control-sm" /></label>
                         <br />
                         <span class="lead">Room Type </span>
                         <div class = "form-group">
@@ -36,9 +36,9 @@
                     </div>
                     <div class="form-group">
                         <div class = "input-group"> 
-                            <label><input #roomLength type="number" class="form-control-sm" step="0.1" min = 0 placeholder="0.0" (change)="updateProjectRoomLength(roomLength.value)" value="{{project.roomLength}}" /> Length (ft.)</label>
-                            <label><input #roomWidth type="number" class="form-control-sm" step="0.1" min = 0 placeholder="0.0" (change)="updateProjectRoomWidth(roomWidth.value)" value="{{project.roomWidth}}" /> Width (ft.)</label>
-                            <label><input #roomHeight type="number" class="form-control-sm" step="0.1" min = 0 placeholder="0.0" (change)="updateProjectRoomHeight(roomHeight.value)" value="{{project.roomHeight}}" /> Ceiling Height (ft.)</label>
+                            <label><input #roomLength type="number" class="form-control form-control-sm" step="0.1" min = 0 placeholder="0.0" (change)="updateProjectRoomLength(roomLength.value)" value="{{project.roomLength}}" /> Length (ft.)</label>
+                            <label><input #roomWidth type="number" class="form-control form-control-sm" step="0.1" min = 0 placeholder="0.0" (change)="updateProjectRoomWidth(roomWidth.value)" value="{{project.roomWidth}}" /> Width (ft.)</label>
+                            <label><input #roomHeight type="number" class="form-control form-control-sm" step="0.1" min = 0 placeholder="0.0" (change)="updateProjectRoomHeight(roomHeight.value)" value="{{project.roomHeight}}" /> Ceiling Height (ft.)</label>
                         </div>
                     </div>
                     <span class="badge badge-success"(click) = "editingProject = false;" >Save Changes</span>
@@ -48,19 +48,16 @@
         </div>
     </div>
 
-    <br />
     <div class = "container col-12">
         <div class="form-group">
             <h5>Fixtures</h5>
-            <div>
-                <ul *ngFor="let item of itemsArray">
-                    <li class="input-group" *ngIf="item.category == 'fixture' && item.room.includes(project.roomType)">
-                        <label>{{item.name}}
-                        <input #quantity (change)="saveItemDetails(quantity.value, item)" type="number"
-                                value="{{getQuantity(item)}}" class="form-control" />
-                        </label>
-                    </li>
-                </ul>
+            <div *ngFor="let item of itemsArray">
+                <div class="input-group" *ngIf="item.category == 'fixture' && item.room.includes(project.roomType)">
+                    <div class="lead col">{{item.name}}</div>
+                    <div class="col"><input #quantity (change)="saveItemDetails(quantity.value, item)" type="number"
+                            value="{{getQuantity(item)}}" class="form-control form-control-sm" /> unit</div>
+                    <div class = "col">options</div>
+                    </div>
             </div>
         </div>
         <br />
