@@ -16,8 +16,8 @@ export class RegisterComponent implements OnInit {
   ngOnInit() {
   }
 
-  saveItem(firstName: string, lastName: string, email: string, password: string, userDetails: UserDetails[], projects: Project[]) {
-    let user = new User(firstName, lastName, email, password, [], []);
+  saveItem(firstName: string, lastName: string, email: string, password: string, userDetails: UserDetails, projects: Project[]) {
+    let user = new User(firstName, lastName, email, password, null, []);
     console.log("saved user", user);
     // TODO: POST TO SERVER
     fetch('http://localhost:8080/api/user', {

@@ -18,6 +18,7 @@ export class ProjectDetailsComponent implements OnInit {
   id: string;
   itemsArray: Item[];
   detailsArray: ItemDetails[];
+  editingProject: boolean = false;
 
   constructor(private route: ActivatedRoute) { }
 
@@ -57,7 +58,6 @@ export class ProjectDetailsComponent implements OnInit {
         this.detailsArray = [];
         json.forEach(obj => {
           let item = new Item(obj.id, obj.name, obj.description, obj.price, obj.category, obj.room);
-
           this.itemsArray.push(item);
         });
       }.bind(this));
@@ -106,18 +106,18 @@ export class ProjectDetailsComponent implements OnInit {
     console.log("changed project room type:", this.project.roomType);
   }
 
-  updateProjectRoomLength(roomLength: string) {
-    this.project.roomLength = name;
+  updateProjectRoomLength(roomLength: number) {
+    this.project.roomLength = roomLength;
     console.log("changed project room length:", this.project.roomLength);
   }
 
-  updateProjectRoomWidth(roomWidth: string) {
-    this.project.roomWidth = name;
+  updateProjectRoomWidth(roomWidth: number) {
+    this.project.roomWidth = roomWidth;
     console.log("changed project room width:", this.project.roomWidth);
   }
 
-  updateProjectRoomHeight(roomHeight: string) {
-    this.project.roomHeight = name;
+  updateProjectRoomHeight(roomHeight: number) {
+    this.project.roomHeight = roomHeight;
     console.log("changed project room height:", this.project.roomHeight);
   }
 
