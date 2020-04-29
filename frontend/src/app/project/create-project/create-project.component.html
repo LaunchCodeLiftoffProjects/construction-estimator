@@ -1,33 +1,35 @@
 <div class = "container">
     <br />
     <h2 class="text-info mt-5">Create a New Project</h2>
+    <p class="lead">Let's get started with some basic information! <span class="text-muted"> (You'll be able to go into more detail on the next page.)</span></p>
+
     <!-- <form> -->
     <!-- <form [formGroup]="createProjectForm">   -->
         <br />
         <div class = "form-group">
-            <h5>What would you like to call your project?</h5>
-            <input #name type='text' placeholder="Project Name" class="form-control"/>
+            <h4>What would you like to call your project?</h4>
+            <input #name type='text' placeholder="My Project" class="form-control form-control-sm w-50"/>
         </div>
         <br />
         <div class = "form-group">
-            <h5>Select your room type:</h5>
+            <h4>Select your room type:</h4>
             <div class="form-check indent-left">
-                <label class="form-check-label"><input #roomType name="roomType" type="radio" class = "form-check-input" value="Kitchen" (change)="radioChangeHandler($event)"/>Kitchen</label>
+                <label class="form-check-label"><input #roomType name="roomType" type="radio" class = "form-check-input" value="kitchen" (change)="radioChangeHandler($event)"/>Kitchen</label>
             </div>
             <div class="form-check indent-left">
-                <label class="form-check-label"><input #roomType name="roomType" type="radio" class = "form-check-input" value="Bathroom" (change)="radioChangeHandler($event)"/>Bathroom</label>
+                <label class="form-check-label"><input #roomType name="roomType" type="radio" class = "form-check-input" value="bathroom" (change)="radioChangeHandler($event)"/>Bathroom</label>
             </div>
             <div class="form-check indent-left">
-                <label class="form-check-label"><input #roomType name="roomType" type="radio" class = "form-check-input" value="Bedroom/Living/Other" (change)="radioChangeHandler($event)"/>Bedroom, Living Room, Office, Etc.</label>
+                <label class="form-check-label"><input #roomType name="roomType" type="radio" class = "form-check-input" value="living" (change)="radioChangeHandler($event)"/>Bedroom, Living Room, Office, Etc.</label>
             </div> 
         </div>
         <br />
         <div class="form-group">
-            <h5>What are the room's general dimensions?</h5>
+            <h4>What are the room's general dimensions?</h4>
             <div class = "input-group"> 
-                <label><input #roomLength type="number" class="form-control" step="0.1" min = 0 placeholder="0.0" />Length (ft.)</label>
-                <label><input #roomWidth type="number" class="form-control" step="0.1" min = 0 placeholder="0.0" />Width (ft.)</label>
-                <label><input #roomHeight type="number" class="form-control" step="0.1" min = 0 placeholder="0.0" />Ceiling Height (ft.)</label>
+                <label><input #roomLength type="number" class="form-control form-control-sm w-50" step="1" min = 0 placeholder="0" />Length (ft.)</label>
+                <label><input #roomWidth type="number" class="form-control form-control-sm w-50" step="1" min = 0 placeholder="0" />Width (ft.)</label>
+                <label><input #roomHeight type="number" class="form-control form-control-sm w-50" step="1" min = 0 placeholder="0" />Ceiling Height (ft.)</label>
             </div>
         </div>
         <br />
