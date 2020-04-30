@@ -17,7 +17,7 @@
                 </div>
                 <!--Visible only while editing name, type, and dimensions-->
                 <ng-template #editProjectBlock>
-                    <div class="form-group w-100">
+                    <div class="form-group">
                         <label class="lead">Project Name <input #name (change)="updateProjectName(name.value)"
                                 type="text" value="{{project.name}}" class="form-control form-control-sm w-100" /></label>
                         <br />
