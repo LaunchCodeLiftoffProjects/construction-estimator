@@ -50,6 +50,7 @@ public class ProjectController {
     }
 
     // returns json in form { "id": "project.id" }
+    // this is probably unnecessary but left it for consistency with the post mapping
     @PutMapping("/{projectId}")
     public ResponseEntity updateProject(@PathVariable("projectId") int projectId, @RequestBody Project project) {
 
@@ -87,8 +88,5 @@ public class ProjectController {
         }
 
     }
-
-
-    // TODO: Delete and put mapping
 
 }
