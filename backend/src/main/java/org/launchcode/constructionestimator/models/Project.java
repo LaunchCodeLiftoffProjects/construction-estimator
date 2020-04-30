@@ -11,9 +11,9 @@ public class Project extends NamedEntity {
 
     private String roomType;
 
-    private int roomLength;
-    private int roomWidth;
-    private int roomHeight;
+    private double roomLength;
+    private double roomWidth;
+    private double roomHeight;
 
     private boolean needElectrician;
     private boolean needPlumber;
@@ -41,7 +41,7 @@ public class Project extends NamedEntity {
         this.roomType = roomType;
     }
 
-    public int getRoomLength() {
+    public double getRoomLength() {
         return roomLength;
     }
 
@@ -49,7 +49,7 @@ public class Project extends NamedEntity {
         this.roomLength = roomLength;
     }
 
-    public int getRoomWidth() {
+    public double getRoomWidth() {
         return roomWidth;
     }
 
@@ -57,7 +57,7 @@ public class Project extends NamedEntity {
         this.roomWidth = roomWidth;
     }
 
-    public int getRoomHeight() {
+    public double getRoomHeight() {
         return roomHeight;
     }
 
