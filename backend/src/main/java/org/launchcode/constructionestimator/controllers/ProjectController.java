@@ -1,18 +1,13 @@
 package org.launchcode.constructionestimator.controllers;
 
-import org.launchcode.constructionestimator.models.Item;
-import org.launchcode.constructionestimator.models.ItemDetails;
 import org.launchcode.constructionestimator.models.Project;
-import org.launchcode.constructionestimator.models.data.ItemDetailsRepository;
 import org.launchcode.constructionestimator.models.data.ProjectRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
 import java.util.Map;
 
 @RestController
