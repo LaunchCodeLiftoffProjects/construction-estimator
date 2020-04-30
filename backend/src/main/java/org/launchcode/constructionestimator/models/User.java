@@ -1,13 +1,11 @@
 package org.launchcode.constructionestimator.models;
 
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@AttributeOverride(name = "name", column = @Column(name="e_mail"))
 public class User extends NamedEntity {
 
     private String FirstName;
