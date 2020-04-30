@@ -12,18 +12,13 @@ public class ItemDetails extends AbstractEntity {
     @JsonBackReference
     private Project project;
 
-    // This should be another entity on the database with common item fields
-    @ManyToOne
-    private Item item;
-
     private double quantity;
     private int finalPrice;
 
     public ItemDetails() {}
 
-    public ItemDetails(Project project, Item item) {
+    public ItemDetails(Project project) {
         this.project = project;
-        this.item = item;
     }
 
     public Project getProject() {
@@ -32,14 +27,6 @@ public class ItemDetails extends AbstractEntity {
 
     public void setProject(Project project) {
         this.project = project;
-    }
-
-    public Item getItem() {
-        return item;
-    }
-
-    public void setItem(Item item) {
-        this.item = item;
     }
 
     public double getQuantity() {
