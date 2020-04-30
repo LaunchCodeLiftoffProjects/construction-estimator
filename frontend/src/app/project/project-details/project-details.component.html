@@ -4,7 +4,7 @@
         <div class="row justify-content-between">
             <div class="col-6">
                 <h2 class="text-info">Project Details</h2>
-                <p>Tell us all about what you're planning to do! Don't worry if you aren't sure about some of the details; you can come back and edit your project at any time.</p>
+                <p>Tell us what you need to make your project come to life! Don't worry if you aren't sure about some of the details; you can come back and edit your project at any time.</p>
             </div>
             <div class="col-6">
                 
@@ -50,43 +50,66 @@
 
     <div class = "container col-12">
         <div class="form-group">
-            <h5>Fixtures</h5>
+            <h4 class="mt-5">Fixtures</h4>
             <div *ngFor="let item of itemsArray">
                 <div class="input-group" *ngIf="item.category == 'fixture' && item.room.includes(project.roomType)">
-                    <div class="lead col">{{item.name}}</div>
-                    <div class="col"><input #quantity (change)="saveItemDetails(quantity.value, item)" type="number"
-                            value="{{getQuantity(item)}}" class="form-control form-control-sm" /> unit</div>
-                    <div class = "col">options</div>
+                    <div class="col-5 lead">
+                        {{item.name}}
                     </div>
+                    <div class="col-3">
+                        <input #quantity (change)="saveItemDetails(quantity.value, item)" type="number"
+                            value="{{getQuantity(item)}}" class="form-control form-control-sm w-50" /> unit
+                    </div>
+                    <div class = "col-4">
+                        options dropdown (if any)
+                    </div>
+                </div>
             </div>
         </div>
         <br />
         <div class="form-group">
-            <h5>Appliances</h5>
-            <div>
-                <ul *ngFor="let item of itemsArray">
-                    <li class="input-group" *ngIf="item.category == 'appliance' && item.room.includes(project.roomType)">
-                        <label>{{item.name}}
-                            <input #quantity (change)="saveItemDetails(quantity.value, item)" type="number"
-                                value="{{getQuantity(item)}}" class="form-control" />
-                        </label>
-                    </li>
-                </ul>
+            <h4 class="mt-5">Appliances</h4>
+            <div *ngFor="let item of itemsArray">
+                <div class="input-group" *ngIf="item.category == 'appliance' && item.room.includes(project.roomType)">
+                    <div class="col-5 lead">
+                        {{item.name}}
+                    </div>
+                    <div class="col-3">
+                        <input #quantity (change)="saveItemDetails(quantity.value, item)" type="number"
+                            value="{{getQuantity(item)}}" class="form-control form-control-sm w-50" /> unit
+                    </div>
+                    <div class = "col-4">
+                        options dropdown (if any)
+                    </div>
+                </div>
             </div>
         </div>
         <br />
         <div class="form-group">
-            <h5>Finishes</h5>
-            <div>
-                <ul *ngFor="let item of itemsArray">
-                    <li class="input-group" *ngIf="item.category == 'finish' && item.room.includes(project.roomType)">
-                        <label>{{item.name}}<br>{{item.description}}<input class="form-control" #quantity
-                                (change)="saveItemDetails(quantity.value, item)" type="number"
-                                value="{{getQuantity(item)}}" />
-                        </label>
-                    </li>
-                </ul>
+            <h4 class="mt-5">Finishes</h4>
+            <div *ngFor="let item of itemsArray">
+                <div class="input-group" *ngIf="item.category == 'finish' && item.room.includes(project.roomType)">
+                    <div class="col-5 lead">
+                        {{item.name}}
+                    </div>
+                    <div class="col-3">
+                        <input #quantity (change)="saveItemDetails(quantity.value, item)" type="number"
+                            value="{{getQuantity(item)}}" class="form-control form-control-sm w-50" /> unit
+                    </div>
+                    <div class = "col-4">
+                        options dropdown (if any)
+                    </div>
+                </div>
             </div>
+        </div>
+        <br />
+        <h4 class="mt-5">Labor</h4>
+        <div class="form-group">
+            <p class="lead">Will you be hiring any subcontractors?</p>
+            <label class = "checkbox"><input #plumbing type="checkbox" value="plumbing" /> Plumbing</label>
+            <label class = "checkbox"><input #electrical type="checkbox" value="electrical" /> Electrical</label>
+            <label class = "checkbox"><input #roughCarpentry type="checkbox" value="roughCarpentry" /> Rough Carpentry</label>
+            <label class = "checkbox"><input #finishWork type="checkbox" value="finishWork" /> Finish Work</label>
         </div>
         <br />
         <div class="form-group text-right">
