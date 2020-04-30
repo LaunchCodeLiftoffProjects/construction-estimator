@@ -95,7 +95,7 @@ for(let i = 0; i < itemArray.length; i++) {
     }
 }
 
-for (let i = 0; i < 50; i++) {
+for (let i = 0; i < 100; i++) {
     itemArray.push(casual.item(i + 1));
 }
 
