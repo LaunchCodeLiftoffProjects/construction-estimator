@@ -2,7 +2,6 @@ package org.launchcode.constructionestimator.controllers;
 
 import org.launchcode.constructionestimator.models.ItemDetails;
 import org.launchcode.constructionestimator.models.Project;
-import org.launchcode.constructionestimator.models.data.ItemDetailsRepository;
 import org.launchcode.constructionestimator.models.data.ProjectRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,7 +20,7 @@ public class ProjectController {
 
     @Autowired
     ItemDetailsRepository itemDetailsRepository;
-
+  
     // Use this with @RequestParam to search all projects by field, leave params empty to return all projects
     @GetMapping
     public ResponseEntity getProjects() {

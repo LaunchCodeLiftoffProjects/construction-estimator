@@ -12,13 +12,15 @@ public class ItemDetails extends AbstractEntity {
     @JsonBackReference
     private Project project;
 
-    // references an id in items.json, these ids are unique to item but not unique to anything else
+
     private int itemId;
 
-    private int quantity;
+    private double quantity;
+
     private int finalPrice;
 
     public ItemDetails() {}
+
 
     public ItemDetails(Project project, int itemId) {
         this.project = project;
@@ -33,19 +35,15 @@ public class ItemDetails extends AbstractEntity {
         this.project = project;
     }
 
-    public int getItemId() {
-        return itemId;
-    }
-
     public void setItemId(int itemId) {
         this.itemId = itemId;
     }
 
-    public int getQuantity() {
+    public double getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(int quantity) {
+    public void setQuantity(double quantity) {
         this.quantity = quantity;
     }
 
