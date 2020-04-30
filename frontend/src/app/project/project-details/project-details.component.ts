@@ -17,6 +17,8 @@ export class ProjectDetailsComponent implements OnInit {
   projectURL = "http://localhost:8080/api/project/";
   id: string;
   itemsArray: Item[];
+  detailsArray: ItemDetails[];
+  editingProject: boolean = false;
 
   constructor(private route: ActivatedRoute) { }
 
@@ -26,53 +28,71 @@ export class ProjectDetailsComponent implements OnInit {
 
     console.log("Id", this.id);
 
-   
-
     this.projectURL = this.projectURL + this.id;
     this.loadProject();
     console.log("Project Loaded");
-    
+
   }
 
 
   loadProject() {
 
-    
-    fetch(this.projectURL).then(function(response) {
-      response.json().then(function(json) {
+    fetch(this.projectURL).then(function (response) {
+      response.json().then(function (json) {
         this.project = new Project(json.name, json.roomType, json.roomLength, json.roomWidth, json.roomHeight);
         this.project.id = json.id;
         this.project.itemDetails = json.itemDetails;
+
+        this.loadItems();
+        console.log("Items loaded.");
       }.bind(this));
     }.bind(this));
 
   }
 
-  // loadItems() {
+  loadItems() {
 
-  //   fetch("http://localhost:8080/api/item").then(function(response) {
-  //     response.json().then(function(json) {
-  //       let detailsArray: ItemDetails[] = [];
-  //       let item: Item;
-  //       let itemDetails: ItemDetails;
-  //       json.forEach(obj => {
-  //         item = new Item(obj.id, obj.name, obj.description, obj.price, obj.category, obj.roomTypes);
-  //         itemDetails = new ItemDetails(this.project, item);
-  //         detailsArray.push(itemDetails);
-  //       });
-  //       this.project.itemDetails = detailsArray;
-  //     }.bind(this));
-  //   }.bind(this));
-    
+    fetch("http://localhost:8080/api/item").then(function (response) {
+      response.json().then(function (json) {
+        this.itemsArray = [];
+        this.detailsArray = [];
+        json.forEach(obj => {
+          let item = new Item(obj.id, obj.name, obj.description, obj.price, obj.category, obj.room);
+          this.itemsArray.push(item);
+        });
+      }.bind(this));
+    }.bind(this));
 
-  // }
+
+  }
 
 
 
 
-  saveItemDetails(quantity: number, itemDetailsObject: ItemDetails) {
-      itemDetailsObject.quantity = quantity;
-      console.log("changed quantity of " + itemDetailsObject.item.name + "and added it to the Project ItemDetails array", itemDetailsObject);
+  saveItemDetails(quantity: number, item: Item) {
+
+    // find the itemDetails.itemId index matching item.id
+    let detailsIndex = this.project.findItemDetailsByItemId(item.id);
+
+    // check and see if details already exist, if not create a new ItemDetails object
+    if (detailsIndex === -1) {
+      let newDetails = new ItemDetails(item.id);
+      newDetails.quantity = quantity;
+      this.project.itemDetails.push(newDetails);
+    } else { // the details already exist, update existing quantity
+      this.project.itemDetails[detailsIndex].quantity = quantity;
+    }
+  }
+
+  getQuantity(item:Item): number {
+    let detailsIndex = this.project.findItemDetailsByItemId(item.id);
+
+    if (detailsIndex === -1) {
+      return 0;
+    } else {
+      return this.project.itemDetails[detailsIndex].quantity;
+    }
+
   }
 
 
@@ -86,26 +106,26 @@ export class ProjectDetailsComponent implements OnInit {
     console.log("changed project room type:", this.project.roomType);
   }
 
-  updateProjectRoomLength(roomLength: string) {
-    this.project.roomLength = name;
+  updateProjectRoomLength(roomLength: number) {
+    this.project.roomLength = roomLength;
     console.log("changed project room length:", this.project.roomLength);
   }
 
-  updateProjectRoomWidth(roomWidth: string) {
-    this.project.roomWidth = name;
+  updateProjectRoomWidth(roomWidth: number) {
+    this.project.roomWidth = roomWidth;
     console.log("changed project room width:", this.project.roomWidth);
   }
 
-  updateProjectRoomHeight(roomHeight: string) {
-    this.project.roomHeight = name;
+  updateProjectRoomHeight(roomHeight: number) {
+    this.project.roomHeight = roomHeight;
     console.log("changed project room height:", this.project.roomHeight);
   }
 
 
 
   saveProjectDetails() {
-  
-    fetch("http://localhost:8080/api/project/" + this.project.id + "/component", {
+
+    fetch("http://localhost:8080/api/project/" + this.project.id + "/details", {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -113,11 +133,11 @@ export class ProjectDetailsComponent implements OnInit {
         'Access-Control-Allow-Credentials': 'true'
       },
       body: JSON.stringify(this.project.itemDetails),
-    }).then(function(response) {
+    }).then(function (response) {
       return response.json();
-    }).then(function(data) {
+    }).then(function (data) {
       console.log('Success:', data);
-    }).catch(function(error) {
+    }).catch(function (error) {
       console.error('Error:', error);
     });
 
@@ -131,11 +151,11 @@ export class ProjectDetailsComponent implements OnInit {
         'Access-Control-Allow-Credentials': 'true'
       },
       body: JSON.stringify(this.project),
-    }).then(function(response) {
+    }).then(function (response) {
       return response.json();
-    }).then(function(data) {
+    }).then(function (data) {
       console.log('Success:', data);
-    }).catch(function(error) {
+    }).catch(function (error) {
       console.error('Error:', error);
     });
 

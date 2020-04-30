@@ -22,6 +22,7 @@ public class ConstructionestimatorApplication {
 				registry.addMapping("/api/project").allowedOrigins("http://localhost:4200");
 				registry.addMapping("/api/project/**").allowedOrigins("http://localhost:4200");
 				registry.addMapping("/api/item").allowedOrigins("http://localhost:4200");
+				registry.addMapping("/api/project/**/details").allowedOrigins("http://localhost:4200");
 			}
 		};
 	}

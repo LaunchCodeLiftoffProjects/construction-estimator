@@ -1,0 +1,1101 @@
+[
+    {
+        "id": 1,
+        "name": "Doloribus eum",
+        "room": [
+            "living"
+        ],
+        "category": "appliance",
+        "type": "refrigerator",
+        "price": 844
+    },
+    {
+        "id": 2,
+        "name": "Est consequuntur sit",
+        "room": [
+            "kitchen",
+            "living",
+            "bath"
+        ],
+        "category": "finish",
+        "type": "walls",
+        "price": 13
+    },
+    {
+        "id": 3,
+        "name": "Ea qui",
+        "room": [
+            "bath",
+            "kitchen"
+        ],
+        "category": "fixture",
+        "type": "outlet",
+        "price": 130
+    },
+    {
+        "id": 4,
+        "name": "Aut est",
+        "room": [
+            "kitchen",
+            "bath"
+        ],
+        "category": "finish",
+        "type": "shelving",
+        "price": 15
+    },
+    {
+        "id": 5,
+        "name": "Et sint iste",
+        "room": [
+            "bath"
+        ],
+        "category": "fixture",
+        "type": "fan",
+        "price": 134
+    },
+    {
+        "id": 6,
+        "name": "Quis aut qui",
+        "room": [
+            "living",
+            "bath"
+        ],
+        "category": "fixture",
+        "type": "lighting",
+        "price": 69
+    },
+    {
+        "id": 7,
+        "name": "Voluptatibus ratione",
+        "room": [
+            "living",
+            "kitchen",
+            "bath"
+        ],
+        "category": "finish",
+        "type": "windows",
+        "price": 12
+    },
+    {
+        "id": 8,
+        "name": "Quisquam distinctio in",
+        "room": [
+            "living",
+            "bath",
+            "kitchen"
+        ],
+        "category": "finish",
+        "type": "trim",
+        "price": 10
+    },
+    {
+        "id": 9,
+        "name": "Et eos",
+        "room": [
+            "kitchen",
+            "living",
+            "bath"
+        ],
+        "category": "finish",
+        "type": "doors",
+        "price": 10
+    },
+    {
+        "id": 10,
+        "name": "Saepe ipsam",
+        "room": [
+            "living",
+            "bath"
+        ],
+        "category": "fixture",
+        "type": "fan",
+        "price": 120
+    },
+    {
+        "id": 11,
+        "name": "Aut repellendus",
+        "room": [
+            "bath",
+            "kitchen",
+            "living"
+        ],
+        "category": "fixture",
+        "type": "outlet",
+        "price": 81
+    },
+    {
+        "id": 12,
+        "name": "Blanditiis molestiae",
+        "room": [
+            "living",
+            "kitchen"
+        ],
+        "category": "appliance",
+        "type": "refrigerator",
+        "price": 1121
+    },
+    {
+        "id": 13,
+        "name": "Ut molestiae",
+        "room": [
+            "kitchen",
+            "bath",
+            "living"
+        ],
+        "category": "finish",
+        "type": "flooring",
+        "price": 18
+    },
+    {
+        "id": 14,
+        "name": "Mollitia aliquam fugit",
+        "room": [
+            "living"
+        ],
+        "category": "appliance",
+        "type": "refrigerator",
+        "price": 616
+    },
+    {
+        "id": 15,
+        "name": "Eligendi laboriosam",
+        "room": [
+            "living",
+            "kitchen"
+        ],
+        "category": "appliance",
+        "type": "refrigerator",
+        "price": 1516
+    },
+    {
+        "id": 16,
+        "name": "Consectetur amet",
+        "room": [
+            "bath",
+            "kitchen"
+        ],
+        "category": "finish",
+        "type": "windows",
+        "price": 6
+    },
+    {
+        "id": 17,
+        "name": "Natus repudiandae",
+        "room": [
+            "living",
+            "bath"
+        ],
+        "category": "finish",
+        "type": "walls",
+        "price": 10
+    },
+    {
+        "id": 18,
+        "name": "Consequatur ullam quod",
+        "room": [
+            "kitchen",
+            "living"
+        ],
+        "category": "appliance",
+        "type": "refrigerator",
+        "price": 613
+    },
+    {
+        "id": 19,
+        "name": "Et architecto",
+        "room": [
+            "living",
+            "bath",
+            "kitchen"
+        ],
+        "category": "finish",
+        "type": "windows",
+        "price": 16
+    },
+    {
+        "id": 20,
+        "name": "Cupiditate quia",
+        "room": [
+            "living",
+            "kitchen",
+            "bath"
+        ],
+        "category": "fixture",
+        "type": "fan",
+        "price": 155
+    },
+    {
+        "id": 21,
+        "name": "Ut exercitationem",
+        "room": [
+            "bath",
+            "living"
+        ],
+        "category": "finish",
+        "type": "doors",
+        "price": 11
+    },
+    {
+        "id": 22,
+        "name": "Quae animi",
+        "room": [
+            "kitchen",
+            "bath"
+        ],
+        "category": "fixture",
+        "type": "fan",
+        "price": 99
+    },
+    {
+        "id": 23,
+        "name": "Quam quasi",
+        "room": [
+            "bath",
+            "kitchen"
+        ],
+        "category": "fixture",
+        "type": "outlet",
+        "price": 195
+    },
+    {
+        "id": 24,
+        "name": "Eos impedit",
+        "room": [
+            "bath",
+            "living"
+        ],
+        "category": "fixture",
+        "type": "lighting",
+        "price": 186
+    },
+    {
+        "id": 25,
+        "name": "Temporibus dignissimos doloribus",
+        "room": [
+            "living",
+            "kitchen"
+        ],
+        "category": "appliance",
+        "type": "refrigerator",
+        "price": 1226
+    },
+    {
+        "id": 26,
+        "name": "Iste numquam dolor",
+        "room": [
+            "bath",
+            "living"
+        ],
+        "category": "fixture",
+        "type": "fan",
+        "price": 190
+    },
+    {
+        "id": 27,
+        "name": "Dolor molestiae",
+        "room": [
+            "bath",
+            "living"
+        ],
+        "category": "fixture",
+        "type": "fan",
+        "price": 73
+    },
+    {
+        "id": 28,
+        "name": "Fugiat dolores et",
+        "room": [
+            "bath"
+        ],
+        "category": "fixture",
+        "type": "lighting",
+        "price": 78
+    },
+    {
+        "id": 29,
+        "name": "Quam itaque doloribus",
+        "room": [
+            "living",
+            "kitchen"
+        ],
+        "category": "finish",
+        "type": "windows",
+        "price": 10
+    },
+    {
+        "id": 30,
+        "name": "Non suscipit",
+        "room": [
+            "living",
+            "kitchen",
+            "bath"
+        ],
+        "category": "fixture",
+        "type": "outlet",
+        "price": 120
+    },
+    {
+        "id": 31,
+        "name": "Aut dolores",
+        "room": [
+            "living",
+            "bath",
+            "kitchen"
+        ],
+        "category": "fixture",
+        "type": "outlet",
+        "price": 68
+    },
+    {
+        "id": 32,
+        "name": "Voluptatem quibusdam",
+        "room": [
+            "living"
+        ],
+        "category": "appliance",
+        "type": "refrigerator",
+        "price": 1082
+    },
+    {
+        "id": 33,
+        "name": "At praesentium veritatis",
+        "room": [
+            "living"
+        ],
+        "category": "appliance",
+        "type": "refrigerator",
+        "price": 1598
+    },
+    {
+        "id": 34,
+        "name": "Voluptatem autem aspernatur",
+        "room": [
+            "living",
+            "bath"
+        ],
+        "category": "fixture",
+        "type": "outlet",
+        "price": 186
+    },
+    {
+        "id": 35,
+        "name": "Velit corporis dolores",
+        "room": [
+            "bath",
+            "living"
+        ],
+        "category": "finish",
+        "type": "shelving",
+        "price": 19
+    },
+    {
+        "id": 36,
+        "name": "Illo possimus quo",
+        "room": [
+            "living",
+            "bath",
+            "kitchen"
+        ],
+        "category": "fixture",
+        "type": "outlet",
+        "price": 106
+    },
+    {
+        "id": 37,
+        "name": "Autem autem cupiditate",
+        "room": [
+            "bath",
+            "living"
+        ],
+        "category": "finish",
+        "type": "cabnetry",
+        "price": 12
+    },
+    {
+        "id": 38,
+        "name": "Recusandae occaecati suscipit",
+        "room": [
+            "kitchen",
+            "living"
+        ],
+        "category": "fixture",
+        "type": "fan",
+        "price": 189
+    },
+    {
+        "id": 39,
+        "name": "Minus aut cupiditate",
+        "room": [
+            "living"
+        ],
+        "category": "appliance",
+        "type": "refrigerator",
+        "price": 1285
+    },
+    {
+        "id": 40,
+        "name": "Ipsam et magni",
+        "room": [
+            "living",
+            "kitchen"
+        ],
+        "category": "finish",
+        "type": "windows",
+        "price": 9
+    },
+    {
+        "id": 41,
+        "name": "Est ut",
+        "room": [
+            "living"
+        ],
+        "category": "appliance",
+        "type": "refrigerator",
+        "price": 1013
+    },
+    {
+        "id": 42,
+        "name": "Est neque ut",
+        "room": [
+            "living"
+        ],
+        "category": "fixture",
+        "type": "outlet",
+        "price": 85
+    },
+    {
+        "id": 43,
+        "name": "Aut dolorum est",
+        "room": [
+            "bath"
+        ],
+        "category": "finish",
+        "type": "windows",
+        "price": 15
+    },
+    {
+        "id": 44,
+        "name": "Nobis ducimus optio",
+        "room": [
+            "living",
+            "kitchen",
+            "bath"
+        ],
+        "category": "fixture",
+        "type": "lighting",
+        "price": 189
+    },
+    {
+        "id": 45,
+        "name": "Dolor est repellendus",
+        "room": [
+            "living",
+            "kitchen"
+        ],
+        "category": "appliance",
+        "type": "refrigerator",
+        "price": 696
+    },
+    {
+        "id": 46,
+        "name": "Molestiae consequatur nobis",
+        "room": [
+            "living",
+            "kitchen"
+        ],
+        "category": "finish",
+        "type": "doors",
+        "price": 7
+    },
+    {
+        "id": 47,
+        "name": "Omnis commodi at",
+        "room": [
+            "living",
+            "bath"
+        ],
+        "category": "fixture",
+        "type": "fan",
+        "price": 195
+    },
+    {
+        "id": 48,
+        "name": "Eos vitae",
+        "room": [
+            "bath",
+            "kitchen",
+            "living"
+        ],
+        "category": "finish",
+        "type": "windows",
+        "price": 13
+    },
+    {
+        "id": 49,
+        "name": "Sint repellendus quia",
+        "room": [
+            "bath",
+            "living",
+            "kitchen"
+        ],
+        "category": "fixture",
+        "type": "outlet",
+        "price": 102
+    },
+    {
+        "id": 50,
+        "name": "Nemo quia labore",
+        "room": [
+            "living"
+        ],
+        "category": "appliance",
+        "type": "refrigerator",
+        "price": 926
+    },
+    {
+        "id": 51,
+        "name": "Natus optio",
+        "room": [
+            "kitchen",
+            "bath"
+        ],
+        "category": "fixture",
+        "type": "outlet",
+        "price": 139
+    },
+    {
+        "id": 52,
+        "name": "Rem consequatur",
+        "room": [
+            "living"
+        ],
+        "category": "appliance",
+        "type": "refrigerator",
+        "price": 685
+    },
+    {
+        "id": 53,
+        "name": "Blanditiis nam",
+        "room": [
+            "living"
+        ],
+        "category": "appliance",
+        "type": "refrigerator",
+        "price": 1592
+    },
+    {
+        "id": 54,
+        "name": "Unde voluptatum magni",
+        "room": [
+            "living",
+            "kitchen"
+        ],
+        "category": "appliance",
+        "type": "refrigerator",
+        "price": 771
+    },
+    {
+        "id": 55,
+        "name": "Non officia",
+        "room": [
+            "bath",
+            "kitchen"
+        ],
+        "category": "finish",
+        "type": "windows",
+        "price": 19
+    },
+    {
+        "id": 56,
+        "name": "Quia perferendis",
+        "room": [
+            "bath",
+            "living",
+            "kitchen"
+        ],
+        "category": "finish",
+        "type": "trim",
+        "price": 19
+    },
+    {
+        "id": 57,
+        "name": "Neque sit",
+        "room": [
+            "living"
+        ],
+        "category": "appliance",
+        "type": "refrigerator",
+        "price": 1535
+    },
+    {
+        "id": 58,
+        "name": "Consequatur occaecati",
+        "room": [
+            "kitchen",
+            "living",
+            "bath"
+        ],
+        "category": "fixture",
+        "type": "lighting",
+        "price": 139
+    },
+    {
+        "id": 59,
+        "name": "Alias aut",
+        "room": [
+            "living",
+            "bath"
+        ],
+        "category": "fixture",
+        "type": "fan",
+        "price": 175
+    },
+    {
+        "id": 60,
+        "name": "Similique quis",
+        "room": [
+            "living"
+        ],
+        "category": "fixture",
+        "type": "fan",
+        "price": 164
+    },
+    {
+        "id": 61,
+        "name": "Nisi sint",
+        "room": [
+            "kitchen",
+            "living"
+        ],
+        "category": "fixture",
+        "type": "outlet",
+        "price": 88
+    },
+    {
+        "id": 62,
+        "name": "Molestiae illo",
+        "room": [
+            "bath",
+            "living"
+        ],
+        "category": "finish",
+        "type": "cabnetry",
+        "price": 16
+    },
+    {
+        "id": 63,
+        "name": "Architecto excepturi",
+        "room": [
+            "bath"
+        ],
+        "category": "fixture",
+        "type": "outlet",
+        "price": 122
+    },
+    {
+        "id": 64,
+        "name": "Et beatae",
+        "room": [
+            "kitchen"
+        ],
+        "category": "appliance",
+        "type": "refrigerator",
+        "price": 1216
+    },
+    {
+        "id": 65,
+        "name": "Quis eum odit",
+        "room": [
+            "bath"
+        ],
+        "category": "finish",
+        "type": "shelving",
+        "price": 16
+    },
+    {
+        "id": 66,
+        "name": "Ex dolore",
+        "room": [
+            "kitchen",
+            "living"
+        ],
+        "category": "appliance",
+        "type": "refrigerator",
+        "price": 889
+    },
+    {
+        "id": 67,
+        "name": "Ea non sed",
+        "room": [
+            "bath",
+            "living"
+        ],
+        "category": "finish",
+        "type": "shelving",
+        "price": 9
+    },
+    {
+        "id": 68,
+        "name": "Quibusdam natus",
+        "room": [
+            "kitchen",
+            "living",
+            "bath"
+        ],
+        "category": "fixture",
+        "type": "outlet",
+        "price": 198
+    },
+    {
+        "id": 69,
+        "name": "Cumque soluta",
+        "room": [
+            "living",
+            "kitchen",
+            "bath"
+        ],
+        "category": "finish",
+        "type": "doors",
+        "price": 12
+    },
+    {
+        "id": 70,
+        "name": "Placeat totam",
+        "room": [
+            "kitchen",
+            "bath"
+        ],
+        "category": "finish",
+        "type": "windows",
+        "price": 11
+    },
+    {
+        "id": 71,
+        "name": "Unde repudiandae labore",
+        "room": [
+            "living",
+            "bath"
+        ],
+        "category": "finish",
+        "type": "doors",
+        "price": 5
+    },
+    {
+        "id": 72,
+        "name": "Error excepturi itaque",
+        "room": [
+            "kitchen"
+        ],
+        "category": "appliance",
+        "type": "refrigerator",
+        "price": 1555
+    },
+    {
+        "id": 73,
+        "name": "Dolores quibusdam dolorem",
+        "room": [
+            "living",
+            "bath",
+            "kitchen"
+        ],
+        "category": "finish",
+        "type": "flooring",
+        "price": 16
+    },
+    {
+        "id": 74,
+        "name": "Rerum amet incidunt",
+        "room": [
+            "living"
+        ],
+        "category": "appliance",
+        "type": "refrigerator",
+        "price": 1557
+    },
+    {
+        "id": 75,
+        "name": "Totam a natus",
+        "room": [
+            "living",
+            "bath",
+            "kitchen"
+        ],
+        "category": "fixture",
+        "type": "outlet",
+        "price": 184
+    },
+    {
+        "id": 76,
+        "name": "Sunt et",
+        "room": [
+            "kitchen",
+            "living",
+            "bath"
+        ],
+        "category": "finish",
+        "type": "trim",
+        "price": 17
+    },
+    {
+        "id": 77,
+        "name": "Adipisci nulla rem",
+        "room": [
+            "living"
+        ],
+        "category": "appliance",
+        "type": "refrigerator",
+        "price": 1233
+    },
+    {
+        "id": 78,
+        "name": "Fuga est",
+        "room": [
+            "kitchen"
+        ],
+        "category": "finish",
+        "type": "doors",
+        "price": 10
+    },
+    {
+        "id": 79,
+        "name": "Omnis dolor",
+        "room": [
+            "living"
+        ],
+        "category": "appliance",
+        "type": "refrigerator",
+        "price": 1186
+    },
+    {
+        "id": 80,
+        "name": "Voluptatem ut",
+        "room": [
+            "living",
+            "bath"
+        ],
+        "category": "fixture",
+        "type": "fan",
+        "price": 123
+    },
+    {
+        "id": 81,
+        "name": "Et fugiat provident",
+        "room": [
+            "bath",
+            "kitchen"
+        ],
+        "category": "finish",
+        "type": "walls",
+        "price": 18
+    },
+    {
+        "id": 82,
+        "name": "Ab alias sit",
+        "room": [
+            "living",
+            "kitchen",
+            "bath"
+        ],
+        "category": "finish",
+        "type": "walls",
+        "price": 17
+    },
+    {
+        "id": 83,
+        "name": "Consectetur quia ut",
+        "room": [
+            "living"
+        ],
+        "category": "appliance",
+        "type": "refrigerator",
+        "price": 1277
+    },
+    {
+        "id": 84,
+        "name": "Debitis recusandae quo",
+        "room": [
+            "living",
+            "bath",
+            "kitchen"
+        ],
+        "category": "finish",
+        "type": "doors",
+        "price": 10
+    },
+    {
+        "id": 85,
+        "name": "Quod ut odio",
+        "room": [
+            "kitchen",
+            "living",
+            "bath"
+        ],
+        "category": "finish",
+        "type": "walls",
+        "price": 9
+    },
+    {
+        "id": 86,
+        "name": "Qui voluptatum",
+        "room": [
+            "living",
+            "bath"
+        ],
+        "category": "fixture",
+        "type": "fan",
+        "price": 168
+    },
+    {
+        "id": 87,
+        "name": "Ipsam minus",
+        "room": [
+            "living"
+        ],
+        "category": "appliance",
+        "type": "refrigerator",
+        "price": 608
+    },
+    {
+        "id": 88,
+        "name": "Sed inventore et",
+        "room": [
+            "living",
+            "bath",
+            "kitchen"
+        ],
+        "category": "fixture",
+        "type": "lighting",
+        "price": 76
+    },
+    {
+        "id": 89,
+        "name": "Minus ut est",
+        "room": [
+            "bath"
+        ],
+        "category": "finish",
+        "type": "doors",
+        "price": 6
+    },
+    {
+        "id": 90,
+        "name": "Excepturi ea nihil",
+        "room": [
+            "living",
+            "bath"
+        ],
+        "category": "fixture",
+        "type": "outlet",
+        "price": 130
+    },
+    {
+        "id": 91,
+        "name": "Placeat quia rerum",
+        "room": [
+            "bath"
+        ],
+        "category": "finish",
+        "type": "trim",
+        "price": 13
+    },
+    {
+        "id": 92,
+        "name": "Ipsum maxime",
+        "room": [
+            "bath"
+        ],
+        "category": "finish",
+        "type": "shelving",
+        "price": 6
+    },
+    {
+        "id": 93,
+        "name": "Rem earum",
+        "room": [
+            "living",
+            "bath"
+        ],
+        "category": "finish",
+        "type": "shelving",
+        "price": 10
+    },
+    {
+        "id": 94,
+        "name": "Ea non asperiores",
+        "room": [
+            "bath",
+            "living"
+        ],
+        "category": "fixture",
+        "type": "outlet",
+        "price": 198
+    },
+    {
+        "id": 95,
+        "name": "Non quisquam assumenda",
+        "room": [
+            "living",
+            "kitchen",
+            "bath"
+        ],
+        "category": "fixture",
+        "type": "lighting",
+        "price": 104
+    },
+    {
+        "id": 96,
+        "name": "Voluptate quia",
+        "room": [
+            "bath"
+        ],
+        "category": "finish",
+        "type": "windows",
+        "price": 11
+    },
+    {
+        "id": 97,
+        "name": "Eligendi hic",
+        "room": [
+            "bath",
+            "living",
+            "kitchen"
+        ],
+        "category": "fixture",
+        "type": "lighting",
+        "price": 72
+    },
+    {
+        "id": 98,
+        "name": "Sit inventore numquam",
+        "room": [
+            "bath",
+            "living"
+        ],
+        "category": "fixture",
+        "type": "outlet",
+        "price": 92
+    },
+    {
+        "id": 99,
+        "name": "Qui aspernatur est",
+        "room": [
+            "living",
+            "bath",
+            "kitchen"
+        ],
+        "category": "fixture",
+        "type": "outlet",
+        "price": 105
+    },
+    {
+        "id": 100,
+        "name": "Dolorum ex sunt",
+        "room": [
+            "kitchen",
+            "living"
+        ],
+        "category": "appliance",
+        "type": "refrigerator",
+        "price": 1585
+    }
+]

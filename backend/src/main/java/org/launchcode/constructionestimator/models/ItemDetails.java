@@ -16,7 +16,7 @@ public class ItemDetails extends AbstractEntity {
     @ManyToOne
     private Item item;
 
-    private int quantity;
+    private double quantity;
     private int finalPrice;
 
     public ItemDetails() {}
@@ -42,7 +42,7 @@ public class ItemDetails extends AbstractEntity {
         this.item = item;
     }
 
-    public int getQuantity() {
+    public double getQuantity() {
         return quantity;
     }
 

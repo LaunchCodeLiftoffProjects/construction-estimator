@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Project } from 'src/app/project';
+import { User } from 'src/app/user';
 
 @Component({
   selector: 'app-project-list',
@@ -8,23 +8,23 @@ import { Project } from 'src/app/project';
 })
 export class ProjectListComponent implements OnInit {
 
-  url = "http://localhost:8080/api/project";
-  projects: Project[];
+  userUrl = "http://localhost:8080/api/user";
+  user: User[]
 
   constructor() { }
 
   ngOnInit() {
-    this.loadProjects();
+    this.loadUser();
   }
 
-  loadProjects() {
-    fetch(this.url).then(function(response) {
+  loadUser() {
+    fetch(this.userUrl).then(function(response) {
       response.json().then(function(json) {
-        let refreshProjects: Project[] = [];
+        let refreshUser: User[] = [];
         json.forEach(obj => {
-          refreshProjects.push(new Project(obj.name, obj.roomType, obj.roomLength, obj.roomWidth, obj.roomHeight));
+          refreshUser.push(new User(obj.firstName, obj.lastName, obj.email, obj.password, obj.userDetails, obj.projects));
         });
-        this.projects = refreshProjects;
+        this.projects = refreshUser;
       }.bind(this));
     }.bind(this));
   }
