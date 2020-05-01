@@ -1,5 +1,6 @@
 package org.launchcode.constructionestimator.controllers;
 
+import org.launchcode.constructionestimator.models.ItemDetails;
 import org.launchcode.constructionestimator.models.Project;
 import org.launchcode.constructionestimator.models.data.ProjectRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,9 @@ public class ProjectController {
     @Autowired
     ProjectRepository projectRepository;
 
+    @Autowired
+    ItemDetailsRepository itemDetailsRepository;
+  
     // Use this with @RequestParam to search all projects by field, leave params empty to return all projects
     @GetMapping
     public ResponseEntity getProjects() {
@@ -26,7 +30,7 @@ public class ProjectController {
 
     @GetMapping("/{projectId}")
     public ResponseEntity getProjectById(@PathVariable("projectId") int projectId) {
-        if(projectRepository.findById(projectId).isEmpty()) {
+        if (projectRepository.findById(projectId).isEmpty()) {
             return new ResponseEntity(HttpStatus.NOT_FOUND); // returns 404 if id does not exist in database
         } else {
             return new ResponseEntity(projectRepository.findById(projectId), HttpStatus.OK);
@@ -44,7 +48,44 @@ public class ProjectController {
         return new ResponseEntity(map, HttpStatus.CREATED);
     }
 
+    // returns json in form { "id": "project.id" }
+    // this is probably unnecessary but left it for consistency with the post mapping
+    @PutMapping("/{projectId}")
+    public ResponseEntity updateProject(@PathVariable("projectId") int projectId, @RequestBody Project project) {
 
-    // TODO: Delete and put mapping
+        // return 404 if project doesn't already exist
+        if (projectRepository.findById(projectId).isEmpty()) {
+            return new ResponseEntity(HttpStatus.NOT_FOUND);
+        } else {
+            projectRepository.save(project);
+
+            Integer id = projectId;
+            Map<String, String> map = Collections.singletonMap("id", id.toString());
+            return new ResponseEntity(map, HttpStatus.OK);
+        }
+
+    }
+
+    @DeleteMapping("/{projectId}")
+    public ResponseEntity deleteProject(@PathVariable("projectId") int projectId) {
+
+        // Check and see if project exists
+        if (projectRepository.findById(projectId).isEmpty()) {
+            return new ResponseEntity(HttpStatus.NOT_FOUND);
+        } else {
+            Project project = projectRepository.findById(projectId).get();
+
+            // Need to delete all ItemDetails entities associated with project
+            for (ItemDetails itemDetails : project.getItemDetails()) {
+                itemDetailsRepository.deleteById(itemDetails.getId());
+            }
+
+            // lastly delete the project
+            projectRepository.deleteById(projectId);
+
+            return new ResponseEntity(HttpStatus.NO_CONTENT);  // Best practice response code I think
+        }
+
+    }
 
 }
