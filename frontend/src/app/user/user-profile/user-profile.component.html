@@ -1,4 +1,4 @@
-<div class = "container">
+<div *ngIf="loadCompleted" class="container">
     <br />
     <h2 class="text-info mt-5">Welcome, {{user.firstName}}!</h2>
     <br />
@@ -11,19 +11,23 @@
 
     <div class="mt-5">
         <h5>My Home</h5>
-        <p>{{user.userDetails.homeAge}}<br />
-            {{user.userDetails.homeBuild}}</p>
-        <p class="lead">Notes:</p>
-        <p>{{user.userDetails.homeNotes}}</p>
+        <div *ngIf="user.userDetails == null">Details empty</div>
+        <ng-template #elseBlock>
+            <label>Year Built:</label><p>{{user.userDetails.homeAge}}<br />
+                <label>Construction:</label>{{user.userDetails.homeBuild}}</p>
+            <p class="lead">Notes:</p>
+            <p>{{user.userDetails.homeNotes}}</p>
+        </ng-template>
+
 
     </div>
 
     <div class="mt-5">
         <h5>My Projects</h5>
-        <div *ngIf="! user.projects">
-            <p>Hey there! You do not have any projects yet.<br /> 
+        <div *ngIf="user.projects.length == 0">
+            <p>Hey there! You do not have any projects yet.<br />
                 Why not <a class="text-info" [routerLink]="'/project/create'">create</a> one?</p>
-        </div>   
+        </div>
         <div>
             <ul>
                 <li class="lead" *ngFor="let project of user.projects">{{project.name}}</li>

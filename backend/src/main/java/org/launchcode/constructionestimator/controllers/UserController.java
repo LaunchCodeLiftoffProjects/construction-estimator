@@ -17,6 +17,17 @@ public class UserController {
     @Autowired
     UserRepository userRepository;
 
+    @GetMapping("/{userId}")
+    public ResponseEntity getUserById(@PathVariable("userId") int id) {
+
+        if(userRepository.findById(id).isEmpty()) {
+            return new ResponseEntity(HttpStatus.NOT_FOUND);
+        } else {
+            return new ResponseEntity(userRepository.findById(id).get(), HttpStatus.OK);
+        }
+
+    }
+
     @PostMapping
     public ResponseEntity postUser(@RequestBody User user) {
 
