@@ -54,7 +54,7 @@
             <div *ngFor="let item of itemsArray">
                 <div class="input-group" *ngIf="item.category == 'fixture' && item.room.includes(project.roomType)">
                     <div class="col-5 lead">
-                        {{item.name}}
+                        {{item.type}}
                     </div>
                     <div class = "col-4">
                         options dropdown (if any)
@@ -73,7 +73,7 @@
             <div *ngFor="let item of itemsArray">
                 <div class="input-group" *ngIf="item.category == 'appliance' && item.room.includes(project.roomType)">
                     <div class="col-5 lead">
-                        {{item.name}}
+                        {{item.type}}
                     </div>
                     <div class = "col-4">
                         options dropdown (if any)
@@ -92,7 +92,7 @@
             <div *ngFor="let item of itemsArray">
                 <div class="input-group" *ngIf="item.category == 'finish' && item.room.includes(project.roomType)">
                     <div class="col-5 lead">
-                        {{item.name}}
+                        {{item.type}}
                     </div>
                     <div class = "col-4">
                         options dropdown (if any)
