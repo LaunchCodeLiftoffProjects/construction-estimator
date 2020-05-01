@@ -1,11 +1,14 @@
 package org.launchcode.constructionestimator.models;
 
+import com.fasterxml.jackson.annotation.JsonGetter;
+import com.fasterxml.jackson.annotation.JsonSetter;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@AttributeOverride(name = "name", column = @Column(name="e_mail"))
+@AttributeOverride(name = "name", column = @Column(name="email"))
 public class User extends NamedEntity {
 
     private String FirstName;
@@ -19,6 +22,19 @@ public class User extends NamedEntity {
 
     @OneToOne
     private UserDetails userDetails;
+
+    // allows us to use email for the field name instead of user in sent and received JSON
+    @Override
+    @JsonSetter("email")
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    @Override
+    @JsonGetter("email")
+    public String getName() {
+        return name;
+    }
 
     public String getFirstName() {
         return FirstName;

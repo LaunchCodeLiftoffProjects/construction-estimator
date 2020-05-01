@@ -7,6 +7,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
+import java.util.Map;
+
 @RestController
 @RequestMapping("/api/user")
 public class UserController {
@@ -17,9 +20,10 @@ public class UserController {
     @PostMapping
     public ResponseEntity postUser(@RequestBody User user) {
 
-        userRepository.save(user)
+        userRepository.save(user);
 
-
-        return new ResponseEntity(HttpStatus.CREATED)
+        Integer id = user.getId();
+        Map<String, String> map = Collections.singletonMap("id", id.toString());
+        return new ResponseEntity(map, HttpStatus.CREATED);
     }
 }
