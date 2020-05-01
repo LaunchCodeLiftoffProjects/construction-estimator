@@ -20,9 +20,13 @@ public class ItemDetails extends AbstractEntity {
 
     public ItemDetails() {}
 
+
     public ItemDetails(Project project, int itemId) {
         this.project = project;
         this.itemId = itemId;
+    }
+    public ItemDetails(Project project) {
+        this.project = project;
     }
 
     public Project getProject() {
@@ -45,7 +49,7 @@ public class ItemDetails extends AbstractEntity {
         return quantity;
     }
 
-    public void setQuantity(int quantity) {
+    public void setQuantity(double quantity) {
         this.quantity = quantity;
     }
 
