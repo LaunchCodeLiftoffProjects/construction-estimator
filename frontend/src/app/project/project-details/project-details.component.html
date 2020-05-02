@@ -50,9 +50,9 @@
 
     <div class = "container col-12">
         <div class="form-group">
-            <h4 class="mt-5">Fixtures</h4>
+            <h4 class="mt-5">Appliances</h4>
             <div *ngFor="let item of itemsArray">
-                <div class="input-group" *ngIf="item.category == 'fixture' && item.room.includes(project.roomType)">
+                <div class="input-group" *ngIf="item.category == 'appliance' && item.room.includes(project.roomType)">
                     <div class="col-5 lead">
                         {{item.type}}
                     </div>
@@ -69,9 +69,9 @@
         </div>
         <br />
         <div class="form-group">
-            <h4 class="mt-5">Appliances</h4>
+            <h4 class="mt-5">Fixtures</h4>
             <div *ngFor="let item of itemsArray">
-                <div class="input-group" *ngIf="item.category == 'appliance' && item.room.includes(project.roomType)">
+                <div class="input-group" *ngIf="item.category == 'fixture' && item.room.includes(project.roomType)">
                     <div class="col-5 lead">
                         {{item.type}}
                     </div>
