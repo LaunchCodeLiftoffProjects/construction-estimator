@@ -55,9 +55,9 @@ export class ProjectDetailsComponent implements OnInit {
     fetch("http://localhost:8080/api/item").then(function (response) {
       response.json().then(function (json) {
         this.itemsArray = [];
-        this.detailsArray = [];
+        // this.detailsArray = [];
         json.forEach(obj => {
-          let item = new Item(obj.id, obj.name, obj.description, obj.price, obj.category, obj.room);
+          let item = new Item(obj.id, obj.name, obj.room, obj.category, obj.type, obj.price);
           this.itemsArray.push(item);
         });
       }.bind(this));
