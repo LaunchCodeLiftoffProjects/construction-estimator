@@ -13,6 +13,8 @@ export class UserProfileComponent implements OnInit {
   user: User;
   id: String;
   loadCompleted: boolean = false;
+  editUser: boolean = false;
+  editDetails: boolean = false;
 
   constructor(private route: ActivatedRoute) { }
 
@@ -28,11 +30,21 @@ export class UserProfileComponent implements OnInit {
     fetch(this.userUrl).then(function(response) {
       response.json().then(function(json) {
         this.user = new User(json.firstName, json.lastName, json.email, json.password, json.userDetails, json.projects);
+        this.user.id = json.id;
         console.log(this.user);
-        
+
         this.loadCompleted = true;
       }.bind(this));
     }.bind(this));
+  }
+
+  editProfile() {
+    this.editUser = true;
+  }
+
+  onEditClose() {
+    console.log("event received");
+    this.editUser = false;
   }
 
 }

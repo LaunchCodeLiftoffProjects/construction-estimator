@@ -19,12 +19,8 @@ public class ConstructionestimatorApplication {
 		return new WebMvcConfigurer() {
 			@Override
 			public void addCorsMappings(CorsRegistry registry) {
-				registry.addMapping("/api/project").allowedOrigins("http://localhost:4200");
-				registry.addMapping("/api/project/**").allowedOrigins("http://localhost:4200");
-				registry.addMapping("/api/item").allowedOrigins("http://localhost:4200");
-				registry.addMapping("/api/project/**/details").allowedOrigins("http://localhost:4200");
-				registry.addMapping("/api/user").allowedOrigins("http://localhost:4200");
-				registry.addMapping("/api/user/**").allowedOrigins("http://localhost:4200");
+				registry.addMapping("/**").allowedOrigins("http://localhost:4200").
+						allowedMethods("GET", "POST", "DELETE", "PUT");
 			}
 		};
 	}

@@ -37,4 +37,15 @@ public class UserController {
         Map<String, String> map = Collections.singletonMap("id", id.toString());
         return new ResponseEntity(map, HttpStatus.CREATED);
     }
+
+    @PutMapping("/{userId}")
+    public ResponseEntity updateUser(@RequestBody User user, @PathVariable("userId") int id) {
+
+        if(userRepository.findById(id).isEmpty()) {
+            return new ResponseEntity(HttpStatus.NOT_FOUND);
+        } else {
+            userRepository.save(user);
+            return new ResponseEntity(HttpStatus.OK);
+        }
+    }
 }
