@@ -42,6 +42,10 @@ export class UserProfileComponent implements OnInit {
     this.editUser = true;
   }
 
+  editHomeDetails() {
+    this.editDetails = true;
+  }
+
   onEditClose() {
     console.log("event received");
     this.editUser = false;
