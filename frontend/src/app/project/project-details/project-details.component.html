@@ -49,24 +49,34 @@
     </div>
 
     <div class = "container col-12">
-        <div class="form-group">
-            <h4 class="mt-5">Appliances</h4>
-            <div *ngFor="let item of itemsArray">
-                <div class="input-group" *ngIf="item.category == 'appliance' && item.room.includes(project.roomType)">
-                    <div class="col-5 lead">
-                        {{item.type}}
+        <!--There are appliances only in kitchens, so this section will otherwise not show up-->
+        <ng-container *ngIf="project.roomType === 'kitchen'">
+            <div class="form-group">
+                <h4 class="mt-5">Appliances</h4>
+                <div *ngFor="let item of itemsArray">
+                    <div class="input-group" *ngIf="item.category == 'appliance' && item.room.includes(project.roomType)">
+                        <div class="col-5">
+                            <!--need to fix hashtag and values to reference item type-->
+                            <label class="lead"><input type="checkbox" value="item.type" /> {{item.type}}</label>
+                        </div>
+                        <div class = "col-4">
+                            <!-- <select class="custom-select" [(ngModel)]="item">
+                                <ng-container *ngFor="let option of getOptions(item.type)">
+                                    <option [ngValue]="option">{{option.name}}</option>
+                                </ng-container>
+                            </select> -->
+                            <!--use item name properties for each item type-->
+                        </div>
+                        <div class="col-3">
+                            <ng-container *ngIf="needsQuantity.includes(item.type)">
+                                <input #quantity (change)="saveItemDetails(quantity.value, item)" type="number"
+                                    value="{{getQuantity(item)}}" class="form-control form-control-sm w-50" />
+                            </ng-container>
+                        </div>
                     </div>
-                    <div class = "col-4">
-                        options dropdown (if any)
-                    </div>
-                    <div class="col-3">
-                        <input #quantity (change)="saveItemDetails(quantity.value, item)" type="number"
-                            value="{{getQuantity(item)}}" class="form-control form-control-sm w-50" />
-                    </div>
-
                 </div>
             </div>
-        </div>
+        </ng-container>
         <br />
         <div class="form-group">
             <h4 class="mt-5">Fixtures</h4>
@@ -79,10 +89,11 @@
                         options dropdown (if any)
                     </div>
                     <div class="col-3">
-                        <input #quantity (change)="saveItemDetails(quantity.value, item)" type="number"
-                            value="{{getQuantity(item)}}" class="form-control form-control-sm w-50" />
+                        <ng-container *ngIf="needsQuantity.includes(item.type)">
+                            <input #quantity (change)="saveItemDetails(quantity.value, item)" type="number"
+                                value="{{getQuantity(item)}}" class="form-control form-control-sm w-50" />
+                        </ng-container>
                     </div>
-
                 </div>
             </div>
         </div>
@@ -98,10 +109,11 @@
                         options dropdown (if any)
                     </div>
                     <div class="col-3">
-                        <input #quantity (change)="saveItemDetails(quantity.value, item)" type="number"
-                            value="{{getQuantity(item)}}" class="form-control form-control-sm w-50" />
+                        <ng-container *ngIf="needsQuantity.includes(item.type)">
+                            <input #quantity (change)="saveItemDetails(quantity.value, item)" type="number"
+                                value="{{getQuantity(item)}}" class="form-control form-control-sm w-50" />
+                        </ng-container>
                     </div>
-
                 </div>
             </div>
         </div>

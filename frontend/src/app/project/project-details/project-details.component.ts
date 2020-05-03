@@ -1,9 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { Project } from 'src/app/project';
 import { Item } from 'src/app/item';
 import { ItemDetails } from 'src/app/item-details';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
-
+import { FormsModule } from '@angular/forms';
 
 
 @Component({
@@ -17,11 +17,13 @@ export class ProjectDetailsComponent implements OnInit {
   projectURL = "http://localhost:8080/api/project/";
   id: string;
   itemsArray: Item[];
-  detailsArray: ItemDetails[];
+  detailsArray: ItemDetails[]; // where is this used?
   editingProject: boolean = false;
+  needsQuantity: string[] = ['Bath & Shower', 'Ceiling Light/Fan', 'Electrical Outlets', 'Electrical Switches', 'Lighting, Other', 'Sink', 'Specialty', 'Toilet', 'Doors', 'Lower Cabinets', 'Upper Cabinets', 'Windows'];
 
   constructor(private route: ActivatedRoute) { }
 
+  @Input() items: Item[];
 
   ngOnInit() {
     this.id = this.route.snapshot.paramMap.get("id");
@@ -42,7 +44,6 @@ export class ProjectDetailsComponent implements OnInit {
         this.project = new Project(json.name, json.roomType, json.roomLength, json.roomWidth, json.roomHeight);
         this.project.id = json.id;
         this.project.itemDetails = json.itemDetails;
-
         this.loadItems();
         console.log("Items loaded.");
       }.bind(this));
@@ -55,19 +56,29 @@ export class ProjectDetailsComponent implements OnInit {
     fetch("http://localhost:8080/api/item").then(function (response) {
       response.json().then(function (json) {
         this.itemsArray = [];
-        // this.detailsArray = [];
+        this.detailsArray = []; // what is this for?
         json.forEach(obj => {
           let item = new Item(obj.id, obj.name, obj.room, obj.category, obj.type, obj.price);
           this.itemsArray.push(item);
         });
+        this.itemsArray.sort((a, b) => (a.type > b.type) ? 1 : -1)
       }.bind(this));
     }.bind(this));
 
-
   }
 
+  // for each category build a list of available types
+  // for each type (flooring etc) build a list of available options for that room
 
-
+  // getOptions(itemRoom: string, itemType: string): string[] {
+  //   let optionsArray = [];
+  //   for (let i=0; i < this.itemsArray.length; i++) {
+  //     if (this.itemsArray[i].room === itemRoom && this.itemsArray[i].type === itemType) {
+  //       optionsArray.push(this.itemsArray[i].name);
+  //     }
+  //   }
+  //   return optionsArray;
+  // }
 
   saveItemDetails(quantity: number, item: Item) {
 
@@ -161,5 +172,14 @@ export class ProjectDetailsComponent implements OnInit {
 
   }
 
-
+  // sortByType(): void {
+  //   this.itemsArray.sort(function(a: Item, b: Item): number {
+  //       if(a.type < b.type) {
+  //          return -1;
+  //       } else if (a.type > b.type) {
+  //          return 1;
+  //       }
+  //       return 0;
+  //   });
+  // }
 }
