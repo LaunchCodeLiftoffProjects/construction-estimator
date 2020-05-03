@@ -12,13 +12,19 @@ public class ItemDetails extends AbstractEntity {
     @JsonBackReference
     private Project project;
 
+
+    private int itemId;
+
     private double quantity;
+
     private int finalPrice;
 
     public ItemDetails() {}
 
-    public ItemDetails(Project project) {
+
+    public ItemDetails(Project project, int itemId) {
         this.project = project;
+        this.itemId = itemId;
     }
 
     public Project getProject() {
@@ -29,11 +35,15 @@ public class ItemDetails extends AbstractEntity {
         this.project = project;
     }
 
+    public void setItemId(int itemId) {
+        this.itemId = itemId;
+    }
+
     public double getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(int quantity) {
+    public void setQuantity(double quantity) {
         this.quantity = quantity;
     }
 

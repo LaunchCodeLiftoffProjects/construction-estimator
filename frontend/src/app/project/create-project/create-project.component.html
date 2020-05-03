@@ -32,6 +32,7 @@
         <div class="form-check indent-left">
             <label class="form-check-label"><input #roomType name="roomType" type="radio" class="form-check-input"
                     value="living" (change)="radioChangeHandler($event)" />Bedroom, Living Room, Office, Etc.</label>
+
         </div>
         <div [hidden]="roomType.valid || roomType.pristine" class="alert alert-danger">
 
