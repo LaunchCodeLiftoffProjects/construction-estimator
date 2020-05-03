@@ -12,10 +12,15 @@ import { bindCallback } from 'rxjs';
 })
 export class CreateProjectComponent implements OnInit {
   id: number;
-  project: Project;
-  selectedRoom: string = '';
+  project: Project = new Project('Test Name', "kitchen", 0, 0, 0);
+  selectedRoom: string = "kitchen";
+  changedName: boolean;
+  projectName = "testing";
 
-  constructor(private route: ActivatedRoute, private router: Router) { }
+
+  constructor(private route: ActivatedRoute, private router: Router) { 
+
+  }
 
   ngOnInit() {
  

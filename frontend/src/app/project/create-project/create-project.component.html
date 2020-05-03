@@ -1,13 +1,16 @@
 <div class="container" hasErrors="true">
     <br />
     <h2 class="text-info mt-5">Create a New Project</h2>
+    <h4>Name: {{projectName}}</h4>
     <br />
-    <form (ngSubmit)="saveProject(name.value, selectedRoom, roomLength.value, roomWidth.value, roomHeight.value)" #projectForm="ngForm"></form>
+    <!-- <form (ngSubmit)="saveProject(name.value, selectedRoom, roomLength.value, roomWidth.value, roomHeight.value)"> -->
     <div class="form-group">
         <h5>What would you like to call your project?</h5>
-        <input #name="ngModel" type='text' placeholder="Project Name" class="form-control" ngModel required minlength="6"/>
+        <input #name="ngModel" type='text' placeholder="Project Name" class="form-control" [(ngModel)]="project.name"
+            required minlength="6" (change)="changedName = true;" />
+        
 
-        <div [hidden]="name.valid || name.pristine" class="alert alert-danger">
+        <div [hidden]="!changedName" class="alert alert-danger">
 
             <div *ngIf="name.errors.required">
                 Name is required.
@@ -15,15 +18,16 @@
             <div *ngIf="name.errors.minlength">
                 Name must be at least 6 characters long.
             </div>
-            
+
         </div>
     </div>
     <br />
     <div class="form-group">
         <h5>Select your room type:</h5>
         <div class="form-check indent-left">
-            <label class="form-check-label"><input #roomType="ngModel" name="roomType" type="radio" class="form-check-input"
-                [(ngModel)]="project.roomType" value="kitchen" (change)="radioChangeHandler($event)" checked required/>Kitchen</label>
+            <label class="form-check-label"><input #roomType="ngModel" name="roomType" type="radio"
+                    class="form-check-input" [(ngModel)]="project.roomType" value="kitchen"
+                    (change)="radioChangeHandler($event)" checked required />Kitchen</label>
         </div>
         <div class="form-check indent-left">
             <label class="form-check-label"><input #roomType name="roomType" type="radio" class="form-check-input"
@@ -39,21 +43,25 @@
             <div *ngIf="roomType.errors.required">
                 Room Type is required.
             </div>
-            
+
         </div>
     </div>
     <br />
     <div class="form-group">
         <h5>What are the room's general dimensions?</h5>
         <div class="input-group">
-            <label><input #roomLength="ngModel" [(ngModel)]="project.roomLength" type="number" class="form-control" step="0.1" min=0 placeholder="0.0" />Length
+            <label><input #roomLength="ngModel" [(ngModel)]="project.roomLength" type="number" class="form-control"
+                    step="0.1" min=0 placeholder="0.0" />Length
                 (ft.)</label>
-            <label><input #roomWidth="ngModel" [(ngModel)]="project.roomWidth" type="number" class="form-control" step="0.1" min=0 placeholder="0.0" />Width
+            <label><input #roomWidth="ngModel" [(ngModel)]="project.roomWidth" type="number" class="form-control"
+                    step="0.1" min=0 placeholder="0.0" />Width
                 (ft.)</label>
-            <label><input #roomHeight="ngModel" [(ngModel)]="project.roomHeight" type="number" class="form-control" step="0.1" min=0 placeholder="0.0" />Ceiling
+            <label><input #roomHeight="ngModel" [(ngModel)]="project.roomHeight" type="number" class="form-control"
+                    step="0.1" min=0 placeholder="0.0" />Ceiling
                 Height (ft.)</label>
         </div>
-        <div [hidden]="(roomHeight.valid || roomHeight.pristine) && (roomLength.valid || roomLength.pristine) && (roomWidth.valid || roomWidth.pristine)" class="alert alert-danger">
+        <div [hidden]="(roomHeight.valid || roomHeight.pristine) && (roomLength.valid || roomLength.pristine) && (roomWidth.valid || roomWidth.pristine)"
+            class="alert alert-danger">
 
             <div *ngIf="roomHeight.errors.required || roomLength.errors.required || roomWidth.errors.required">
                 All Room Dimensions are required.
@@ -61,12 +69,12 @@
             <div *ngIf="!roomHeight.valid || !roomLength.valid || !roomWidth.valid">
                 Room Dimensions must be valid numbers.
             </div>
-            
+
         </div>
     </div>
     <br />
     <div class="form-group">
         <button class="btn btn-info" type="submit" [disabled]="!projectForm.form.valid">Create Project</button>
     </div>
-    </form>
+    <!-- </form> -->
 </div>

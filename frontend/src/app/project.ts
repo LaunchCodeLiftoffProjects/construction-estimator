@@ -10,6 +10,7 @@ export class Project {
     roomHeight: number;
     itemDetails: ItemDetails[];
 
+
     constructor(name: string, roomType: string, roomLength: number, roomWidth: number, roomHeight: number) {
         this.name = name;
         this.roomType = roomType;
