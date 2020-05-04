@@ -11,7 +11,7 @@
     </div>
 
     <ng-template #editUserBlock>
-        <app-edit-user-profile [user] = "user" (onSubmit)="onEditClose($event)"></app-edit-user-profile>
+        <app-edit-user-profile [user]="user" (onSubmit)="onEditClose($event)"></app-edit-user-profile>
     </ng-template>
     
     <div class="mt-5" *ngIf="!editDetails; else editDetailsBlock">
@@ -28,7 +28,7 @@
     </div>
 
     <ng-template #editDetailsBlock>
-        <app-edit-user-details></app-edit-user-details>
+        <app-edit-user-details [user]="user"></app-edit-user-details>
     </ng-template>
 
     <div class="mt-5">

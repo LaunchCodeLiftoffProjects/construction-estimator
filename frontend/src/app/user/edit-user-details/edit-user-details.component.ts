@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
+import { UserDetails } from 'src/app/user-details';
+import { User } from 'src/app/user';
 
 @Component({
   selector: 'app-edit-user-details',
@@ -7,9 +9,24 @@ import { Component, OnInit } from '@angular/core';
 })
 export class EditUserDetailsComponent implements OnInit {
 
+  @Input() user: User;
+  
+
   constructor() { }
 
   ngOnInit() {
+
+    if(this.user.userDetails === null) {
+      this.user.userDetails = new UserDetails(null, null, null);
+    }
+  }
+
+  findHomeAge() {
+    if(this.user.userDetails.homeAge === null) {
+      return "Enter your home's age";
+    } else {
+      return this.user.userDetails.homeAge;
+    }
   }
 
 }
