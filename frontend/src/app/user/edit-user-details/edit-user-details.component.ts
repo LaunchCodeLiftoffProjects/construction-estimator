@@ -15,18 +15,36 @@ export class EditUserDetailsComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-
     if(this.user.userDetails === null) {
       this.user.userDetails = new UserDetails(null, null, null);
     }
   }
 
-  findHomeAge() {
-    if(this.user.userDetails.homeAge === null) {
-      return "Enter your home's age";
-    } else {
-      return this.user.userDetails.homeAge;
-    }
+
+  updateUserDetails(homeAge: number, homeBuild: string, homeNotes: string) {
+    this.user.userDetails.homeAge = homeAge;
+    this.user.userDetails.homeBuild = homeBuild;
+    this.user.userDetails.homeNotes = homeNotes;
+
+    fetch(`http://localhost:8080/api/user/${this.user.id}/details`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Credentials': 'true'
+      },
+      body: JSON.stringify(this.user.userDetails),
+    }).then(function (response) {
+
+      // this.closeEdit();
+      return response;
+
+    }.bind(this)).then(function (data) {
+      console.log('Success:', data);
+    }).catch(function (error) {
+      console.error('Error:', error);
+    });
   }
+
 
 }

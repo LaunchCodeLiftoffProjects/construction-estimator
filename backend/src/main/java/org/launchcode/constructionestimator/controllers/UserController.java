@@ -1,6 +1,8 @@
 package org.launchcode.constructionestimator.controllers;
 
 import org.launchcode.constructionestimator.models.User;
+import org.launchcode.constructionestimator.models.UserDetails;
+import org.launchcode.constructionestimator.models.data.UserDetailsRepository;
 import org.launchcode.constructionestimator.models.data.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,6 +18,9 @@ public class UserController {
 
     @Autowired
     UserRepository userRepository;
+
+    @Autowired
+    UserDetailsRepository userDetailsRepository;
 
     @GetMapping("/{userId}")
     public ResponseEntity getUserById(@PathVariable("userId") int id) {
@@ -45,6 +50,22 @@ public class UserController {
             return new ResponseEntity(HttpStatus.NOT_FOUND);
         } else {
             userRepository.save(user);
+            return new ResponseEntity(HttpStatus.OK);
+        }
+    }
+
+    @PostMapping("/{userId}/details")
+    public ResponseEntity postUserDetails(@PathVariable("userId") int id, @RequestBody UserDetails userDetails) {
+
+        if(userRepository.findById(id).isEmpty()) {
+            return new ResponseEntity(HttpStatus.NOT_FOUND);
+        } else {
+            User user = userRepository.findById(id).get();
+
+            user.setUserDetails(userDetails);
+            userDetails.setUser(user);
+            userDetailsRepository.save(userDetails);
+
             return new ResponseEntity(HttpStatus.OK);
         }
     }

@@ -12,7 +12,7 @@ export class EditUserProfileComponent implements OnInit {
   passwordMismatch: boolean = false;
   userUrl = "http://localhost:8080/api/user/";
 
-  @Output() onSubmit = new EventEmitter();
+  @Output() onUserSubmit = new EventEmitter();
 
   constructor() { }
 
@@ -56,7 +56,7 @@ export class EditUserProfileComponent implements OnInit {
 
   closeEdit() {
     console.log("closing edit");
-    this.onSubmit.emit(null);
+    this.onUserSubmit.emit(null);
   }
 
 

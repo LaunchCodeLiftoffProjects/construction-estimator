@@ -11,7 +11,7 @@ import java.util.List;
 @AttributeOverride(name = "name", column = @Column(name="email"))
 public class User extends NamedEntity {
 
-    private String FirstName;
+    private String firstName;
     private String lastName;
 
     private String password;
@@ -37,11 +37,11 @@ public class User extends NamedEntity {
     }
 
     public String getFirstName() {
-        return FirstName;
+        return firstName;
     }
 
     public void setFirstName(String firstName) {
-        FirstName = firstName;
+        firstName = firstName;
     }
 
     public String getLastName() {
