@@ -2,13 +2,13 @@ import { ItemDetails } from './item-details';
 
 export class Project {
 
-    id: number;
-    name: string;
-    roomType: string;
-    roomLength: number;
-    roomWidth: number;
-    roomHeight: number;
-    itemDetails: ItemDetails[];
+    public id: number;
+    public name: string;
+    public roomType: string;
+    public roomLength: number;
+    public roomWidth: number;
+    public roomHeight: number;
+    public itemDetails: ItemDetails[];
 
 
     constructor(name: string, roomType: string, roomLength: number, roomWidth: number, roomHeight: number) {

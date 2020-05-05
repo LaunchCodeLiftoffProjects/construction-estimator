@@ -2,6 +2,7 @@ package org.launchcode.constructionestimator.controllers;
 
 import org.launchcode.constructionestimator.models.ItemDetails;
 import org.launchcode.constructionestimator.models.Project;
+import org.launchcode.constructionestimator.models.data.ItemDetailsRepository;
 import org.launchcode.constructionestimator.models.data.ProjectRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

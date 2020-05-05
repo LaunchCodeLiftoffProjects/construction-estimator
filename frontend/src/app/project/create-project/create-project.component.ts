@@ -12,11 +12,11 @@ import { bindCallback } from 'rxjs';
 })
 export class CreateProjectComponent implements OnInit {
   id: number;
-  project: Project = new Project('Test Name', "kitchen", 0, 0, 0);
   selectedRoom: string = "kitchen";
-  changedName: boolean;
+  changedName: boolean = false;
   projectName = "testing";
-
+  changedDimensions: number = 0;
+  
 
   constructor(private route: ActivatedRoute, private router: Router) { 
 
@@ -26,8 +26,9 @@ export class CreateProjectComponent implements OnInit {
  
   }
 
-  saveProject(name: string, roomType: string, roomLength: number, roomWidth: number, roomHeight: number) {
-    let project = new Project(name, roomType, roomLength, roomWidth, roomHeight);
+
+  saveProject(name: string, roomLength: number, roomWidth: number, roomHeight: number) {
+    let project = new Project(name, this.selectedRoom, roomLength, roomWidth, roomHeight);
     let id: number;
     console.log("saved project", project);
     // TODO: POST TO SERVER
@@ -60,9 +61,14 @@ export class CreateProjectComponent implements OnInit {
   }
 
   //event handler for the radio button's change event
-  radioChangeHandler (event: any) {
+  updateProjectRoomType (event: any) {
     //update the ui
     this.selectedRoom = event.target.value;
   }
 
+
+  //helps validate room dimensions
+  isNumber(val): boolean { 
+    return typeof val === 'number'; 
+  }
 }
