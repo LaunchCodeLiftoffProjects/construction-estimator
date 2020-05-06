@@ -1,30 +1,50 @@
 <div class = "container">
     <br />
     <h2 class="text-info mt-5">Create an Account</h2>
-    <form>
+    <form (ngSubmit)="saveItem(firstname, lastname, email.value, password.value)" #userForm="ngForm">
         <br />
         <h5 class="mb-3">Get ready to create your first project!</h5>
         <div class = "form-group">
             <div class="input-group">
-                <input #firstname type='text' placeholder="First Name" class="form-control"/>
-                <input #lastname type='text' placeholder="Last Name" class="form-control"/>
+                <input name="firstname" [(ngModel)]="firstname" type='text' placeholder="First Name" class="form-control" 
+                required minlength="2" (change)="changedFirst = true;"/>
+                <div *ngIf="changedFirst && (firstname == null || firstname.length < 2)" class="alert alert-danger">
+                    First Name is required and must be at least 2 characters long.
+                </div>
+                <input name="lastname" [(ngModel)]="lastname" type='text' placeholder="Last Name" class="form-control" 
+                required (change)="changedLast = true;"/>
+                <div *ngIf="changedLast && (lastname == null || lastname.length < 2)" class="alert alert-danger">
+                    Last Name is required and must be at least 2 characters long.
+                </div>
             </div>
         </div>
         <div class = "form-group">
-            <input #email type='email' placeholder="E-mail Address" class="form-control"/>
+            <input [value]="emailSaved" (input)="emailSaved = email.value" #email ngModel name="email" type='email' placeholder="E-mail Address" class="form-control" 
+            required pattern="^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" (change)="changedEmail = true;"/>
+            <div *ngIf="changedEmail && (email == null || !email.valid)" class="alert alert-danger">
+                Email is required and must be a valid email address.
+            </div>
         </div>
         <div class = "form-group">
-            <input #password type='password' placeholder="Password" class="form-control"/>
+            <input name="password" type='password' [(ngModel)]="password" placeholder="Password" class="form-control" 
+            required (change)="changedPassword = true;"/>
+            <div *ngIf="changedPassword && (password == null || password.length < 5)" class="alert alert-danger">
+                Password is required and must be at least 5 characters long.
+            </div>
         </div>
         <div class = "form-group">
-            <input #verifypassword type='password' placeholder="Verify Password" class="form-control"/>
+            <input #verifypassword [(ngModel)]="verifyPassword" type='password' placeholder="Verify Password" 
+            required class="form-control" (change)="changedVerifyPassword = true;"/>
+            <div *ngIf="changedVerifyPassword && changedPassword && (password != verifyPassword)" class="alert alert-danger">
+                Passwords do not match.
+            </div>
         </div>
         <div>
             <p>Already registered? <a  class="text-info" [routerLink]="'/login'">Login here.</a></p>
         </div>
 
         <div class="form-group text-right">
-            <button (click)='saveItem(firstName.value, lastName.value, email.value, password.value)'class="btn btn-info" [routerLink] = "'/user/profile'">Get Started</button>
+            <button class="btn btn-info" type="submit" [routerLink] = "'/user/profile'" [disabled]="!userForm.form.valid">Get Started</button>
         </div>
     </form>
 </div>

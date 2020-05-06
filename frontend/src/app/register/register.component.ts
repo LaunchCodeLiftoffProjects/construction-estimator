@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { User } from 'src/app/user'
 import { UserDetails } from '../user-details';
 import { Project } from 'src/app/project';
+import { EmailValidator } from '@angular/forms';
 
 
 @Component({
@@ -10,6 +11,7 @@ import { Project } from 'src/app/project';
   styleUrls: ['./register.component.css']
 })
 export class RegisterComponent implements OnInit {
+  emailSaved: string;
 
   constructor() { }
 
