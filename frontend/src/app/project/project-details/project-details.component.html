@@ -49,31 +49,29 @@
     </div>
 
     <div class = "container col-12">
-        <!--There are appliances only in kitchens, so this section will otherwise not show up-->
+        <!-- This section only needs to show up for kitchens, ergo next line -->
         <ng-container *ngIf="project.roomType === 'kitchen'">
-            <div class="form-group">
+            <div class="form-group" >
                 <h4 class="mt-5">Appliances</h4>
-                <div *ngFor="let item of itemsArray">
-                    <div class="input-group" *ngIf="item.category == 'appliance' && item.room.includes(project.roomType)">
-                        <div class="col-5">
-                            <!--need to fix hashtag and values to reference item type-->
-                            <label class="lead"><input type="checkbox" value="item.type" /> {{item.type}}</label>
-                        </div>
-                        <div class = "col-4">
-                            <!-- <select class="custom-select" [(ngModel)]="item">
-                                <ng-container *ngFor="let option of getOptions(item.type)">
-                                    <option [ngValue]="option">{{option.name}}</option>
-                                </ng-container>
-                            </select> -->
-                            <!--use item name properties for each item type-->
-                        </div>
-                        <div class="col-3">
-                            <ng-container *ngIf="needsQuantity.includes(item.type)">
-                                <input #quantity (change)="saveItemDetails(quantity.value, item)" type="number"
-                                    value="{{getQuantity(item)}}" class="form-control form-control-sm w-50" />
-                            </ng-container>
-                        </div>
+                <div class="input-group mt-2" *ngFor="let itemType of getTypes(project.roomType, 'appliance')">
+                    <div class="col-4">
+                        <!--NEED TO CHANGE SO THAT CHECKBOX DETERMINES INCLUSION TO BE SAVED-->
+                        <!--create function and check console log to see if saving to project-->
+                        <label class="lead"><input #type (change)="saveItemType(itemType, type.checked)" type="checkbox" value="{{itemType}}" /> {{itemType}}</label>
                     </div>
+                    <div class = "col-4">
+                        <select #option (change)="saveOption(type, option)" class="custom-select  w-100">
+                            <option>(Select an option)</option>
+                            <option *ngFor="let options of getOptions(project.roomType, type)">{{options.name}}</option>
+                        </select>
+                    </div>
+                    <div class="col-2 w-50">
+                        <!--Next line makes sure quantity field displays only when needed-->
+                        <ng-container *ngIf="needsQuantity.includes(option)">
+                            <input #quantity type="number" (change)="saveQuantity(type, quantity)" class="form-control form-control-sm w-50" />
+                        </ng-container>
+                    </div> 
+                    <div class="col-2"></div>
                 </div>
             </div>
         </ng-container>
@@ -118,7 +116,7 @@
             </div>
         </div>
         <br />
-        <h4 class="mt-5">Rough Materials</h4>
+        <h4 class="mt-5">Materials</h4>
         <div class="form-group">
             <p class="lead">Will you be adding or replacing any of the following?</p>
             <label class = "checkbox"><input #plumbingSystem type="checkbox" value="plumbing system" /> Plumbing System</label>
@@ -137,7 +135,7 @@
         </div>
         <br />
         <div class="form-group text-right">
-            <button (click)='saveProjectDetails()' class="btn btn-info" [routerLink]="'/project/list'">Get Estimate</button>
+            <button (click)='saveProject()' class="btn btn-info" [routerLink]="'/project/list'">Get Estimate</button>
         </div>
     </div>
 
