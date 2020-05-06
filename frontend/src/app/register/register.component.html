@@ -21,20 +21,20 @@
         <div class = "form-group">
             <input [value]="emailSaved" (input)="emailSaved = email.value" #email ngModel name="email" type='email' placeholder="E-mail Address" class="form-control" 
             required pattern="^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" (change)="changedEmail = true;"/>
-            <div *ngIf="changedEmail && (email == null || !email.valid)" class="alert alert-danger">
+            <div *ngIf="changedEmail && email.validity.typeMismatch" class="alert alert-danger">
                 Email is required and must be a valid email address.
             </div>
         </div>
         <div class = "form-group">
             <input name="password" type='password' [(ngModel)]="password" placeholder="Password" class="form-control" 
-            required (change)="changedPassword = true;"/>
+            required (change)="changedPassword = true;" minlength="5"/>
             <div *ngIf="changedPassword && (password == null || password.length < 5)" class="alert alert-danger">
                 Password is required and must be at least 5 characters long.
             </div>
         </div>
         <div class = "form-group">
-            <input #verifypassword [(ngModel)]="verifyPassword" type='password' placeholder="Verify Password" 
-            required class="form-control" (change)="changedVerifyPassword = true;"/>
+            <input name="verifypassword" [(ngModel)]="verifyPassword" type='password' placeholder="Verify Password" 
+            required minlength="5" class="form-control" (change)="changedVerifyPassword = true;"/>
             <div *ngIf="changedVerifyPassword && changedPassword && (password != verifyPassword)" class="alert alert-danger">
                 Passwords do not match.
             </div>
