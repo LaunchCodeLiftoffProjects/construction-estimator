@@ -8,10 +8,6 @@ export class Item {
     type: string;
     price: number;
 
-
-    //Do we need this on the frontend?
-    //itemDetails: ItemDetails[];
-
     constructor(id: number, name: string, room: string[], category: string, type: string, price: number) {
         this.id = id;
         this.name = name;
