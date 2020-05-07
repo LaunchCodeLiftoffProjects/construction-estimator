@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { User } from 'src/app/user'
 import { UserDetails } from '../user-details';
 import { Project } from 'src/app/project';
+import { Router, RouterModule, ActivatedRoute, ParamMap, NavigationExtras } from '@angular/router';
+
 
 
 @Component({
@@ -11,12 +13,23 @@ import { Project } from 'src/app/project';
 })
 export class RegisterComponent implements OnInit {
 
-  constructor() { }
+  id: number;
+  passwordMismatch: boolean = false;
+
+ constructor(private route: ActivatedRoute, private router: Router) { }
 
   ngOnInit() {
   }
 
-  saveItem(firstName: string, lastName: string, email: string, password: string, userDetails: UserDetails, projects: Project[]) {
+  saveUser(firstName: string, lastName: string, email: string, password: string, verifyPassword: string) {
+
+    // don't submit form if passwords mismatch
+    if(password !== verifyPassword) {
+      this.passwordMismatch = true;
+      console.log("password mismatch")
+      return;
+    }
+
     let user = new User(firstName, lastName, email, password, null, []);
     console.log("saved user", user);
     // TODO: POST TO SERVER
@@ -29,8 +42,14 @@ export class RegisterComponent implements OnInit {
       },
       body: JSON.stringify(user),
     }).then(function(response) {
-      return response.json();
-    }).then(function(data) {
+      response.json().then(function(json) {
+        this.id = Number(json.id);
+
+        console.log(this.id);
+
+        this.router.navigate(['/user/profile/', this.id]);
+      }.bind(this));
+    }.bind(this)).then(function(data) {
       console.log('Success:', data);
     }).catch(function(error) {
       console.error('Error:', error);
