@@ -6,7 +6,7 @@ import javax.persistence.MappedSuperclass;
 public abstract class NamedEntity extends AbstractEntity {
 
     // TODO: Apply validation to this? Not sure how it works when also using angular
-    private String name;
+    protected String name;
 
     public String getName() {
         return name;

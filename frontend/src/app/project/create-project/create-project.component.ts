@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { Project } from '../../project';
 
 import { Router, RouterModule, ActivatedRoute, ParamMap, NavigationExtras } from '@angular/router';
-import { bindCallback } from 'rxjs';
 
 @Component({
   selector: 'app-create-project',
