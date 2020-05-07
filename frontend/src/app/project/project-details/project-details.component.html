@@ -3,9 +3,11 @@
     <div class="container mt-5">
         <div class="row justify-content-between">
             <div class="col-6">
+
                 <h2 class="text-info">Project Details</h2>
                 <p>Tell us what you need to make your vision a reality! Don't worry if you aren't sure about some of the details; you can come back and edit your project at any time.</p>
             </div>
+
             <div class="col-6">
                 
                 <!--Name, type, and dimensions with edit button-->
@@ -50,11 +52,12 @@
     </div>
 
     <div class = "container col-12">
-
+        <!--iterate through appliance, fixture, and finish-->
         <ng-container *ngFor="let category of categories">
-            <ng-container *ngIf=" project.roomType === 'kitchen' || (project.roomType === 'bath' && category !== 'appliance') || (project.roomType === 'living' && category !== 'appliance') ">
+            <!--do not show appliance section unless the room is kitchen-->
+            <ng-container *ngIf=" project.roomType === 'kitchen' || (project.roomType !== 'kitchen' && category !== 'appliance') ">
                 <div class="form-group" >
-                    <h4 class="mt-5">{{category}}</h4>
+                    <h4 class="mt-5">{{categoryTitles[categories.indexOf(category)]}}</h4>
                     <div class="input-group mt-2" *ngFor="let itemType of getTypes(project.roomType, category)">
                         <div class="col-4">
                             <!--still need to add value of checkbox if previously submitted-->

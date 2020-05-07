@@ -35,8 +35,6 @@ export class ProjectDetailsComponent implements OnInit {
   selectedArray: Item[]; // to store selected item objects before calculating and creating ItemDetails objects
   detailsArray: ItemDetails[]; // to store calculated itemDetails objects in project object
   
-  @Input() item: Item;
-
   constructor(private route: ActivatedRoute) { }
 
   ngOnInit() {
@@ -175,7 +173,7 @@ export class ProjectDetailsComponent implements OnInit {
     return quantity;
   }
 
-  
+
   // GET INFO ON MATERIALS & LABOR FOR CALCULATIONS
 
   // need to set this up
