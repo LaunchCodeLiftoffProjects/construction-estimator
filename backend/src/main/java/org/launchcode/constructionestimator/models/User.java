@@ -41,7 +41,7 @@ public class User extends NamedEntity {
     }
 
     public void setFirstName(String firstName) {
-        firstName = firstName;
+        this.firstName = firstName;
     }
 
     public String getLastName() {
