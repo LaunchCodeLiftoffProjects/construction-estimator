@@ -52,14 +52,13 @@
     <div class = "container col-12">
 
         <ng-container *ngFor="let category of categories">
-            <!-- <ng-container *ngIf="project.roomType === 'kitchen'"> -->
+            <ng-container *ngIf=" project.roomType === 'kitchen' || (project.roomType === 'bath' && category !== 'appliance') || (project.roomType === 'living' && category !== 'appliance') ">
                 <div class="form-group" >
-                    <h4 class="mt-5">{{category.toUpperCase()}}S</h4>
+                    <h4 class="mt-5">{{category}}</h4>
                     <div class="input-group mt-2" *ngFor="let itemType of getTypes(project.roomType, category)">
                         <div class="col-4">
-                            <!--NEED TO CHANGE SO THAT CHECKBOX DETERMINES INCLUSION TO BE SAVED-->
-                            <!--create function and check console log to see if saving to project-->
-                            <label class="lead"><input #type type="checkbox" (change)="includeItem(itemType, type.checked)"/> {{itemType}}</label>
+                            <!--still need to add value of checkbox if previously submitted-->
+                            <label class="lead"><input #type type="checkbox" (change)="includeItem(itemType, type.checked)" /> {{itemType}}</label>
                         </div>
                         <div class = "col-4">
                             <!--needs to display former selection if editing from previous saved estimate-->
@@ -69,15 +68,14 @@
                             </select>
                         </div>
                         <div class="col-2">
-                            <!--Next line makes sure quantity field displays only when needed-->
                             <ng-container *ngIf="needsQuantity.includes(itemType)">
-                                <input #quantity type="number" step="1" min = 0 placeholder="0" class="form-control form-control-sm w-75 h-100" (change)="saveOption(itemType, quantity)"/>
+                                <input #quantity type="number" step="1" min = 0 placeholder="0" class="form-control form-control-sm w-75 h-100" (change)="saveOption(itemType, quantity)" value="{{getQuantity(itemType)}}"/>
                             </ng-container>
                         </div> 
                         <div class="col-2"></div>
                     </div>
                 </div>
-            <!-- </ng-container> -->
+            </ng-container>
         </ng-container>
         <br />
 

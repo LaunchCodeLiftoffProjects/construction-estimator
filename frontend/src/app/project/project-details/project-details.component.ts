@@ -24,6 +24,7 @@ export class ProjectDetailsComponent implements OnInit {
   itemsArray: Item[]; // to get all possible items (serves dual purpose - display and calculations)
 
   categories = [ "appliance", "fixture", "finish" ];
+  categoryTitles = [ "Appliances", "Fixtures", "Finishes" ];
 
   needsQuantity: string[] = ['Dishwasher','Disposal','Microwave/Hood','Oven/Range','Refrigerator',
               'Bath & Shower', 'Ceiling Light/Fan', 'Electrical Outlets', 'Electrical Switches', 
@@ -127,7 +128,6 @@ export class ProjectDetailsComponent implements OnInit {
   }
 
   // for each type, build a list of available options to display for dropdown lists
-  // display last saved options if editing formerly estimated project
   getOptions(itemType: string, itemRoom: string) {
     let optionsArray = [];
     let item: Item;
@@ -141,18 +141,44 @@ export class ProjectDetailsComponent implements OnInit {
     return optionsArray;
   }
 
-  // get last saved quantity for display if editing formerly estimated project
-  // need to refactor args
-  getQuantity(item: Item): number {
-    let detailsIndex = this.project.findItemDetailsByItemId(item.id);
-
-    if (detailsIndex === -1) {
-      return 0;
-    } else {
-      return this.project.itemDetails[detailsIndex].quantity;
-    }
-
+  // display last selection for each type if editing formerly estimated project
+  getItem(itemType: string): [Item, ItemDetails] {
+    // refactor to check all items in itemsArray with type itemType
+    // against item ID saved in project.itemDetails
+    // return item (to get name for option dropdown) and itemDetails (to get quantity if needed)
+    let item: Item;
+    let itemDetails: ItemDetails;
+    // let detailsIndex = this.project.findItemDetailsByItemId(item.id);
+    // if (detailsIndex === -1) {
+    //   return null;
+    // } else {
+    // return this.project.itemDetails[detailsIndex].quantity;
+    // }
+    return [item, itemDetails];
   }
+
+  getCheckStatus(itemType: string): boolean {
+    let wasChecked: boolean;
+    // use getItem() to find out if this type was included before or not
+    return wasChecked;
+  }
+
+  getSelection(itemType: string): string {
+    let option: string;
+    // use getItem() to get the option previously selected for this type
+    return option;
+  }
+
+  getQuantity(itemType: string): number {
+    let quantity: number;
+    // use getItem() to get the quantity previously stored for this type
+    return quantity;
+  }
+
+  
+  // GET INFO ON MATERIALS & LABOR FOR CALCULATIONS
+
+  // need to set this up
 
 
   // UPON FORM SUBMISSION, GATHER SELECTED ITEMS, CALCULATE, AND SAVE TO PROJECT
