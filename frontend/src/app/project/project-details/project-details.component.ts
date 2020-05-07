@@ -33,7 +33,6 @@ export class ProjectDetailsComponent implements OnInit {
 
   isChecked = {}; // maybe not needed after all?
   selectedArray: Item[]; // to store selected item objects before calculating and creating ItemDetails objects
-  detailsArray: ItemDetails[]; // to store calculated itemDetails objects in project object
   
   constructor(private route: ActivatedRoute) { }
 
@@ -140,37 +139,50 @@ export class ProjectDetailsComponent implements OnInit {
   }
 
   // display last selection for each type if editing formerly estimated project
-  getItem(itemType: string): [Item, ItemDetails] {
-    // refactor to check all items in itemsArray with type itemType
-    // against item ID saved in project.itemDetails
-    // return item (to get name for option dropdown) and itemDetails (to get quantity if needed)
+  getItem(itemType): [Item, ItemDetails] {
     let item: Item;
-    let itemDetails: ItemDetails;
-    // let detailsIndex = this.project.findItemDetailsByItemId(item.id);
-    // if (detailsIndex === -1) {
-    //   return null;
-    // } else {
-    // return this.project.itemDetails[detailsIndex].quantity;
-    // }
-    return [item, itemDetails];
+    let details: ItemDetails;
+    if (this.project.itemDetails.length !== 0) {
+      for (let i=0; i < this.itemsArray.length; i++) {
+        for (let j=0; j < this.project.itemDetails.length; j++) {
+          item = this.itemsArray[i];
+          details = this.project.itemDetails[j]
+          // check items in itemsArray with current type against item IDs saved in project.itemDetails
+          if (item.type === itemType && item.id === details.itemId) {
+            // return item (to get name for option dropdown) and itemDetails (to get quantity)
+            return [item, details];
+          }
+        }
+      } 
+    } else {
+      return [null, null]; 
+    }
   }
 
-  getCheckStatus(itemType: string): boolean {
-    let wasChecked: boolean;
-    // use getItem() to find out if this type was included before or not
-    return wasChecked;
+  getCheckStatus(itemType: string): boolean { 
+      if (this.getItem(itemType)[0] === null) {
+        return false;
+      } else {
+        return true
+    }
   }
 
   getSelection(itemType: string): string {
-    let option: string;
-    // use getItem() to get the option previously selected for this type
-    return option;
+    let result = this.getItem(itemType);
+    if (result[0] === null) {
+      return "(Select an option)";
+    } else {
+      return result[0].name;
+    }
   }
 
   getQuantity(itemType: string): number {
-    let quantity: number;
-    // use getItem() to get the quantity previously stored for this type
-    return quantity;
+    let result = this.getItem(itemType);
+    if (result[1] === null) {
+      return 0;
+    } else {
+      return result[1].quantity;
+    }
   }
 
 
