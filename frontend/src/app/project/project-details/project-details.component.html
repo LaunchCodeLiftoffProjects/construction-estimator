@@ -61,7 +61,7 @@
                     <div class="input-group mt-2" *ngFor="let itemType of getTypes(project.roomType, category)">
                         <div class="col-4">
                             <!--still need to add value of checkbox if previously submitted-->
-                            <label class="lead"><input #type type="checkbox" (change)="includeItem(itemType, type.checked)" /> {{itemType}}</label>
+                            <label class="lead"><input #type type="checkbox" (change)="includeItem(itemType, type.checked)" ng-checked="getCheckedStatus(itemType)"/> {{itemType}}</label>
                         </div>
                         <div class = "col-4">
                             <!--needs to display former selection if editing from previous saved estimate-->

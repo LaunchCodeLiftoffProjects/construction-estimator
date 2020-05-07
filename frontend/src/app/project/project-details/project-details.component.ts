@@ -167,14 +167,15 @@ export class ProjectDetailsComponent implements OnInit {
     }
   }
 
-  getSelection(itemType: string): string {
-    let result = this.getItem(itemType);
-    if (result[0] === null) {
-      return "(Select an option)";
-    } else {
-      return result[0].name;
-    }
-  }
+  // THIS IS NOT WORKING - need different approach (most research says to use ngModel but...)
+  // getSelection(itemType: string): string {
+  //   let result = this.getItem(itemType);
+  //   if (result[0] !== null) {
+  //     return "(Select an option)";
+  //   } else {
+  //     return result[0].name;
+  //   }
+  // }
 
   getQuantity(itemType: string): number {
     let result = this.getItem(itemType);
@@ -193,103 +194,104 @@ export class ProjectDetailsComponent implements OnInit {
 
   // UPON FORM SUBMISSION, GATHER SELECTED ITEMS, CALCULATE, AND SAVE TO PROJECT
 
-  // put currently selected items in their own array before calculating
+  // verify item has been checked before including
   includeItem(itemType: string, typeSelected: boolean) {
     console.log(itemType, "selected, typeSelected=", typeSelected);
     this.isChecked[itemType] = typeSelected; // adds to object above... still need this?
     if (typeSelected) {
-      // add item if not checked before
-      // remove item if unchecked
+      // okay to add - see saveOption()
     }
   }
 
-  // // put currently selected items in their own array before calculating
-  // saveOption(itemType: string, option: Item) {
-  //   console.log(itemType, "selected option ", option);
-  //   if (this.selectedArray.includes(option)) { // finish this
-  //     // add item if not checked before
-  //     // remove item if unchecked
-  //   }
-  // }
+  // put currently selected items into selectedArray before calculating
+  saveOption(itemType: string, option: Item) {
+    console.log(itemType, "selected option ", option);
+    if (this.selectedArray.includes(option)) { 
+      // finish this
+      // reference includeItem() and saveQuantity()
+      // add item if not included before
+      // remove item if no longer included
+    }
+  }
 
-  // // put currently selected items in their own array before calculating
-  // saveQuantity(itemType: string, quantity: number) {
-  //   console.log(itemType, "set quantity to", quantity);
-  //   if (this.selectedArray) { // finish this
-  //     // add item if not checked before
-  //     // remove item if unchecked
-  //   }
-  // }
+  // get quantity if required for calculation
+  saveQuantity(itemType: string, quantity: number) {
+    console.log(itemType, "set quantity to", quantity);
+    if (this.selectedArray) { 
+      // finish this
+      // include if required - see saveOption()
+    }
+  }
 
-  // // use data from original JSON file of all items to calculate for each selected item
-  // calculateItemDetails() {
-  //   // calculations not yet written
-  // }
+  // use data from original JSON file of all items to calculate for each selected item
+  calculateItemDetails() {
+    // calculations not yet written
+  }
 
-  // // add/update ItemDetails objects in itemDetailsArray
-  // saveItemDetails(quantity: number, item: Item) {
+  // add/update ItemDetails objects in itemDetailsArray
+  saveItemDetails(quantity: number, item: Item) {
 
-//     // find the itemDetails.itemId index matching item.id
-//     let detailsIndex = this.project.findItemDetailsByItemId(item.id);
+    // find the itemDetails.itemId index matching item.id
+    let detailsIndex = this.project.findItemDetailsByItemId(item.id);
 
-//     // check and see if details already exist, if not create a new ItemDetails object
-//     if (detailsIndex === -1) {
-//       let newDetails = new ItemDetails(item.id);
-//       newDetails.quantity = quantity;
-//       this.project.itemDetails.push(newDetails);
-//     } else { // the details already exist, update existing quantity
-//       this.project.itemDetails[detailsIndex].quantity = quantity;
-//     }
-//   }
+    // check and see if details already exist, if not create a new ItemDetails object
+    if (detailsIndex === -1) {
+      let newDetails = new ItemDetails(item.id);
+      newDetails.quantity = quantity;
+      this.project.itemDetails.push(newDetails);
+    } else { // the details already exist, update existing quantity
+      this.project.itemDetails[detailsIndex].quantity = quantity;
+    }
+  }
 
-//   // calculate category totals and save to an estimate object
-//   saveEstimate() {
-//     // this needs to be written once estimate class is available on both ends
-//     // reference completed itemDetailsArray and get subtotals by category
-//     // return estimate object
-//   }
+  // calculate category totals and save to an estimate object
+  saveEstimate() {
+    // this needs to be written once estimate class is available on both ends
+    // reference completed itemDetailsArray and get subtotals by category
+    // return estimate object
+  }
 
-//  // save itemDetails array and estimate object to project and save project to database
-//  saveProject() {
+ // save itemDetails array and estimate object to project and save project to database
+ saveProject() {
 
-//     // save itemDetails to project
-//     fetch("http://localhost:8080/api/project/" + this.project.id + "/details", {
-//       method: 'POST',
-//       headers: {
-//         'Content-Type': 'application/json',
-//         'Access-Control-Allow-Origin': '*',
-//         'Access-Control-Allow-Credentials': 'true'
-//       },
-//       body: JSON.stringify(this.project.itemDetails),
-//     }).then(function (response) {
-//       return response.json();
-//     }).then(function (data) {
-//       console.log('Success:', data);
-//     }).catch(function (error) {
-//       console.error('Error:', error);
-//     });
+    // save itemDetails to project
+    fetch("http://localhost:8080/api/project/" + this.project.id + "/details", {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Credentials': 'true'
+      },
+      body: JSON.stringify(this.project.itemDetails),
+    }).then(function (response) {
+      return response.json();
+    }).then(function (data) {
+      console.log('Success:', data);
+    }).catch(function (error) {
+      console.error('Error:', error);
+    });
 
-//     // save estimate to project
-//     // TODO
+    // save estimate to project
+    // TODO
 
-//     // save entire project object to database
-//     // NOTE: This needs to be replaced with Shaun's newer PUT function
-//     fetch("http://localhost:8080/api/project/" + this.project.id, {
-//       method: 'PUT',
-//       headers: {
-//         'Content-Type': 'application/json',
-//         'Access-Control-Allow-Origin': '*',
-//         'Access-Control-Allow-Credentials': 'true'
-//       },
-//       body: JSON.stringify(this.project),
-//     }).then(function (response) {
-//       return response.json();
-//     }).then(function (data) {
-//       console.log('Success:', data);
-//     }).catch(function (error) {
-//       console.error('Error:', error);
-//     });
+    // save entire project object to database
+    // NOTE: This needs to be replaced with Shaun's newer PUT function
+    fetch("http://localhost:8080/api/project/" + this.project.id, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Credentials': 'true'
+      },
+      body: JSON.stringify(this.project),
+    }).then(function (response) {
+      return response.json();
+    }).then(function (data) {
+      console.log('Success:', data);
+    }).catch(function (error) {
+      console.error('Error:', error);
+    });
 
-//   }
+  }
 
 }
