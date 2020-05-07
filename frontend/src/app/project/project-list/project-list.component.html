@@ -1,18 +1,25 @@
-<div class="container">
+ 
+ <div class="container">
 
-    <div class="mt-5">
-        <h2 class="text-info">All Projects</h2>
+        <div class="mt-5">
+            <h2 class="text-info">All Projects</h2>
+        </div>
+
+        <div *ngIf="! projects">
+            <p class="lead">Hey there! You do not have any projects yet.<br /> 
+                Why not <a class="text-info" [routerLink]="'/project/create'">create</a> one?</p>
+        </div>
+
+        <div>
+            <ul>
+                <li class="lead" *ngFor="let project of projects">{{project.name}}</li>
+            </ul>
+        </div>
+
     </div>
 
-    <div *ngIf="! user.projects">
-        <p class="lead">Hey there! You do not have any projects yet.<br /> 
-            Why not <a class="text-info" [routerLink]="'/project/create'">create</a> one?</p>
-    </div>
+    <div class="container">
 
-    <div>
-        <ul>
-            <li class="lead" *ngFor="let project of user.projects">{{project.name}}</li>
-        </ul>
+        <router-outlet></router-outlet>
+    
     </div>
-
-</div>

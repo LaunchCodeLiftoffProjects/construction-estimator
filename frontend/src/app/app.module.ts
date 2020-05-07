@@ -19,6 +19,7 @@ import { FormsModule } from '@angular/forms';
 import { EditUserDetailsComponent } from './user/edit-user-details/edit-user-details.component';
 
 
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -36,8 +37,8 @@ import { EditUserDetailsComponent } from './user/edit-user-details/edit-user-det
     EditUserDetailsComponent],
   imports: [
     BrowserModule,
-    AppRoutingModule, // brings over info from app-routing.module.ts
-    FormsModule       // allows the use of ngSubmit directive
+    FormsModule,
+    AppRoutingModule // brings over info from app-routing.module.ts
   ],
   providers: [],
   bootstrap: [AppComponent]

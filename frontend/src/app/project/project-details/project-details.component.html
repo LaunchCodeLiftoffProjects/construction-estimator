@@ -3,18 +3,21 @@
     <div class="container mt-5">
         <div class="row justify-content-between">
             <div class="col-6">
+
                 <h2 class="text-info">Project Details</h2>
-                <p>Tell us what you need to make your project come to life! Don't worry if you aren't sure about some of the details; you can come back and edit your project at any time.</p>
+                <p>Tell us what you need to make your vision a reality! Don't worry if you aren't sure about some of the details; you can come back and edit your project at any time.</p>
             </div>
+
             <div class="col-6">
                 
                 <!--Name, type, and dimensions with edit button-->
                 <div *ngIf="!editingProject; else editProjectBlock" class="text-right">
-                    <h5>{{project.name}} </h5>
-                    <p class="lead">{{project.roomType}}<br />
+                    <h4>{{project.name}} </h4>
+                    <p class="lead">{{project.roomType.toUpperCase()}}<br />
                     {{project.roomLength}}'L x {{project.roomWidth}}'W x {{project.roomHeight}}'H</p>
                     <span class = "badge badge-info" (click) = "editingProject = true;">Edit</span>
                 </div>
+
                 <!--Visible only while editing name, type, and dimensions-->
                 <ng-template #editProjectBlock>
                     <div class="form-group">
@@ -49,60 +52,46 @@
     </div>
 
     <div class = "container col-12">
-        <div class="form-group">
-            <h4 class="mt-5">Fixtures</h4>
-            <div *ngFor="let item of itemsArray">
-                <div class="input-group" *ngIf="item.category == 'fixture' && item.room.includes(project.roomType)">
-                    <div class="col-5 lead">
-                        {{item.name}}
-                    </div>
-                    <div class="col-3">
-                        <input #quantity (change)="saveItemDetails(quantity.value, item)" type="number"
-                            value="{{getQuantity(item)}}" class="form-control form-control-sm w-50" /> unit
-                    </div>
-                    <div class = "col-4">
-                        options dropdown (if any)
-                    </div>
-                </div>
-            </div>
-        </div>
-        <br />
-        <div class="form-group">
-            <h4 class="mt-5">Appliances</h4>
-            <div *ngFor="let item of itemsArray">
-                <div class="input-group" *ngIf="item.category == 'appliance' && item.room.includes(project.roomType)">
-                    <div class="col-5 lead">
-                        {{item.name}}
-                    </div>
-                    <div class="col-3">
-                        <input #quantity (change)="saveItemDetails(quantity.value, item)" type="number"
-                            value="{{getQuantity(item)}}" class="form-control form-control-sm w-50" /> unit
-                    </div>
-                    <div class = "col-4">
-                        options dropdown (if any)
+        <!--iterate through appliance, fixture, and finish-->
+        <ng-container *ngFor="let category of categories">
+            <!--do not show appliance section unless the room is kitchen-->
+            <ng-container *ngIf=" project.roomType === 'kitchen' || (project.roomType !== 'kitchen' && category !== 'appliance') ">
+                <div class="form-group" >
+                    <h4 class="mt-5">{{categoryTitles[categories.indexOf(category)]}}</h4>
+                    <div class="input-group mt-2" *ngFor="let itemType of getTypes(project.roomType, category)">
+                        <div class="col-4">
+                            <!--still need to add value of checkbox if previously submitted-->
+                            <label class="lead"><input #type type="checkbox" (change)="includeItem(itemType, type.checked)" ng-checked="getCheckedStatus(itemType)"/> {{itemType}}</label>
+                        </div>
+                        <div class = "col-4">
+                            <!--needs to display former selection if editing from previous saved estimate-->
+                            <select #option class="custom-select w-100" (change)="saveOption(itemType, option)">
+                                <option>(Select an option)</option>
+                                <option *ngFor="let options of getOptions(itemType, project.roomType)">{{options.name}}</option>
+                            </select>
+                        </div>
+                        <div class="col-2">
+                            <ng-container *ngIf="needsQuantity.includes(itemType)">
+                                <input #quantity type="number" step="1" min = 0 placeholder="0" class="form-control form-control-sm w-75 h-100" (change)="saveOption(itemType, quantity)" value="{{getQuantity(itemType)}}"/>
+                            </ng-container>
+                        </div> 
+                        <div class="col-2"></div>
                     </div>
                 </div>
-            </div>
-        </div>
+            </ng-container>
+        </ng-container>
         <br />
+
+        <h4 class="mt-5">Materials</h4>
         <div class="form-group">
-            <h4 class="mt-5">Finishes</h4>
-            <div *ngFor="let item of itemsArray">
-                <div class="input-group" *ngIf="item.category == 'finish' && item.room.includes(project.roomType)">
-                    <div class="col-5 lead">
-                        {{item.name}}
-                    </div>
-                    <div class="col-3">
-                        <input #quantity (change)="saveItemDetails(quantity.value, item)" type="number"
-                            value="{{getQuantity(item)}}" class="form-control form-control-sm w-50" /> unit
-                    </div>
-                    <div class = "col-4">
-                        options dropdown (if any)
-                    </div>
-                </div>
-            </div>
+            <p class="lead">Will you be adding or replacing any of the following?</p>
+            <label class = "checkbox"><input #plumbingSystem type="checkbox" value="plumbing system" /> Plumbing System</label>
+            <label class = "checkbox"><input #electricalSystem type="checkbox" value="electrical system" /> Electrical System</label>
+            <label class = "checkbox"><input #framing type="checkbox" value="wall framing" /> Wall Framing</label>
+            <label class = "checkbox"><input #drywall type="checkbox" value="drywall" /> Plaster/Drywall</label>
         </div>
         <br />
+
         <h4 class="mt-5">Labor</h4>
         <div class="form-group">
             <p class="lead">Will you be hiring any subcontractors?</p>
@@ -112,9 +101,11 @@
             <label class = "checkbox"><input #finishWork type="checkbox" value="finishWork" /> Finish Work</label>
         </div>
         <br />
+
         <div class="form-group text-right">
-            <button (click)='saveProjectDetails()' class="btn btn-info" [routerLink]="'/project/list'">Get Estimate</button>
+            <button (click)='saveProject()' class="btn btn-info" [routerLink]="'/project/list'">Get Estimate</button>
         </div>
+
     </div>
 
 </div>
