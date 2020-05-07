@@ -10,7 +10,7 @@
                 
                 <!--Name, type, and dimensions with edit button-->
                 <div *ngIf="!editingProject; else editProjectBlock" class="text-right">
-                    <h5>{{project.name}} </h5>
+                    <h4>{{project.name}} </h4>
                     <p class="lead">{{project.roomType.toUpperCase()}}<br />
                     {{project.roomLength}}'L x {{project.roomWidth}}'W x {{project.roomHeight}}'H</p>
                     <span class = "badge badge-info" (click) = "editingProject = true;">Edit</span>
@@ -51,11 +51,11 @@
 
     <div class = "container col-12">
 
-        <!-- <ng-container *ngFor="let category of categoryList"> -->
+        <ng-container *ngFor="let category of categories">
             <!-- <ng-container *ngIf="project.roomType === 'kitchen'"> -->
                 <div class="form-group" >
-                    <h4 class="mt-5">{{Finishes}}</h4>
-                    <div class="input-group mt-2" *ngFor="let itemType of getTypes(project.roomType, 'finish')">
+                    <h4 class="mt-5">{{category.toUpperCase()}}S</h4>
+                    <div class="input-group mt-2" *ngFor="let itemType of getTypes(project.roomType, category)">
                         <div class="col-4">
                             <!--NEED TO CHANGE SO THAT CHECKBOX DETERMINES INCLUSION TO BE SAVED-->
                             <!--create function and check console log to see if saving to project-->
@@ -63,22 +63,22 @@
                         </div>
                         <div class = "col-4">
                             <!--needs to display former selection if editing from previous saved estimate-->
-                            <select #option class="custom-select  w-100" (change)="saveOption(itemType, option)">
+                            <select #option class="custom-select w-100" (change)="saveOption(itemType, option)">
                                 <option>(Select an option)</option>
                                 <option *ngFor="let options of getOptions(itemType, project.roomType)">{{options.name}}</option>
                             </select>
                         </div>
-                        <div class="col-2 w-50">
+                        <div class="col-2">
                             <!--Next line makes sure quantity field displays only when needed-->
                             <ng-container *ngIf="needsQuantity.includes(itemType)">
-                                <input #quantity type="number" class="form-control form-control-sm w-50" value = "{{getQuantity()}}" (change)="saveOption(itemType, quantity)"/>
+                                <input #quantity type="number" step="1" min = 0 placeholder="0" class="form-control form-control-sm w-75 h-100" (change)="saveOption(itemType, quantity)"/>
                             </ng-container>
                         </div> 
                         <div class="col-2"></div>
                     </div>
                 </div>
             <!-- </ng-container> -->
-        <!-- </ng-container> -->
+        </ng-container>
         <br />
 
         <h4 class="mt-5">Materials</h4>

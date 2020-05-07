@@ -12,6 +12,8 @@ import { FormsModule } from '@angular/forms';
   styleUrls: ['./project-details.component.css']
 })
 
+
+
 export class ProjectDetailsComponent implements OnInit {
 
   project: Project;
@@ -21,11 +23,7 @@ export class ProjectDetailsComponent implements OnInit {
 
   itemsArray: Item[]; // to get all possible items (serves dual purpose - display and calculations)
 
-  categoryList = [ 
-    { referenceName: "appliance", displayName: "Appliances" },
-    { referenceName: "fixture", displayName: "Fixtures" },
-    { referenceName: "finish", displayName: "Finishes" }
-  ];
+  categories = [ "appliance", "fixture", "finish" ];
 
   needsQuantity: string[] = ['Dishwasher','Disposal','Microwave/Hood','Oven/Range','Refrigerator',
               'Bath & Shower', 'Ceiling Light/Fan', 'Electrical Outlets', 'Electrical Switches', 
@@ -36,6 +34,7 @@ export class ProjectDetailsComponent implements OnInit {
   selectedArray: Item[]; // to store selected item objects before calculating and creating ItemDetails objects
   detailsArray: ItemDetails[]; // to store calculated itemDetails objects in project object
   
+  @Input() item: Item;
 
   constructor(private route: ActivatedRoute) { }
 
@@ -156,17 +155,17 @@ export class ProjectDetailsComponent implements OnInit {
   }
 
 
-  // // UPON FORM SUBMISSION, GATHER SELECTED ITEMS, CALCULATE, AND SAVE TO PROJECT
+  // UPON FORM SUBMISSION, GATHER SELECTED ITEMS, CALCULATE, AND SAVE TO PROJECT
 
-  // // put currently selected items in their own array before calculating
-  // includeItem(itemType: string, typeSelected: boolean) {
-  //   console.log(itemType, "selected, typeSelected=", typeSelected);
-  //   this.isChecked[itemType] = typeSelected; // adds to object above... still need this?
-  //   if (typeSelected) {
-  //     // add item if not checked before
-  //     // remove item if unchecked
-  //   }
-  // }
+  // put currently selected items in their own array before calculating
+  includeItem(itemType: string, typeSelected: boolean) {
+    console.log(itemType, "selected, typeSelected=", typeSelected);
+    this.isChecked[itemType] = typeSelected; // adds to object above... still need this?
+    if (typeSelected) {
+      // add item if not checked before
+      // remove item if unchecked
+    }
+  }
 
   // // put currently selected items in their own array before calculating
   // saveOption(itemType: string, option: Item) {
