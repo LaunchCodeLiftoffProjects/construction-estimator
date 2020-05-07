@@ -1,7 +1,10 @@
 package org.launchcode.constructionestimator.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +32,10 @@ public class Project extends NamedEntity {
     @OneToMany
     @JoinColumn(name="project_id")
     private List<ItemDetails> itemDetails = new ArrayList<>();
+
+    @ManyToOne
+    @JsonBackReference
+    private User user;
 
     // necessary for hibernate to use model binding I think
     public Project() {}
@@ -135,5 +142,13 @@ public class Project extends NamedEntity {
 
     public void setItemDetails(List<ItemDetails> itemDetails) {
         this.itemDetails = itemDetails;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }

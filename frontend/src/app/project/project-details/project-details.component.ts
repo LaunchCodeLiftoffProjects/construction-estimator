@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Project } from 'src/app/project';
 import { Item } from 'src/app/item';
 import { ItemDetails } from 'src/app/item-details';
-import { Router, ActivatedRoute, ParamMap } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 
 
 

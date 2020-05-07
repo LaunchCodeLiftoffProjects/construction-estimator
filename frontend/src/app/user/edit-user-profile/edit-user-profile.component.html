@@ -1,3 +1,24 @@
-<br />
-<p>Edit Profile form will be here</p>
-<p>Submitting it will lead back to <a [routerLink]="'/user/profile'">HERE</a>.</p>
+<div class="mt-3">
+    <form (ngSubmit)="updateUser(firstName.value, lastName.value, email.value, password.value, verifyPassword.value)">
+        <div class="form-group">
+            <div class="input-group">
+                <input #firstName type='text' placeholder="{{user.firstName}}" class="form-control" />
+                <input #lastName type='text' placeholder="{{user.lastName}}" class="form-control" />
+            </div>
+        </div>
+        <div class = "form-group">
+            <input #email type='email' placeholder="{{user.email}}" class="form-control"/>
+        </div>
+        <div class = "form-group">
+            <input #password type='password' placeholder="Update Password" class="form-control"/>
+        </div>
+        <div class = "form-group">
+            <input #verifyPassword type='password' placeholder="Verify Updated Password" class="form-control"/>
+            <p *ngIf="passwordMismatch ==  true" style="color: red">Passwords must match!</p>
+            <p>Leave blank to keep password</p>
+        </div>
+        <div class="form-group text-right">
+            <button type="submit" class="btn btn-info">Update Profile</button>
+        </div>
+    </form>
+</div>

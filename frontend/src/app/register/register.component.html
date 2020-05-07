@@ -1,7 +1,7 @@
 <div class = "container">
     <br />
     <h2 class="text-info mt-5">Create an Account</h2>
-    <form (ngSubmit)="saveItem(firstname, lastname, email.value, password.value)" #userForm="ngForm">
+    <form (ngSubmit)='saveUser(firstName.value, lastName.value, email.value, password.value, verifyPassword.value)' #userForm="ngForm">
         <br />
         <h5 class="mb-3">Get ready to create your first project!</h5>
         <div class = "form-group">
