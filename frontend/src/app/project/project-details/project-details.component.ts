@@ -4,7 +4,6 @@ import { Item } from 'src/app/item';
 import { ItemDetails } from 'src/app/item-details';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
 
 
 
@@ -189,9 +188,11 @@ export class ProjectDetailsComponent implements OnInit {
   }
 
 
+  
   // GET INFO ON MATERIALS & LABOR FOR CALCULATIONS
 
   // need to set this up
+
 
 
   // UPON FORM SUBMISSION, GATHER SELECTED ITEMS, CALCULATE, AND SAVE TO PROJECT
