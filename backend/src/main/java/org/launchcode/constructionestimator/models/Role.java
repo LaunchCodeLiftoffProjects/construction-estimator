@@ -5,7 +5,7 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 
 @Entity
-public class Role {
+public class Role extends AbstractEntity {
 
     @Enumerated(EnumType.STRING)
     private ERole name;

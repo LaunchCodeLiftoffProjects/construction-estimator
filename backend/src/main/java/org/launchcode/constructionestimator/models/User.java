@@ -30,6 +30,13 @@ public class User extends NamedEntity {
     @ManyToMany
     private Set<Role> roles = new HashSet<>();
 
+    public User(String firstName, String lastName, String email, String password) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.name = email;
+        this.password = password;
+    }
+
     public User() { }
 
     // allows us to use email for the field name instead of name in sent and received JSON
