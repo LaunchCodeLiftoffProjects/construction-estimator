@@ -1,7 +1,7 @@
 package org.launchcode.constructionestimator.controllers;
 
 import org.launchcode.constructionestimator.models.User;
-import org.launchcode.constructionestimator.models.UserDetails;
+import org.launchcode.constructionestimator.models.HomeDetails;
 import org.launchcode.constructionestimator.models.data.UserDetailsRepository;
 import org.launchcode.constructionestimator.models.data.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,16 +55,16 @@ public class UserController {
     }
 
     @PostMapping("/{userId}/details")
-    public ResponseEntity postUserDetails(@PathVariable("userId") int id, @RequestBody UserDetails userDetails) {
+    public ResponseEntity postUserDetails(@PathVariable("userId") int id, @RequestBody HomeDetails homeDetails) {
 
         if(userRepository.findById(id).isEmpty()) {
             return new ResponseEntity(HttpStatus.NOT_FOUND);
         } else {
             User user = userRepository.findById(id).get();
 
-            user.setUserDetails(userDetails);
-            userDetails.setUser(user);
-            userDetailsRepository.save(userDetails);
+            user.setHomeDetails(homeDetails);
+            homeDetails.setUser(user);
+            userDetailsRepository.save(homeDetails);
 
             return new ResponseEntity(HttpStatus.OK);
         }

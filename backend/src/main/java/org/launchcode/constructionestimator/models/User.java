@@ -1,11 +1,14 @@
 package org.launchcode.constructionestimator.models;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSetter;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @AttributeOverride(name = "name", column = @Column(name="email"))
@@ -14,6 +17,7 @@ public class User extends NamedEntity {
     private String firstName;
     private String lastName;
 
+    @JsonIgnore
     private String password;
 
     @OneToMany
@@ -21,9 +25,14 @@ public class User extends NamedEntity {
     private List<Project> projects = new ArrayList<>();
 
     @OneToOne
-    private UserDetails userDetails;
+    private HomeDetails homeDetails;
 
-    // allows us to use email for the field name instead of user in sent and received JSON
+    @ManyToMany
+    private Set<Role> roles = new HashSet<>();
+
+    public User() { }
+
+    // allows us to use email for the field name instead of name in sent and received JSON
     @Override
     @JsonSetter("email")
     public void setName(String name) {
@@ -68,11 +77,19 @@ public class User extends NamedEntity {
         this.projects = projects;
     }
 
-    public UserDetails getUserDetails() {
-        return userDetails;
+    public HomeDetails getHomeDetails() {
+        return homeDetails;
     }
 
-    public void setUserDetails(UserDetails userDetails) {
-        this.userDetails = userDetails;
+    public void setHomeDetails(HomeDetails homeDetails) {
+        this.homeDetails = homeDetails;
+    }
+
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
     }
 }
