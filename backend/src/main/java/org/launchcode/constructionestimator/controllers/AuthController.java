@@ -6,6 +6,7 @@ import org.launchcode.constructionestimator.models.Role;
 import org.launchcode.constructionestimator.models.User;
 import org.launchcode.constructionestimator.models.data.RoleRepository;
 import org.launchcode.constructionestimator.models.data.UserRepository;
+import org.launchcode.constructionestimator.payload.request.LoginRequest;
 import org.launchcode.constructionestimator.payload.request.SignupRequest;
 import org.launchcode.constructionestimator.payload.response.JwtResponse;
 import org.launchcode.constructionestimator.payload.response.MessageResponse;
@@ -95,5 +96,23 @@ public class AuthController {
         // Returns jwt token after registration
         return ResponseEntity.ok(new JwtResponse(jwt, userDetails.getId(), userDetails.getUsername(), jwtRoles));
 
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity loginUser(@Valid @RequestBody LoginRequest loginRequest) {
+
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
+
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        String jwt = jwtUtils.generateJwtToken(authentication);
+
+        // pull UserDetails out of Authentication object
+        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+        List<String> jwtRoles = userDetails.getAuthorities().stream().map(item -> item.getAuthority())
+                .collect(Collectors.toList());
+
+        // Returns jwt token after login
+        return ResponseEntity.ok(new JwtResponse(jwt, userDetails.getId(), userDetails.getUsername(), jwtRoles));
     }
 }
