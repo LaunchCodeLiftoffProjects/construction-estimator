@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static org.launchcode.constructionestimator.models.ERole.ROLE_ADMIN;
 import static org.launchcode.constructionestimator.models.ERole.ROLE_USER;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -65,9 +66,12 @@ public class AuthController {
 
         // workaround to ensure ROLE_USER exists in database
         if(roleRepository.findByName(ROLE_USER).isEmpty()) {
-            Role role = new Role();
-            role.setName(ROLE_USER);
-            roleRepository.save(role);
+            Role userRole = new Role();
+            userRole.setName(ROLE_USER);
+            roleRepository.save(userRole);
+            Role adminRole = new Role();
+            adminRole.setName(ROLE_ADMIN);
+            roleRepository.save(adminRole);
         }
 
         // Here we would check what role the newly registered user has and assign it accordingly. For right now, just
