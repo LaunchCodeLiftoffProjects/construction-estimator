@@ -7,7 +7,6 @@
             <h5>What would you like to call your project?</h5>
             <input type='text' [(ngModel)]="name" placeholder="Project Name" class="form-control" name="name" required
                 minlength="6" (change)="changedName = true;" />
-            <h4>Name: {{name}}</h4>
 
             <div *ngIf="changedName && (name == null || name.length < 6)" class="alert alert-danger">
                 Name is required and must be at least 6 characters long.
@@ -30,7 +29,6 @@
                     Etc.</label>
 
             </div>
-            <div>Room Type: {{selectedRoom}}</div>
             <div *ngIf="selectedRoom == null || selectedRoom.length < 4">
                 Room Type is required.
             </div>
@@ -40,16 +38,15 @@
             <h5>What are the room's general dimensions?</h5>
             <div class="input-group">
                 <label><input [(ngModel)]="roomLength" type="number" class="form-control" step="0.1" min=0
-                        placeholder="0.0" name="roomLength" (change)="changedDimensions = changedDimensions + 1;" (blur)="changedDimensions = changedDimensions + 1;"/>Length
+                        placeholder="0.0" name="roomLength" required (change)="changedDimensions = changedDimensions + 1;" (blur)="changedDimensions = changedDimensions + 1;"/>Length
                     (ft.)</label>
                 <label><input [(ngModel)]="roomWidth" type="number" class="form-control" step="0.1" min=0
-                        placeholder="0.0" name="roomWidth" (change)="changedDimensions = changedDimensions + 1;" (blur)="changedDimensions = changedDimensions + 1;"/>Width
+                        placeholder="0.0" name="roomWidth" required (change)="changedDimensions = changedDimensions + 1;" (blur)="changedDimensions = changedDimensions + 1;"/>Width
                     (ft.)</label>
                 <label><input [(ngModel)]="roomHeight" type="number" class="form-control" step="0.1" min=0
-                        placeholder="0.0" name="roomHeight" (change)="changedDimensions = changedDimensions + 1;" (blur)="changedDimensions = changedDimensions + 1;"/>Ceiling
+                        placeholder="0.0" name="roomHeight" required (change)="changedDimensions = changedDimensions + 1;" (blur)="changedDimensions = changedDimensions + 1;"/>Ceiling
                     Height (ft.)</label>
             </div>
-            <div>Dimensions: {{roomLength}} X {{roomWidth}} X {{roomHeight}} </div>
 
             <div *ngIf="changedDimensions >= 3 && (!isNumber(roomHeight) || !isNumber(roomLength) || !isNumber(roomWidth))"
                 class="alert alert-danger">
