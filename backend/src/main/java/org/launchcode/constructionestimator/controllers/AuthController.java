@@ -58,7 +58,7 @@ public class AuthController {
         User user = new User(signupRequest.getFirstName(), signupRequest.getLastName(),
                 signupRequest.getEmail(), encoder.encode(signupRequest.getPassword()));
 
-        Set<String> strRoles = signupRequest.getRole();
+//        Set<String> strRoles = signupRequest.getRole();
         Set<Role> roles = new HashSet<>();
 
         // workaround to ensure ROLE_USER exists in database
