@@ -32,7 +32,6 @@ export class ProjectDetailsComponent implements OnInit {
               'Lighting', 'Sink', 'Specialty', 'Toilet', 'Doors', 'Lower Cabinets', 'Upper Cabinets', 
               'Windows'];
 
-  isChecked = {}; // maybe not needed after all?
   selectedArray: Item[]; // to store selected item objects before calculating and creating ItemDetails objects
   
   constructor(private route: ActivatedRoute) { }

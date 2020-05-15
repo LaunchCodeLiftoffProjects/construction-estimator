@@ -61,18 +61,18 @@
                     <div class="input-group mt-2" *ngFor="let itemType of getTypes(project.roomType, category)">
                         <div class="col-4">
                             <!--still need to add value of checkbox if previously submitted-->
-                            <label class="lead"><input #type type="checkbox" (change)="includeItem(itemType, type.checked)" ng-checked="getCheckedStatus(itemType)"/> {{itemType}}</label>
+                            <label class="lead"><input #include="ngModel" [(ngModel)]="itemType.include" (change)="includeItem(include.checked)" type="checkbox" /> {{itemType}}</label>
                         </div>
                         <div class = "col-4">
                             <!--needs to display former selection if editing from previous saved estimate-->
-                            <select #option class="custom-select w-100" (change)="saveOption(itemType, option)">
+                            <select #selection="ngModel"  [(ngModel)]="itemType.selection" (change)="setSelection(selection.value)" class="custom-select w-100">
                                 <option>(Select an option)</option>
                                 <option *ngFor="let options of getOptions(itemType, project.roomType)">{{options.name}}</option>
                             </select>
                         </div>
                         <div class="col-2">
                             <ng-container *ngIf="needsQuantity.includes(itemType)">
-                                <input #quantity type="number" step="1" min = 0 placeholder="0" class="form-control form-control-sm w-75 h-100" (change)="saveOption(itemType, quantity)" value="{{getQuantity(itemType)}}"/>
+                                <input #quantity="ngModel" [(ngModel)]="itemType.quantity" (change)="setQuantity(quantity.value)" type="number" step="1" min = 0 placeholder="0" class="form-control form-control-sm w-75 h-100" />
                             </ng-container>
                         </div> 
                         <div class="col-2"></div>
