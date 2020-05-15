@@ -123,6 +123,7 @@ export class ProjectDetailsComponent implements OnInit {
   }
     return typesArray;
   }
+  
 
   // for each type, build a list of available options to display for dropdown lists
   getOptions(itemType: string, itemRoom: string) {
@@ -138,34 +139,14 @@ export class ProjectDetailsComponent implements OnInit {
     return optionsArray;
   }
 
-  // display last selection for each type if editing formerly estimated project
-  // getItem(itemType): [Item, ItemDetails] {
-  //   let item: Item;
-  //   let details: ItemDetails;
-  //   if (this.project.itemDetails.length !== 0) {
-  //     for (let i=0; i < this.itemsArray.length; i++) {
-  //       for (let j=0; j < this.project.itemDetails.length; j++) {
-  //         item = this.itemsArray[i];
-  //         details = this.project.itemDetails[j]
-  //         // check items in itemsArray with current type against item IDs saved in project.itemDetails
-  //         if (item.type === itemType && item.id === details.itemId) {
-  //           // return item (to get name for option dropdown) and itemDetails (to get quantity)
-  //           return [item, details];
-  //         }
-  //       }
-  //     } 
-  //   } else {
-  //     return [null, null]; 
-  //   }
-  // }
-
-  // getCheckStatus(itemType: string): boolean { 
-  //     if (this.getItem(itemType)[0] === null) {
-  //       return false;
-  //     } else {
-  //       return true
-  //   }
-  // }
+  // look to see if an item is already included in the project and should be checked by default
+  locateItem(itemType: string): boolean { 
+      if (this.findItemDetails(itemType) === null) {
+        return false;
+      } else {
+        return true
+    }
+  }
 
   // THIS IS NOT WORKING - need different approach (most research says to use ngModel but...)
   // getSelection(itemType: string): string {
@@ -247,12 +228,11 @@ export class ProjectDetailsComponent implements OnInit {
   }
 
   // save itemID of the selected Item object to the ItemDetails array in the project
-  // need to validate form so that it won't submit if a type is checked but an option hasn't been selected
   setSelection(itemType: string, selection: string) {
     console.log("selected option ", selection, "for", itemType);
     let existingDetails: ItemDetails = this.findItemDetails(itemType);
-    let item = this.getItemByTypeAndName(itemType, selection);
-    let index = this.project.itemDetails.indexOf(existingDetails);
+    let item: Item = this.getItemByTypeAndName(itemType, selection);
+    let index: number = this.project.itemDetails.indexOf(existingDetails);
     this.project.itemDetails[index].itemId = item.id; // set itemID to itemDetails object in project
     console.log("set item ID for", selection, "to itemDetails in project");
   }
@@ -261,7 +241,7 @@ export class ProjectDetailsComponent implements OnInit {
   setQuantity(itemType: string, quantity: number) {
     console.log("user input quantity of", quantity, "for", itemType);
     let existingDetails: ItemDetails = this.findItemDetails(itemType);
-    let index = this.project.itemDetails.indexOf(existingDetails);
+    let index: number = this.project.itemDetails.indexOf(existingDetails);
     this.project.itemDetails[index].quantity = quantity; // set quantity to itemDetails object in project
     console.log("set quantity for", itemType, "to itemDetails in project");
   }
