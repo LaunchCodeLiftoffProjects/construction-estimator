@@ -1,15 +1,18 @@
 import { ItemDetails } from './item-details';
+import { Materials } from './materials';
+import { Labor } from './labor';
 
 export class Project {
 
-    public id: number;
-    public name: string;
-    public roomType: string;
-    public roomLength: number;
-    public roomWidth: number;
-    public roomHeight: number;
-    public itemDetails: ItemDetails[];
-
+    id: number;
+    name: string;
+    roomType: string;
+    roomLength: number;
+    roomWidth: number;
+    roomHeight: number;
+    itemDetails: ItemDetails[];
+    materials: Materials;
+    labor: Labor;
 
     constructor(name: string, roomType: string, roomLength: number, roomWidth: number, roomHeight: number) {
         this.name = name;
