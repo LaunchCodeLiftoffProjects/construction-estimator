@@ -36,6 +36,7 @@ import { EditUserDetailsComponent } from './user/edit-user-details/edit-user-det
     PageNotFoundComponent,
     EditUserDetailsComponent],
   imports: [
+    FormsModule,
     BrowserModule,
     FormsModule,
     AppRoutingModule // brings over info from app-routing.module.ts
