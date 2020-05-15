@@ -258,7 +258,7 @@ export class ProjectDetailsComponent implements OnInit {
   }
 
   // get quantity if required for calculation
-  saveQuantity(itemType: string, quantity: number) {
+  setQuantity(itemType: string, quantity: number) {
     console.log("user input quantity of", quantity, "for", itemType);
     let existingDetails: ItemDetails = this.findItemDetails(itemType);
     let index = this.project.itemDetails.indexOf(existingDetails);
