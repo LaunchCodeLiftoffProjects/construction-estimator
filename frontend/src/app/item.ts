@@ -1,4 +1,3 @@
-import { ItemDetails } from './item-details';
 
 export class Item {
     id: number;
