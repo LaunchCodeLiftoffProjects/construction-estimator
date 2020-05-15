@@ -110,6 +110,7 @@ public class AuthController {
 
         // pull UserDetails out of Authentication object
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+
         List<String> jwtRoles = userDetails.getAuthorities().stream().map(GrantedAuthority::getAuthority)
                 .collect(Collectors.toList());
 
