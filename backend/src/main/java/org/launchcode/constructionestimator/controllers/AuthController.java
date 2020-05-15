@@ -1,7 +1,6 @@
 package org.launchcode.constructionestimator.controllers;
 
 
-import org.launchcode.constructionestimator.models.ERole;
 import org.launchcode.constructionestimator.models.Role;
 import org.launchcode.constructionestimator.models.User;
 import org.launchcode.constructionestimator.models.data.RoleRepository;
@@ -83,7 +82,7 @@ public class AuthController {
         userRepository.save(user);
 
         Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(signupRequest.getEmail(), signupRequest.getPassword()));
+                new UsernamePasswordAuthenticationToken(user.getName(), user.getPassword()));
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwt = jwtUtils.generateJwtToken(authentication);
