@@ -58,21 +58,19 @@
             <ng-container *ngIf=" project.roomType === 'kitchen' || (project.roomType !== 'kitchen' && category !== 'appliance') ">
                 <div class="form-group" >
                     <h4 class="mt-5">{{categoryTitles[categories.indexOf(category)]}}</h4>
-                    <div class="input-group mt-2" *ngFor="let itemType of getTypes(project.roomType, category)">
+                    <div class="input-group mt-2" *ngFor="let itemType of getTypes(project.roomType, category); let i = index">
                         <div class="col-4">
-                            <!--still need to add value of checkbox if previously submitted-->
-                            <label class="lead"><input #type type="checkbox" (change)="includeItem(itemType, type.checked)" ng-checked="getCheckedStatus(itemType)"/> {{itemType}}</label>
+                            <label class="lead"><input #type [(ngModel)]="getTypes(project.roomType, category)[i].type" (change)="includeItem(itemType, type.checked)" type="checkbox" /> {{itemType}}</label>
                         </div>
                         <div class = "col-4">
-                            <!--needs to display former selection if editing from previous saved estimate-->
-                            <select #option class="custom-select w-100" (change)="saveOption(itemType, option)">
-                                <option>(Select an option)</option>
+                            <select #selection="ngModel" [(ngModel)]="getTypes(project.roomType, category)[i].selection" (change)="setSelection(itemType, selection.value)" class="custom-select w-100">
+                                <!-- <option>(Select an option)</option> -->
                                 <option *ngFor="let options of getOptions(itemType, project.roomType)">{{options.name}}</option>
                             </select>
                         </div>
                         <div class="col-2">
                             <ng-container *ngIf="needsQuantity.includes(itemType)">
-                                <input #quantity type="number" step="1" min = 0 placeholder="0" class="form-control form-control-sm w-75 h-100" (change)="saveOption(itemType, quantity)" value="{{getQuantity(itemType)}}"/>
+                                <input #quantity="ngModel" [(ngModel)]="getTypes(project.roomType, category)[i].quantity" (change)="setQuantity(itemType, quantity.value)" type="number" step="1" min = 0 placeholder="0" class="form-control form-control-sm w-75 h-100" />
                             </ng-container>
                         </div> 
                         <div class="col-2"></div>

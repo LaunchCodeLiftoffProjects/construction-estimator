@@ -22,7 +22,7 @@ export class ProjectDetailsComponent implements OnInit {
   id: string; // project ID
   editingProject: boolean = false; // for editing basic project info at top right of page
 
-  itemsArray: Item[]; // to get all possible items (serves dual purpose - display and calculations)
+  itemsArray: Item[]; // to get all possible items (serves dual purpose - display and data for calculations)
 
   categories = [ "appliance", "fixture", "finish" ];
   categoryTitles = [ "Appliances", "Fixtures", "Finishes" ];
@@ -32,8 +32,7 @@ export class ProjectDetailsComponent implements OnInit {
               'Lighting', 'Sink', 'Specialty', 'Toilet', 'Doors', 'Lower Cabinets', 'Upper Cabinets', 
               'Windows'];
 
-  isChecked = {}; // maybe not needed after all?
-  selectedArray: Item[]; // to store selected item objects before calculating and creating ItemDetails objects
+  currentID: number = 1;
   
   constructor(private route: ActivatedRoute) { }
 
@@ -59,7 +58,7 @@ export class ProjectDetailsComponent implements OnInit {
         this.project = new Project(json.name, json.roomType, json.roomLength, json.roomWidth, json.roomHeight);
         this.project.id = json.id;
         this.project.itemDetails = json.itemDetails;
-        this.loadItems();
+        this.loadItems(); // should problem move this to ngOnInit() since it is independent of project object
         console.log("Items loaded.");
       }.bind(this));
     }.bind(this));
@@ -124,6 +123,7 @@ export class ProjectDetailsComponent implements OnInit {
   }
     return typesArray;
   }
+  
 
   // for each type, build a list of available options to display for dropdown lists
   getOptions(itemType: string, itemRoom: string) {
@@ -139,29 +139,9 @@ export class ProjectDetailsComponent implements OnInit {
     return optionsArray;
   }
 
-  // display last selection for each type if editing formerly estimated project
-  getItem(itemType): [Item, ItemDetails] {
-    let item: Item;
-    let details: ItemDetails;
-    if (this.project.itemDetails.length !== 0) {
-      for (let i=0; i < this.itemsArray.length; i++) {
-        for (let j=0; j < this.project.itemDetails.length; j++) {
-          item = this.itemsArray[i];
-          details = this.project.itemDetails[j]
-          // check items in itemsArray with current type against item IDs saved in project.itemDetails
-          if (item.type === itemType && item.id === details.itemId) {
-            // return item (to get name for option dropdown) and itemDetails (to get quantity)
-            return [item, details];
-          }
-        }
-      } 
-    } else {
-      return [null, null]; 
-    }
-  }
-
-  getCheckStatus(itemType: string): boolean { 
-      if (this.getItem(itemType)[0] === null) {
+  // look to see if an item is already included in the project and should be checked by default
+  locateItem(itemType: string): boolean { 
+      if (this.findItemDetails(itemType) === null) {
         return false;
       } else {
         return true
@@ -178,14 +158,14 @@ export class ProjectDetailsComponent implements OnInit {
   //   }
   // }
 
-  getQuantity(itemType: string): number {
-    let result = this.getItem(itemType);
-    if (result[1] === null) {
-      return 0;
-    } else {
-      return result[1].quantity;
-    }
-  }
+  // getQuantity(itemType: string): number {
+  //   let result = this.getItem(itemType);
+  //   if (result[1] === null) {
+  //     return 0;
+  //   } else {
+  //     return result[1].quantity;
+  //   }
+  // }
 
 
   
@@ -197,54 +177,78 @@ export class ProjectDetailsComponent implements OnInit {
 
   // UPON FORM SUBMISSION, GATHER SELECTED ITEMS, CALCULATE, AND SAVE TO PROJECT
 
-  // verify item has been checked before including
-  includeItem(itemType: string, typeSelected: boolean) {
-    console.log(itemType, "selected, typeSelected=", typeSelected);
-    this.isChecked[itemType] = typeSelected; // adds to object above... still need this?
-    if (typeSelected) {
-      // okay to add - see saveOption()
+  // look to see if itemDetails object already exists in project itemsDetails array
+  findItemDetails(itemType: string): ItemDetails {
+    if (this.project.itemDetails.length > 0) {
+      for (let i=0; i < this.itemsArray.length; i++) {
+        let item: Item;
+        let details: ItemDetails;
+        for (let j=0; j < this.project.itemDetails.length; j++) {
+          item = this.itemsArray[i];
+          details = this.project.itemDetails[j]
+          // check all available items in itemsArray with current type against item IDs saved in project.itemDetails
+          if (item.type === itemType && item.id === details.itemId) {
+            return details;
+          }
+        }
+      }
     }
+    return null; // if not found
   }
 
-  // put currently selected items into selectedArray before calculating
-  saveOption(itemType: string, option: Item) {
-    console.log(itemType, "selected option ", option);
-    if (this.selectedArray.includes(option)) { 
-      // finish this
-      // reference includeItem() and saveQuantity()
-      // add item if not included before
-      // remove item if no longer included
+  getItemByTypeAndName(itemType: string, name: string): Item {
+    let item: Item;
+    for (let i=0; i < this.itemsArray.length; i++) {
+      item = this.itemsArray[i];
+      if (item.type === itemType && item.name === name) {
+        return item;
+      }
     }
+    return null;
+  }
+
+  //get fresh ID number for new ItemDetails items - can't remember how this is supposed to happen otherwise
+  getID(): number {
+    this.currentID++;
+    return this.currentID;
+  }
+
+  // if checked, make sure ItemDetails object is included in selected Array - if unchecked, remove from array
+  includeItem(itemType: string, checked: boolean) {
+    console.log(itemType, "checked:", checked);
+    let existingDetails: ItemDetails = this.findItemDetails(itemType);
+    if (existingDetails !== null && checked === false) {
+      this.project.itemDetails.splice(this.project.itemDetails.indexOf(existingDetails), 1); // remove object from array in project
+      console.log("removed", itemType, "from project");
+    } else if (existingDetails === null && checked === true) {
+      let newDetails: ItemDetails = new ItemDetails(this.getID()); // values for properties will be added elsewhere
+      this.project.itemDetails.push(newDetails); // add object to array in project
+      console.log("added", itemType, "to project")
+    } 
+  }
+
+  // save itemID of the selected Item object to the ItemDetails array in the project
+  setSelection(itemType: string, selection: string) {
+    console.log("selected option ", selection, "for", itemType);
+    let existingDetails: ItemDetails = this.findItemDetails(itemType);
+    let item: Item = this.getItemByTypeAndName(itemType, selection);
+    let index: number = this.project.itemDetails.indexOf(existingDetails);
+    this.project.itemDetails[index].itemId = item.id; // set itemID to itemDetails object in project
+    console.log("set item ID for", selection, "to itemDetails in project");
   }
 
   // get quantity if required for calculation
-  saveQuantity(itemType: string, quantity: number) {
-    console.log(itemType, "set quantity to", quantity);
-    if (this.selectedArray) { 
-      // finish this
-      // include if required - see saveOption()
-    }
+  setQuantity(itemType: string, quantity: number) {
+    console.log("user input quantity of", quantity, "for", itemType);
+    let existingDetails: ItemDetails = this.findItemDetails(itemType);
+    let index: number = this.project.itemDetails.indexOf(existingDetails);
+    this.project.itemDetails[index].quantity = quantity; // set quantity to itemDetails object in project
+    console.log("set quantity for", itemType, "to itemDetails in project");
   }
 
   // use data from original JSON file of all items to calculate for each selected item
   calculateItemDetails() {
     // calculations not yet written
-  }
-
-  // add/update ItemDetails objects in itemDetailsArray
-  saveItemDetails(quantity: number, item: Item) {
-
-    // find the itemDetails.itemId index matching item.id
-    let detailsIndex = this.project.findItemDetailsByItemId(item.id);
-
-    // check and see if details already exist, if not create a new ItemDetails object
-    if (detailsIndex === -1) {
-      let newDetails = new ItemDetails(item.id);
-      newDetails.quantity = quantity;
-      this.project.itemDetails.push(newDetails);
-    } else { // the details already exist, update existing quantity
-      this.project.itemDetails[detailsIndex].quantity = quantity;
-    }
   }
 
   // calculate category totals and save to an estimate object
