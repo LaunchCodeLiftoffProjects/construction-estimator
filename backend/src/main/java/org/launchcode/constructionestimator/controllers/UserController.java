@@ -42,22 +42,30 @@ public class UserController {
     }
 
     @PutMapping("/{userId}")
-    public ResponseEntity updateUser(@RequestBody User user, @PathVariable("userId") int id) {
+    public ResponseEntity updateUser(@RequestBody User user, @PathVariable("userId") int id,
+                                     @RequestHeader HttpHeaders headers) {
+
+        String headerAuth = headers.getFirst("Authorization");
 
         if (userRepository.findById(id).isEmpty()) {
             return new ResponseEntity(HttpStatus.NOT_FOUND);
-        } else {
+        } else if (userAuthService.doesUserMatch(id, headerAuth)) {
             userRepository.save(user);
             return new ResponseEntity(HttpStatus.OK);
+        } else {
+            return new ResponseEntity(HttpStatus.UNAUTHORIZED);
         }
     }
 
     @PostMapping("/{userId}/details")
-    public ResponseEntity postUserDetails(@PathVariable("userId") int id, @RequestBody HomeDetails homeDetails) {
+    public ResponseEntity postUserDetails(@PathVariable("userId") int id, @RequestBody HomeDetails homeDetails,
+                                          @RequestHeader HttpHeaders headers) {
+
+        String headerAuth = headers.getFirst("Authorization");
 
         if (userRepository.findById(id).isEmpty()) {
             return new ResponseEntity(HttpStatus.NOT_FOUND);
-        } else {
+        } else if (userAuthService.doesUserMatch(id, headerAuth)) {
             User user = userRepository.findById(id).get();
 
             user.setHomeDetails(homeDetails);
@@ -65,6 +73,8 @@ public class UserController {
             userDetailsRepository.save(homeDetails);
 
             return new ResponseEntity(HttpStatus.OK);
+        } else {
+            return new ResponseEntity(HttpStatus.UNAUTHORIZED);
         }
     }
 }

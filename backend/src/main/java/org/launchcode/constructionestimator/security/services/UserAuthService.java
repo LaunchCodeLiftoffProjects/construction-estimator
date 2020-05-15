@@ -29,19 +29,24 @@ public class UserAuthService {
 
         // ensure Authorization header is formatted correctly
         if (StringUtils.hasText(headerAuth) && headerAuth.startsWith("Barer ")) {
-            // gets the user's email address from the token
-            String useremail = jwtUtils.getUserNameFromJwtToken(headerAuth.substring(6));
+            String token = headerAuth.substring(6);
 
-            Optional<User> userOptional = userRepository.findByName(useremail);
+            // check if token is valid
+            if(jwtUtils.validateJwtToken(token)) {
 
-            // ensure the user exists
-            if (userOptional.isPresent()) {
-                User theUser = userRepository.findByName(useremail).get();
-                if (theUser.getId() == id) {
-                    return true;
+                // gets the user's email address from the token
+                String useremail = jwtUtils.getUserNameFromJwtToken(token);
+
+                Optional<User> userOptional = userRepository.findByName(useremail);
+
+                // ensure the user exists
+                if (userOptional.isPresent()) {
+                    User theUser = userOptional.get();
+                    if (theUser.getId() == id) {
+                        return true;
+                    }
                 }
             }
-            return false;
         }
 
         return false;

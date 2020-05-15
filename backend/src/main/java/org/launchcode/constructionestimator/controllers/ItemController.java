@@ -2,6 +2,7 @@ package org.launchcode.constructionestimator.controllers;
 
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -10,6 +11,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 
+@CrossOrigin(origins = "*", maxAge = 3600)
 @Controller
 public class ItemController {
 

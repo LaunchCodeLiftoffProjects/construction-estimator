@@ -9,7 +9,6 @@ import org.launchcode.constructionestimator.payload.request.LoginRequest;
 import org.launchcode.constructionestimator.payload.request.SignupRequest;
 import org.launchcode.constructionestimator.payload.response.JwtResponse;
 import org.launchcode.constructionestimator.payload.response.MessageResponse;
-import org.launchcode.constructionestimator.security.jwt.JwtUtils;
 import org.launchcode.constructionestimator.security.services.UserAuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -43,9 +42,6 @@ public class AuthController {
 
     @Autowired
     PasswordEncoder encoder;
-
-    @Autowired
-    JwtUtils jwtUtils;
 
     @Autowired
     UserAuthService userAuthService;
