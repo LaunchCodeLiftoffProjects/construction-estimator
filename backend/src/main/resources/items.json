@@ -503,7 +503,7 @@
             "bath"
         ],
         "category": "finish",
-        "type": "Lower Cabinets",
+        "type": "Cabinets, Lower",
         "price": 85
     },
     {
@@ -513,7 +513,7 @@
             "bath"
         ],
         "category": "finish",
-        "type": "Upper Cabinets",
+        "type": "Cabinets, Upper",
         "price": 15
     },
     {
