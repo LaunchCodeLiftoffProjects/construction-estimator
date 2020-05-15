@@ -4,13 +4,18 @@ import org.launchcode.constructionestimator.models.User;
 import org.launchcode.constructionestimator.models.HomeDetails;
 import org.launchcode.constructionestimator.models.data.UserDetailsRepository;
 import org.launchcode.constructionestimator.models.data.UserRepository;
+import org.launchcode.constructionestimator.security.jwt.JwtUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
 import java.util.Map;
+import java.util.Optional;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -23,25 +28,36 @@ public class UserController {
     @Autowired
     UserDetailsRepository userDetailsRepository;
 
-    @GetMapping("/{userId}")
-    public ResponseEntity getUserById(@PathVariable("userId") int id) {
+    @Autowired
+    JwtUtils jwtUtils;
 
-        if(userRepository.findById(id).isEmpty()) {
-            return new ResponseEntity(HttpStatus.NOT_FOUND);
-        } else {
-            return new ResponseEntity(userRepository.findById(id).get(), HttpStatus.OK);
+    @GetMapping("/{userId}")
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity getUserById(@PathVariable("userId") int id, @RequestHeader HttpHeaders headers) {
+
+        String headerAuth = headers.getFirst("Authorization");
+
+        // ensure Authorization header is formatted correctly
+        if(StringUtils.hasText(headerAuth) && headerAuth.startsWith("Barer ")) {
+            // gets the user's email address from the token
+            String useremail = jwtUtils.getUserNameFromJwtToken(headerAuth.substring(6));
+
+            Optional<User> userOptional = userRepository.findByName(useremail);
+
+            // ensure the user exists
+            if(userOptional.isPresent()) {
+                User theUser = userRepository.findByName(useremail).get();
+                if(theUser.getId() != id) {
+                    return new ResponseEntity(HttpStatus.UNAUTHORIZED);
+                } else {
+                    return new ResponseEntity(userRepository.findById(id).get(), HttpStatus.OK);
+                }
+            } else {
+                return new ResponseEntity(HttpStatus.NOT_FOUND);
+            }
         }
 
-    }
-
-    @PostMapping
-    public ResponseEntity postUser(@RequestBody User user) {
-
-        userRepository.save(user);
-
-        Integer id = user.getId();
-        Map<String, String> map = Collections.singletonMap("id", id.toString());
-        return new ResponseEntity(map, HttpStatus.CREATED);
+        return new ResponseEntity(HttpStatus.UNAUTHORIZED);
     }
 
     @PutMapping("/{userId}")

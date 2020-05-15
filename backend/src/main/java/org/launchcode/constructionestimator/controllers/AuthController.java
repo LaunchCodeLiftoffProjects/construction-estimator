@@ -5,6 +5,7 @@ import org.launchcode.constructionestimator.models.Role;
 import org.launchcode.constructionestimator.models.User;
 import org.launchcode.constructionestimator.models.data.RoleRepository;
 import org.launchcode.constructionestimator.models.data.UserRepository;
+import org.launchcode.constructionestimator.payload.request.LoginRequest;
 import org.launchcode.constructionestimator.payload.request.SignupRequest;
 import org.launchcode.constructionestimator.payload.response.JwtResponse;
 import org.launchcode.constructionestimator.payload.response.MessageResponse;
@@ -15,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
@@ -60,11 +62,11 @@ public class AuthController {
         User user = new User(signupRequest.getFirstName(), signupRequest.getLastName(),
                 signupRequest.getEmail(), encoder.encode(signupRequest.getPassword()));
 
-        Set<String> strRoles= signupRequest.getRole();
+        Set<String> strRoles = signupRequest.getRole();
         Set<Role> roles = new HashSet<>();
 
         // workaround to ensure ROLE_USER exists in database
-        if(roleRepository.findByName(ROLE_USER).isEmpty()) {
+        if (roleRepository.findByName(ROLE_USER).isEmpty()) {
             Role userRole = new Role();
             userRole.setName(ROLE_USER);
             roleRepository.save(userRole);
@@ -82,17 +84,37 @@ public class AuthController {
         userRepository.save(user);
 
         Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(user.getName(), user.getPassword()));
+                new UsernamePasswordAuthenticationToken(signupRequest.getEmail(), signupRequest.getPassword()));
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwt = jwtUtils.generateJwtToken(authentication);
 
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-        List<String> jwtRoles = userDetails.getAuthorities().stream().map(item -> item.getAuthority())
+        List<String> jwtRoles = userDetails.getAuthorities().stream().map(GrantedAuthority::getAuthority)
                 .collect(Collectors.toList());
 
         // Returns jwt token after registration
         return ResponseEntity.ok(new JwtResponse(jwt, userDetails.getId(), userDetails.getUsername(), jwtRoles));
 
     }
+
+    @PostMapping("/login")
+    public ResponseEntity loginUser(@Valid @RequestBody LoginRequest loginRequest) {
+
+        // generate an Authentication object to create token.
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
+
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        String jwt = jwtUtils.generateJwtToken(authentication);
+
+        // pull UserDetails out of Authentication object
+        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+        List<String> jwtRoles = userDetails.getAuthorities().stream().map(GrantedAuthority::getAuthority)
+                .collect(Collectors.toList());
+
+        // Returns jwt token after login
+        return ResponseEntity.ok(new JwtResponse(jwt, userDetails.getId(), userDetails.getUsername(), jwtRoles));
+    }
 }
+
