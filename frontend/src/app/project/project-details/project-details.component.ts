@@ -25,7 +25,9 @@ export class ProjectDetailsComponent implements OnInit {
 
   itemsArray: Item[]; // to get all possible items (serves dual purpose - display and data for calculations)
 
-  categories = [ "appliance", "fixture", "finish" ];
+  rooms: string[] = [ "kitchen", "bathroom", "living" ];
+  roomTitles: string[] = [ "Kitchen", "Bathroom", "Bedroom/Living/Other" ];
+  categories: string[] = [ "appliance", "fixture", "finish" ];
   categoryTitles = [ "Appliances", "Fixtures", "Finishes" ];
 
   needsQuantity: string[] = ['Dishwasher','Disposal','Microwave/Hood','Oven/Range','Refrigerator',
@@ -47,6 +49,8 @@ export class ProjectDetailsComponent implements OnInit {
     console.log("Id", this.id);
 
     this.projectURL = this.projectURL + this.id;
+    this.loadItems(); // moved this out since it is independent of project object
+    console.log("Items loaded.");
     this.loadProject();
     console.log("Project Loaded");
 
@@ -63,39 +67,11 @@ export class ProjectDetailsComponent implements OnInit {
         this.project = new Project(json.name, json.roomType, json.roomLength, json.roomWidth, json.roomHeight);
         this.project.id = json.id;
         this.project.itemDetails = json.itemDetails;
-        this.loadItems(); // should problem move this to ngOnInit() since it is independent of project object
-        console.log("Items loaded.");
+        this.createSelections(); // use any saved details to create objects for looping on form
+        console.log("Selection objects created.");
       }.bind(this));
     }.bind(this));
 
-  }
-
-
-  // UPDATE BASIC PROJECT INFO AT TOP OF PAGE (IF EDITING)
-
-  updateProjectName(name: string) {
-    this.project.name = name;
-    console.log("changed project name:", this.project.name);
-  }
-
-  updateProjectRoomType(event: any) {
-    this.project.roomType = event.target.value;;
-    console.log("changed project room type:", this.project.roomType);
-  }
-
-  updateProjectRoomLength(roomLength: number) {
-    this.project.roomLength = roomLength;
-    console.log("changed project room length:", this.project.roomLength);
-  }
-
-  updateProjectRoomWidth(roomWidth: number) {
-    this.project.roomWidth = roomWidth;
-    console.log("changed project room width:", this.project.roomWidth);
-  }
-
-  updateProjectRoomHeight(roomHeight: number) {
-    this.project.roomHeight = roomHeight;
-    console.log("changed project room height:", this.project.roomHeight);
   }
 
 
@@ -141,6 +117,7 @@ export class ProjectDetailsComponent implements OnInit {
         if (item.room.includes(this.project.roomType)) { // just in case something has shifted
           selection = new Selection(item.category, item.type, true, item.name, details.quantity);
           this.selectionArray.push(selection);
+          console.log("Added", selection, "to selectionArray");
         }
       }
     }
@@ -150,6 +127,7 @@ export class ProjectDetailsComponent implements OnInit {
       if (item.room.includes(this.project.roomType) && this.locateSelection(item) === -1) {
         selection = new Selection(item.category, item.type, false); // will default to initialized values for selected & quantity
         this.selectionArray.push(selection);
+        console.log("Added", selection, "to selectionArray");
       }
     }
   }  
@@ -225,39 +203,6 @@ export class ProjectDetailsComponent implements OnInit {
     return this.currentID;
   }
 
-  // if checked, make sure ItemDetails object is included in selected Array - if unchecked, remove from array
-  includeItem(itemType: string, checked: boolean) {
-    console.log(itemType, "checked:", checked);
-    let existingDetails: ItemDetails = this.findItemDetails(itemType);
-    if (existingDetails !== null && checked === false) {
-      this.project.itemDetails.splice(this.project.itemDetails.indexOf(existingDetails), 1); // remove object from array in project
-      console.log("removed", itemType, "from project");
-    } else if (existingDetails === null && checked === true) {
-      let newDetails: ItemDetails = new ItemDetails(this.getID()); // values for properties will be added elsewhere
-      this.project.itemDetails.push(newDetails); // add object to array in project
-      console.log("added", itemType, "to project")
-    } 
-  }
-
-  // save itemID of the selected Item object to the ItemDetails array in the project
-  setSelection(itemType: string, selection: string) {
-    console.log("selected option ", selection, "for", itemType);
-    let existingDetails: ItemDetails = this.findItemDetails(itemType);
-    let item: Item = this.getItemByTypeAndName(itemType, selection);
-    let index: number = this.project.itemDetails.indexOf(existingDetails);
-    this.project.itemDetails[index].itemId = item.id; // set itemID to itemDetails object in project
-    console.log("set item ID for", selection, "to itemDetails in project");
-  }
-
-  // get quantity if required for calculation
-  setQuantity(itemType: string, quantity: number) {
-    console.log("user input quantity of", quantity, "for", itemType);
-    let existingDetails: ItemDetails = this.findItemDetails(itemType);
-    let index: number = this.project.itemDetails.indexOf(existingDetails);
-    this.project.itemDetails[index].quantity = quantity; // set quantity to itemDetails object in project
-    console.log("set quantity for", itemType, "to itemDetails in project");
-  }
-
   // use data from original JSON file of all items to calculate for each selected item
   calculateItemDetails() {
     // calculations not yet written
@@ -294,7 +239,6 @@ export class ProjectDetailsComponent implements OnInit {
     // TODO
 
     // save entire project object to database
-    // NOTE: This needs to be replaced with Shaun's newer PUT function
     fetch("http://localhost:8080/api/project/" + this.project.id, {
       method: 'PUT',
       headers: {
