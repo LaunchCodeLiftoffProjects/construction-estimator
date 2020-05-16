@@ -44,6 +44,7 @@ public class ProjectController {
 
         if(userAuthService.doesUserMatch(userId, headerAuth)) {
             if (projectRepository.findByUserId(userId).isPresent()) {
+                // TODO: Test the crap out of this. I don't think it returns a complete list
                 return new ResponseEntity<>(projectRepository.findByUserId(userId).get(), HttpStatus.OK);
             } else {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
