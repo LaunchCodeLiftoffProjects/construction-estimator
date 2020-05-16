@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Project } from 'src/app/project';
 import { Item } from 'src/app/item';
+import { Selection } from 'src/app/selection';
 import { ItemDetails } from 'src/app/item-details';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { FormsModule } from '@angular/forms';
@@ -31,8 +32,12 @@ export class ProjectDetailsComponent implements OnInit {
               'Bath & Shower', 'Ceiling Light/Fan', 'Electrical Outlets', 'Electrical Switches', 
               'Lighting', 'Sink', 'Specialty', 'Toilet', 'Doors', 'Lower Cabinets', 'Upper Cabinets', 
               'Windows'];
+              
 
-  currentID: number = 1;
+  selectionArray: Selection[]; // for facilitating data binding with item selections
+  
+  currentID: number = 1; // this is temporary, only because of the way the itemDetails constructor is set up (both its own id and itemId)
+
   
   constructor(private route: ActivatedRoute) { }
 
@@ -96,7 +101,7 @@ export class ProjectDetailsComponent implements OnInit {
 
   // GET BASIC ITEMS AND PROPERTIES FOR DISPLAY 
 
-  // get all possible items that could be displayed and selected
+  // get all possible items that could be displayed and selected from JSON file
   loadItems() {
     fetch("http://localhost:8080/api/item/").then(function (response) {
       response.json().then(function (json) {
@@ -111,64 +116,60 @@ export class ProjectDetailsComponent implements OnInit {
 
   }
 
-  // for each roomType and category, build a list of unduplicated types to display
-  getTypes(itemRoom: string, itemCat: string): string[] {
-    let typesArray: string[] = [];
-    let item: Item;
-    for (let i=0; i < this.itemsArray.length; i++) {
-      item = this.itemsArray[i];
-      if (item.room.includes(itemRoom) && item.category === itemCat && ! typesArray.includes(item.type)) {
-        typesArray.push(item.type);
-      }
+  // helper function to locate item types already included in selectionArray as it is being filled
+  locateSelection(item: Item): number {
+    let selection: Selection;
+    for (let i=0; i<this.selectionArray.length; i++) {
+      selection = this.selectionArray[i];
+      if (selection.type === item.type) {
+        return i;
+      } 
+    }
+    return -1; // if not found
   }
-    return typesArray;
-  }
-  
 
-  // for each type, build a list of available options to display for dropdown lists
-  getOptions(itemType: string, itemRoom: string) {
+  // check to see if details have been saved to this project before or not, and create Selection objects accordingly
+  createSelections() {
+    let size: number = this.project.itemDetails.length;
+    let selection: Selection;
+    let details: ItemDetails;
+    let item: Item;
+    if (size > 0) { // if project already has a saved estimate and itemDetails
+      for (let i=0; i < size; i++) {
+        details = this.project.itemDetails[i];
+        item = this.getItemByID(details.itemId); 
+        if (item.room.includes(this.project.roomType)) { // just in case something has shifted
+          selection = new Selection(item.category, item.type, true, item.name, details.quantity);
+          this.selectionArray.push(selection);
+        }
+      }
+    }
+    // create Selection objects for any types not previously saved to project
+    for (let j=0; j < this.itemsArray.length; j++) {
+      item = this.itemsArray[j];
+      if (item.room.includes(this.project.roomType) && this.locateSelection(item) === -1) {
+        selection = new Selection(item.category, item.type, false); // will default to initialized values for selected & quantity
+        this.selectionArray.push(selection);
+      }
+    }
+  }  
+
+  // for each type, build a list of available options to display for dropdown lists - string value will save upon form submission
+  getOptions(itemType: string) {
     let optionsArray = [];
     let item: Item;
     for (let i=0; i < this.itemsArray.length; i++) {
       item = this.itemsArray[i];
-      if (item.type === itemType && item.room.includes(itemRoom)) {
+      if (item.type === itemType && item.room.includes(this.project.roomType)) {
         optionsArray.push(item);
       }
     }
     optionsArray.sort((a, b) => (a.name > b.name) ? 1 : -1);
     return optionsArray;
   }
-
-  // look to see if an item is already included in the project and should be checked by default
-  locateItem(itemType: string): boolean { 
-      if (this.findItemDetails(itemType) === null) {
-        return false;
-      } else {
-        return true
-    }
-  }
-
-  // THIS IS NOT WORKING - need different approach (most research says to use ngModel but...)
-  // getSelection(itemType: string): string {
-  //   let result = this.getItem(itemType);
-  //   if (result[0] !== null) {
-  //     return "(Select an option)";
-  //   } else {
-  //     return result[0].name;
-  //   }
-  // }
-
-  // getQuantity(itemType: string): number {
-  //   let result = this.getItem(itemType);
-  //   if (result[1] === null) {
-  //     return 0;
-  //   } else {
-  //     return result[1].quantity;
-  //   }
-  // }
-
-
   
+
+
   // GET INFO ON MATERIALS & LABOR FOR CALCULATIONS
 
   // need to set this up
@@ -201,6 +202,17 @@ export class ProjectDetailsComponent implements OnInit {
     for (let i=0; i < this.itemsArray.length; i++) {
       item = this.itemsArray[i];
       if (item.type === itemType && item.name === name) {
+        return item;
+      }
+    }
+    return null;
+  }
+
+  getItemByID(itemID): Item {
+    let item: Item;
+    for (let i=0; i < this.itemsArray.length; i++) {
+      item = this.itemsArray[i];
+      if (item.id === itemID) {
         return item;
       }
     }

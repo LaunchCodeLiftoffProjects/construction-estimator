@@ -1,4 +1,5 @@
 <div class="container">
+    
     <!--Nested container with divs side-by-side to move project name, type, and dimensions to top right-->
     <div class="container mt-5">
         <div class="row justify-content-between">
@@ -52,18 +53,18 @@
     </div>
 
     <div class = "container col-12">
-        <!--iterate through appliance, fixture, and finish-->
+        <!--iterate through appliance, fixture, and finish sections-->
         <ng-container *ngFor="let category of categories">
             <!--do not show appliance section unless the room is kitchen-->
             <ng-container *ngIf=" project.roomType === 'kitchen' || (project.roomType !== 'kitchen' && category !== 'appliance') ">
                 <div class="form-group" >
                     <h4 class="mt-5">{{categoryTitles[categories.indexOf(category)]}}</h4>
-                    <div class="input-group mt-2" *ngFor="let itemType of getTypes(project.roomType, category); let i = index">
+                    <div class="input-group mt-2" *ngFor="let selection of selectionArray; let i = index">
                         <div class="col-4">
-                            <label class="lead"><input #type [(ngModel)]="getTypes(project.roomType, category)[i].type" (change)="includeItem(itemType, type.checked)" type="checkbox" /> {{itemType}}</label>
+                            <label class="lead"><input #type [(ngModel)]="selectionArray[i].checked" (change)="includeItem(selection.type, type.checked)" type="checkbox" /> {{selection.type}}</label>
                         </div>
                         <div class = "col-4">
-                            <select #selection="ngModel" [(ngModel)]="getTypes(project.roomType, category)[i].selection" (change)="setSelection(itemType, selection.value)" class="custom-select w-100">
+                            <select #selected="ngModel" [(ngModel)]="getTypes(project.roomType, category)[i].selected" (change)="setSelection(itemType, selected.value)" class="custom-select w-100">
                                 <!-- <option>(Select an option)</option> -->
                                 <option *ngFor="let options of getOptions(itemType, project.roomType)">{{options.name}}</option>
                             </select>
