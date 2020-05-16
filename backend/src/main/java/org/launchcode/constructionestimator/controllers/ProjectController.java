@@ -42,6 +42,9 @@ public class ProjectController {
 
         String headerAuth = headers.getFirst("Authorization");
 
+        // TODO: maybe re-write this to not include the @RequestParam,
+        //  it the check vs the token is unnecessary because we should be trusting the token just
+        //  pulling the username from headers should be good enough
         if(userAuthService.doesUserMatch(userId, headerAuth)) {
             if (projectRepository.findByUserId(userId).isPresent()) {
                 // TODO: Test the crap out of this. I don't think it returns a complete list
