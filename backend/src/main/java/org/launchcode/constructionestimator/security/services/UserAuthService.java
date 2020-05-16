@@ -65,4 +65,12 @@ public class UserAuthService {
 
         return new JwtResponse(jwt, userDetails.getId(), userDetails.getUsername(), jwtRoles);
     }
+
+    public String getUserName(String headerAuth) {
+        if (StringUtils.hasText(headerAuth) && headerAuth.startsWith("Barer ")) {
+            String token = headerAuth.substring(6);
+            return jwtUtils.getUserNameFromJwtToken(token);
+        }
+        return null;
+    }
 }
