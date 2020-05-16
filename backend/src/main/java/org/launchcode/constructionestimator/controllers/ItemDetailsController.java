@@ -24,16 +24,16 @@ public class ItemDetailsController {
 
     // Add a list of components
     @PostMapping
-    public ResponseEntity postProjectComponents(@RequestBody List<ItemDetails> components, @PathVariable("projectId") int projectId) {
+    public ResponseEntity<?> postProjectComponents(@RequestBody List<ItemDetails> components, @PathVariable("projectId") int projectId) {
 
         if(projectRepository.findById(projectId).isEmpty()) {
-            return new ResponseEntity(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } else {
             Project project = projectRepository.findById(projectId).get();
             itemDetailsRepository.saveAll(components);
             project.setItemDetails(components);
             projectRepository.save(project);
-            return new ResponseEntity(HttpStatus.CREATED);
+            return new ResponseEntity<>(HttpStatus.CREATED);
         }
     }
 }

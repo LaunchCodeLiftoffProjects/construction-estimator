@@ -6,7 +6,6 @@ import org.launchcode.constructionestimator.models.User;
 import org.launchcode.constructionestimator.models.data.ItemDetailsRepository;
 import org.launchcode.constructionestimator.models.data.ProjectRepository;
 import org.launchcode.constructionestimator.models.data.UserRepository;
-import org.launchcode.constructionestimator.security.jwt.JwtUtils;
 import org.launchcode.constructionestimator.security.services.UserAuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -85,13 +84,12 @@ public class ProjectController {
 
         String headerAuth = headers.getFirst("Authorization");
         String userName = userAuthService.getUserName(headerAuth);
+        Optional<User> userOptional = userRepository.findByName(userName);
 
-        if(userName != null) {
+        if(userName != null && userOptional.isPresent()) {
 
-            User user = userRepository.findByName(userName).get();
-
+            User user = userOptional.get();
             project.setUser(user);
-
             projectRepository.save(project);
 
             int id = project.getId();
@@ -112,8 +110,7 @@ public class ProjectController {
         } else {
             projectRepository.save(project);
 
-            int id = projectId;
-            Map<String, String> map = Collections.singletonMap("id", Integer.toString(id));
+            Map<String, String> map = Collections.singletonMap("id", Integer.toString(projectId));
             return new ResponseEntity<>(map, HttpStatus.OK);
         }
 

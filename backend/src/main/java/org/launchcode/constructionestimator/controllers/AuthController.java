@@ -47,7 +47,7 @@ public class AuthController {
     UserAuthService userAuthService;
 
     @PostMapping("/register")
-    public ResponseEntity registerUser(@Valid @RequestBody SignupRequest signupRequest) {
+    public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signupRequest) {
 
         // check and see if user exists
         if (userRepository.findByName(signupRequest.getEmail()).isPresent()) {
@@ -84,12 +84,12 @@ public class AuthController {
 
         JwtResponse response = userAuthService.generateJwtResponse(authentication);
 
-        return new ResponseEntity(response, HttpStatus.OK);
+        return new ResponseEntity<>(response, HttpStatus.OK);
 
     }
 
     @PostMapping("/login")
-    public ResponseEntity loginUser(@Valid @RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<?> loginUser(@Valid @RequestBody LoginRequest loginRequest) {
 
         // generate an Authentication object to create token.
         Authentication authentication = authenticationManager.authenticate(
@@ -97,7 +97,7 @@ public class AuthController {
 
         JwtResponse response = userAuthService.generateJwtResponse(authentication);
 
-        return new ResponseEntity(response, HttpStatus.OK);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }
 

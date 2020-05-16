@@ -33,47 +33,47 @@ public class UserController {
 
     @GetMapping("/{userId}")
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity getUserById(@PathVariable("userId") int id, @RequestHeader HttpHeaders headers) {
+    public ResponseEntity<?> getUserById(@PathVariable("userId") int id, @RequestHeader HttpHeaders headers) {
 
         String headerAuth = headers.getFirst("Authorization");
 
         if (userRepository.findById(id).isEmpty()) {
-            return new ResponseEntity(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } else if (userAuthService.doesUserMatch(id, headerAuth)) {
-            return new ResponseEntity(userRepository.findById(id).get(), HttpStatus.OK);
+            return new ResponseEntity<>(userRepository.findById(id).get(), HttpStatus.OK);
         } else {
-            return new ResponseEntity(HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
     }
 
     @PutMapping("/{userId}")
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity updateUser(@RequestBody User user, @PathVariable("userId") int id,
+    public ResponseEntity<?> updateUser(@RequestBody User user, @PathVariable("userId") int id,
                                      @RequestHeader HttpHeaders headers) {
 
         String headerAuth = headers.getFirst("Authorization");
 
         if (userRepository.findById(id).isEmpty()) {
-            return new ResponseEntity(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } else if (userAuthService.doesUserMatch(id, headerAuth)) {
 
             user.setPassword(encoder.encode(user.getPassword()));
             userRepository.save(user);
-            return new ResponseEntity(HttpStatus.OK);
+            return new ResponseEntity<>(HttpStatus.OK);
         } else {
-            return new ResponseEntity(HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
     }
 
     @PostMapping("/{userId}/details")
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity postUserDetails(@PathVariable("userId") int id, @RequestBody HomeDetails homeDetails,
+    public ResponseEntity<?> postUserDetails(@PathVariable("userId") int id, @RequestBody HomeDetails homeDetails,
                                           @RequestHeader HttpHeaders headers) {
 
         String headerAuth = headers.getFirst("Authorization");
 
         if (userRepository.findById(id).isEmpty()) {
-            return new ResponseEntity(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } else if (userAuthService.doesUserMatch(id, headerAuth)) {
             User user = userRepository.findById(id).get();
 
@@ -81,9 +81,9 @@ public class UserController {
             homeDetails.setUser(user);
             userDetailsRepository.save(homeDetails);
 
-            return new ResponseEntity(HttpStatus.OK);
+            return new ResponseEntity<>(HttpStatus.OK);
         } else {
-            return new ResponseEntity(HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
     }
 }
