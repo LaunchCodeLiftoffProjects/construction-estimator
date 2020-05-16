@@ -102,30 +102,44 @@ public class ProjectController {
     // returns json in form { "id": "project.id" }
     // this is probably unnecessary but left it for consistency with the post mapping
     @PutMapping("/{projectId}")
-    public ResponseEntity<?> updateProject(@PathVariable("projectId") int projectId, @RequestBody Project project) {
+    @PreAuthorize("HasRole('USER')")
+    public ResponseEntity<?> updateProject(@PathVariable("projectId") int projectId, @RequestBody Project project,
+                                           @RequestHeader HttpHeaders headers) {
+
+        String headerAuth = headers.getFirst("Authorization");
+        Optional<Project> projectOptional = projectRepository.findById(projectId);
 
         // return 404 if project doesn't already exist
-        if (projectRepository.findById(projectId).isEmpty()) {
+        if (projectOptional.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        } else {
-            projectRepository.save(project);
+        } else if (userAuthService.doesUserMatch(projectOptional.get().getUser().getId(), headerAuth)) {
+            projectRepository.save(project); // save the updated project
 
             Map<String, String> map = Collections.singletonMap("id", Integer.toString(projectId));
             return new ResponseEntity<>(map, HttpStatus.OK);
+        } else {
+            // returns 401 if user attempts to access wrong project
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
 
     }
 
     @DeleteMapping("/{projectId}")
-    public ResponseEntity<?> deleteProject(@PathVariable("projectId") int projectId) {
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<?> deleteProject(@PathVariable("projectId") int projectId,
+                                           @RequestHeader HttpHeaders headers) {
+
+        String headerAuth = headers.getFirst("Authorization");
+        Optional<Project> projectOptional = projectRepository.findById(projectId);
 
         // Check and see if project exists
-        if (projectRepository.findById(projectId).isEmpty()) {
+        if (projectOptional.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        } else {
-            Project project = projectRepository.findById(projectId).get();
+        } else if(userAuthService.doesUserMatch(projectOptional.get().getUser().getId(), headerAuth)) {
+            Project project = projectOptional.get();
 
             // Need to delete all ItemDetails entities associated with project
+            // TODO: once merged, have this delete Materials and Labor entities as well
             for (ItemDetails itemDetails : project.getItemDetails()) {
                 itemDetailsRepository.deleteById(itemDetails.getId());
             }
@@ -134,6 +148,8 @@ public class ProjectController {
             projectRepository.deleteById(projectId);
 
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);  // Best practice response code I think
+        } else {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
 
     }
