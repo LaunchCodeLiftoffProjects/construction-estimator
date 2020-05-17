@@ -42,9 +42,7 @@ public class UserAuthService {
                 // ensure the user exists
                 if (userOptional.isPresent()) {
                     User theUser = userOptional.get();
-                    if (theUser.getId() == id) {
-                        return true;
-                    }
+                    return theUser.getId() == id;
                 }
             }
         }
