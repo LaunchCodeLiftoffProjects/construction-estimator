@@ -27,26 +27,22 @@ public class UserAuthService {
     // Returns true if user id matches email in token
     public boolean doesUserMatch(int id, String headerAuth) {
 
-        // ensure Authorization header is formatted correctly
-        if (StringUtils.hasText(headerAuth) && headerAuth.startsWith("Barer ")) {
-            String token = headerAuth.substring(6);
+        // get token from authorization header and validate
+        String token = getToken(headerAuth);
 
-            // check if token is valid
-            if(jwtUtils.validateJwtToken(token)) {
+        if (headerAuth != null && jwtUtils.validateJwtToken(token)) {
 
-                // gets the user's email address from the token
-                String useremail = jwtUtils.getUserNameFromJwtToken(token);
+            // gets the user's email address from the token
+            String useremail = jwtUtils.getUserNameFromJwtToken(token);
 
-                Optional<User> userOptional = userRepository.findByName(useremail);
+            Optional<User> userOptional = userRepository.findByName(useremail);
 
-                // ensure the user exists
-                if (userOptional.isPresent()) {
-                    User theUser = userOptional.get();
-                    return theUser.getId() == id;
-                }
+            // ensure the user exists
+            if (userOptional.isPresent()) {
+                User theUser = userOptional.get();
+                return theUser.getId() == id;
             }
         }
-
         return false;
     }
 
@@ -65,10 +61,21 @@ public class UserAuthService {
         return new JwtResponse(jwt, userDetails.getId(), userDetails.getUsername(), jwtRoles);
     }
 
+    // gets the username from authorization header
     public String getUserName(String headerAuth) {
-        if (StringUtils.hasText(headerAuth) && headerAuth.startsWith("Barer ")) {
-            String token = headerAuth.substring(6);
+
+        String token = getToken(headerAuth);
+        if (token != null && jwtUtils.validateJwtToken((token))) {
             return jwtUtils.getUserNameFromJwtToken(token);
+        }
+        return null;
+    }
+
+    // gets JWT token from authorization header
+    // should only be called internal to UserAuthService
+    private String getToken(String headerAuth) {
+        if (StringUtils.hasText(headerAuth) && headerAuth.startsWith("Barer ")) {
+            return headerAuth.substring(6);
         }
         return null;
     }
