@@ -34,7 +34,7 @@ public class ProjectController {
 
     @Autowired
     UserAuthService userAuthService;
-  
+
     // Use this with @RequestParam to search all projects by field, leave params empty to return all projects
     @GetMapping
     @PreAuthorize("hasRole('USER')")
@@ -45,13 +45,8 @@ public class ProjectController {
         // TODO: maybe re-write this to not include the @RequestParam,
         //  it the check vs the token is unnecessary because we should be trusting the token just
         //  pulling the username from headers should be good enough
-        if(userAuthService.doesUserMatch(userId, headerAuth)) {
-            if (projectRepository.findByUserId(userId).isPresent()) {
-                // TODO: Test the crap out of this. I don't think it returns a complete list
-                return new ResponseEntity<>(projectRepository.findByUserId(userId).get(), HttpStatus.OK);
-            } else {
-                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-            }
+        if (userAuthService.doesUserMatch(userId, headerAuth)) {
+            return new ResponseEntity<>(projectRepository.findByUserId(userId), HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
@@ -72,7 +67,7 @@ public class ProjectController {
         } else {
             int userId = projectOptional.get().getUser().getId();
             // checks to see if the project requested belongs to the user
-            if(userAuthService.doesUserMatch(userId, headerAuth)) {
+            if (userAuthService.doesUserMatch(userId, headerAuth)) {
                 return new ResponseEntity<>(projectOptional.get(), HttpStatus.OK);
             }
         }
@@ -90,7 +85,7 @@ public class ProjectController {
         String userName = userAuthService.getUserName(headerAuth);
         Optional<User> userOptional = userRepository.findByName(userName);
 
-        if(userName != null && userOptional.isPresent()) {
+        if (userName != null && userOptional.isPresent()) {
 
             User user = userOptional.get();
             project.setUser(user);
@@ -139,7 +134,7 @@ public class ProjectController {
         // Check and see if project exists
         if (projectOptional.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        } else if(userAuthService.doesUserMatch(projectOptional.get().getUser().getId(), headerAuth)) {
+        } else if (userAuthService.doesUserMatch(projectOptional.get().getUser().getId(), headerAuth)) {
             Project project = projectOptional.get();
 
             // Need to delete all ItemDetails entities associated with project
