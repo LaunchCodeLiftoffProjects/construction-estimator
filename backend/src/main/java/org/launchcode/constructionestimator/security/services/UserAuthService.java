@@ -52,6 +52,7 @@ public class UserAuthService {
         return false;
     }
 
+    // creates JwtResponse json containing user's login token
     public JwtResponse generateJwtResponse(Authentication authentication) {
 
         SecurityContextHolder.getContext().setAuthentication(authentication);

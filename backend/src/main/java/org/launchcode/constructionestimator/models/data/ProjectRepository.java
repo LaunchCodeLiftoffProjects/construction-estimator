@@ -11,5 +11,7 @@ import java.util.Optional;
 @Repository
 public interface ProjectRepository extends CrudRepository<Project, Integer> {
 
+    // finds all projects associated with user with id userId
+    // TODO: write custom query to return only project name and id
     Iterable<Optional<Project>> findByUserId(int userId);
 }
