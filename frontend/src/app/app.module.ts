@@ -8,7 +8,6 @@ import { HeaderComponent } from './header/header.component';
 import { ProjectDetailsComponent } from './project/project-details/project-details.component';
 import { ProjectListComponent } from './project/project-list/project-list.component';
 import { UserProfileComponent } from './user/user-profile/user-profile.component';
-import { EditProjectComponent } from './project/edit-project/edit-project.component';
 import { RegisterComponent } from './register/register.component';
 import { EditUserProfileComponent } from './user/edit-user-profile/edit-user-profile.component';
 import { LoginComponent } from './login/login.component';
@@ -28,7 +27,6 @@ import { EditUserDetailsComponent } from './user/edit-user-details/edit-user-det
     ProjectDetailsComponent,
     ProjectListComponent,
     UserProfileComponent,
-    EditProjectComponent,
     RegisterComponent,
     EditUserProfileComponent,
     LoginComponent,
