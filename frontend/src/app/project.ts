@@ -33,7 +33,6 @@ export class Project {
                 return i;
             }
         }
-
         return -1;
     }
 }

@@ -45,15 +45,10 @@ export class ProjectDetailsComponent implements OnInit {
 
   ngOnInit() {
     this.id = this.route.snapshot.paramMap.get("id");
-
     console.log("Id", this.id);
-
     this.projectURL = this.projectURL + this.id;
-    this.loadItems(); // moved this out since it is independent of project object
-    console.log("Items loaded.");
     this.loadProject();
     console.log("Project Loaded");
-
   }
 
 
@@ -65,13 +60,13 @@ export class ProjectDetailsComponent implements OnInit {
     fetch(this.projectURL).then(function (response) {
       response.json().then(function (json) {
         this.project = new Project(json.name, json.roomType, json.roomLength, json.roomWidth, json.roomHeight);
+        console.log("Project name is", this.project.name);
         this.project.id = json.id;
         this.project.itemDetails = json.itemDetails;
-        this.createSelections(); // use any saved details to create objects for looping on form
-        console.log("Selection objects created.");
+        this.loadItems(); // put here so things load in order
+        console.log("Items loaded.");
       }.bind(this));
     }.bind(this));
-
   }
 
 
@@ -87,6 +82,8 @@ export class ProjectDetailsComponent implements OnInit {
           this.itemsArray.push(item);
         });
         this.itemsArray.sort((a, b) => (a.type > b.type) ? 1 : -1);
+        this.createSelections(); // now that items have been loaded
+        console.log("Selection objects created.");
       }.bind(this));
     }.bind(this));
 
@@ -106,18 +103,17 @@ export class ProjectDetailsComponent implements OnInit {
 
   // check to see if details have been saved to this project before or not, and create Selection objects accordingly
   createSelections() {
-    let size: number = this.project.itemDetails.length;
+    this.selectionArray = []; // reset this array if method is called again prior to form submission due to roomType change
     let selection: Selection;
-    let details: ItemDetails;
+    let details: ItemDetails; // single object
     let item: Item;
-    if (size > 0) { // if project already has a saved estimate and itemDetails
-      for (let i=0; i < size; i++) {
+    if (this.project.itemDetails.length > 0) { // if project already has a saved itemDetails array
+      for (let i=0; i < this.project.itemDetails.length; i++) {
         details = this.project.itemDetails[i];
-        item = this.getItemByID(details.itemId); 
-        if (item.room.includes(this.project.roomType)) { // just in case something has shifted
+        item = this.itemsArray[this.getItemByID(details.itemId)]; 
+        if (item.room.includes(this.project.roomType)) { // just in case the room type has been changed for some reason
           selection = new Selection(item.category, item.type, true, item.name, details.quantity);
           this.selectionArray.push(selection);
-          console.log("Added", selection, "to selectionArray");
         }
       }
     }
@@ -125,9 +121,8 @@ export class ProjectDetailsComponent implements OnInit {
     for (let j=0; j < this.itemsArray.length; j++) {
       item = this.itemsArray[j];
       if (item.room.includes(this.project.roomType) && this.locateSelection(item) === -1) {
-        selection = new Selection(item.category, item.type, false); // will default to initialized values for selected & quantity
+        selection = new Selection(item.category, item.type, false); // default to initialized values for 'selected' & 'quantity'
         this.selectionArray.push(selection);
-        console.log("Added", selection, "to selectionArray");
       }
     }
   }  
@@ -186,15 +181,15 @@ export class ProjectDetailsComponent implements OnInit {
     return null;
   }
 
-  getItemByID(itemID): Item {
+  getItemByID(itemID: number): number {
     let item: Item;
     for (let i=0; i < this.itemsArray.length; i++) {
       item = this.itemsArray[i];
       if (item.id === itemID) {
-        return item;
+        return i;
       }
     }
-    return null;
+    return -1;
   }
 
   //get fresh ID number for new ItemDetails items - can't remember how this is supposed to happen otherwise

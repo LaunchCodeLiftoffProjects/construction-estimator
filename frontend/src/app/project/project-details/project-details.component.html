@@ -28,8 +28,7 @@
                         <span class="lead">Room Type </span>
                         <div class = "form-group">
                             <div class="form-check indent-left" *ngFor="let room of rooms; let r = index">
-                                <!--not working yet - doesn't save changed value-->
-                                <label class="form-check-label"><input #roomType [(ngModel)]="project.roomType.checked" [value]="room" type="radio" class = "form-check-input" />{{roomTitles[r]}}</label>
+                                <label class="form-check-label"><input #roomType [(ngModel)]="project.roomType" (change)="createSelection()" [value]="rooms[r]" type="radio" class = "form-check-input" />{{roomTitles[r]}}</label>
                             </div>
                         </div>
                     </div>
@@ -40,7 +39,7 @@
                             <label><input #roomHeight="ngModel" [(ngModel)]="project.roomHeight" type="number" class="form-control form-control-sm" step="0.1" min = 0 /> Ceiling Height (ft.)</label>
                         </div>
                     </div>
-                    <span class="badge badge-success"(click) = "editingProject = false;" >Save Changes</span>
+                    <span class="badge badge-success" (click) = "editingProject = false" >Save Changes</span>
                 </ng-template>
 
             </div>
@@ -55,21 +54,23 @@
                 <div class="form-group" >
                     <h4 class="mt-5">{{categoryTitles[c]}}</h4>
                     <div class="input-group mt-2" *ngFor="let selection of selectionArray; let i = index">
-                        <div class="col-4">
-                            <label class="lead"><input #type="ngModel" [(ngModel)]="selectionArray[i].checked" type="checkbox" /> {{selection.type}}</label>
-                        </div>
-                        <div class = "col-4">
-                            <select #selected="ngModel" [(ngModel)]="selectionArray[i].selected" class="custom-select w-100">
-                                <!-- <option>(Select an option)</option> -->
-                                <option *ngFor="let options of getOptions(selection.type)">{{options.name}}</option>
-                            </select>
-                        </div>
-                        <div class="col-2">
-                            <ng-container *ngIf="needsQuantity.includes(selection.type)">
-                                <input #quantity="ngModel" [(ngModel)]="selectionArray[i].quantity" type="number" step="1" min = 0 class="form-control form-control-sm w-75 h-100" />
-                            </ng-container>
-                        </div> 
-                        <div class="col-2"></div>
+                        <ng-container *ngIf=" category === selection.category">
+                            <div class="col-4">
+                                <label class="lead"><input #type="ngModel" [(ngModel)]="selectionArray[i].checked" type="checkbox" /> {{selection.type}}</label>
+                            </div>
+                            <div class = "col-4">
+                                <select #selected="ngModel" [(ngModel)]="selectionArray[i].selected" class="custom-select w-100">
+                                    <!-- <option>(Select an option)</option> -->
+                                    <option *ngFor="let options of getOptions(selection.type)">{{options.name}}</option>
+                                </select>
+                            </div>
+                            <div class="col-2">
+                                <ng-container *ngIf="needsQuantity.includes(selection.type)">
+                                    <input #quantity="ngModel" [(ngModel)]="selectionArray[i].quantity" type="number" step="1" min = 0 class="form-control form-control-sm w-75 h-100" />
+                                </ng-container>
+                            </div> 
+                            <div class="col-2"></div>
+                        </ng-container>
                     </div>
                 </div>
             </ng-container>
