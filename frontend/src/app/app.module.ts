@@ -24,6 +24,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { authInterceptorProviders } from './_helpers/auth.interceptor';
 
 
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -43,9 +44,10 @@ import { authInterceptorProviders } from './_helpers/auth.interceptor';
     BoardModeratorComponent,
     BoardUserComponent],
   imports: [
+    FormsModule,
     BrowserModule,
-    AppRoutingModule, // brings over info from app-routing.module.ts
-    FormsModule       // allows the use of ngSubmit directive
+    FormsModule,
+    AppRoutingModule // brings over info from app-routing.module.ts
   ],
   providers: [authInterceptorProviders],
   bootstrap: [AppComponent]

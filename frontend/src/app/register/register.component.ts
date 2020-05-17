@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { User } from 'src/app/user'
 import { UserDetails } from '../user-details';
 import { Project } from 'src/app/project';
+import { EmailValidator } from '@angular/forms';
 import { Router, RouterModule, ActivatedRoute, ParamMap, NavigationExtras } from '@angular/router';
 import { AuthService } from '../_services/auth.service';
 
@@ -13,6 +14,7 @@ import { AuthService } from '../_services/auth.service';
   styleUrls: ['./register.component.css']
 })
 export class RegisterComponent implements OnInit {
+  emailSaved: string;
 
   id: number;
   passwordMismatch: boolean = false;
@@ -58,5 +60,7 @@ export class RegisterComponent implements OnInit {
       console.error('Error:', error);
     });
   }
+
+
 
 }
