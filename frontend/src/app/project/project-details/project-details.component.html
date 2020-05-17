@@ -80,20 +80,20 @@
         <h4 class="mt-5">Materials</h4>
         <div class="form-group">
             <p class="lead">Will you be adding or replacing any of the following?</p>
-            <label class = "checkbox"><input #plumbingSystem type="checkbox" value="plumbing system" /> Plumbing System</label>
-            <label class = "checkbox"><input #electricalSystem type="checkbox" value="electrical system" /> Electrical System</label>
-            <label class = "checkbox"><input #framing type="checkbox" value="wall framing" /> Wall Framing</label>
-            <label class = "checkbox"><input #drywall type="checkbox" value="drywall" /> Plaster/Drywall</label>
+            <label class = "checkbox"><input #plumbingSystem="ngModel" [(ngModel)]="project.materials.needsPlumbingSystem" type="checkbox" /> Plumbing System</label>
+            <label class = "checkbox"><input #electricalSystem="ngModel" [(ngModel)]="project.materials.needsElectricalSystem"  type="checkbox" /> Electrical System</label>
+            <label class = "checkbox"><input #framing="ngModel" [(ngModel)]="project.materials.needsFraming"  type="checkbox" /> Wall Framing</label>
+            <label class = "checkbox"><input #drywall="ngModel" [(ngModel)]="project.materials.needsDrywall"  type="checkbox" /> Plaster/Drywall</label>
         </div>
         <br />
 
         <h4 class="mt-5">Labor</h4>
         <div class="form-group">
             <p class="lead">Will you be hiring any subcontractors?</p>
-            <label class = "checkbox"><input #plumbing type="checkbox" value="plumbing" /> Plumbing</label>
-            <label class = "checkbox"><input #electrical type="checkbox" value="electrical" /> Electrical</label>
-            <label class = "checkbox"><input #roughCarpentry type="checkbox" value="roughCarpentry" /> Rough Carpentry</label>
-            <label class = "checkbox"><input #finishWork type="checkbox" value="finishWork" /> Finish Work</label>
+            <label class = "checkbox"><input #plumbing="ngModel" [(ngModel)]="project.materials.needsPlumbingSub"  type="checkbox" /> Plumbing</label>
+            <label class = "checkbox"><input #electrical="ngModel" [(ngModel)]="project.materials.needsElectricalSub"  type="checkbox" /> Electrical</label>
+            <label class = "checkbox"><input #roughCarpentry="ngModel" [(ngModel)]="project.materials.needsRoughCarpentry"  type="checkbox" /> Rough Carpentry</label>
+            <label class = "checkbox"><input #finishWork="ngModel" [(ngModel)]="project.materials.needsFinishWork"  type="checkbox" /> Finish Work</label>
         </div>
         <br />
 
