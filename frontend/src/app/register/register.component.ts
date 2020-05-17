@@ -3,6 +3,7 @@ import { User } from 'src/app/user'
 import { UserDetails } from '../user-details';
 import { Project } from 'src/app/project';
 import { Router, RouterModule, ActivatedRoute, ParamMap, NavigationExtras } from '@angular/router';
+import { AuthService } from '../_services/auth.service';
 
 
 
@@ -21,6 +22,8 @@ export class RegisterComponent implements OnInit {
   ngOnInit() {
   }
 
+
+  //FIGURE OUT IF YOU'RE GOING TO REPLACE THIS WITH A CALL TO AUTHSERVICE AND A RESPONSE PARSE
   saveUser(firstName: string, lastName: string, email: string, password: string, verifyPassword: string) {
 
     // don't submit form if passwords mismatch

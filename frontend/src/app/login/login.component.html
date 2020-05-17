@@ -1,22 +1,75 @@
-<div class = "container">
-    <br />
-    <h2 class="text-info mt-5">Welcome!</h2>
-    <form>
-    <!-- <form [formGroup]="LoginForm">   -->
-        <br />
-        <h5 class="mb-3">Log in to access your projects</h5>
-        <div class = "form-group">
-            <input #email type='email' placeholder="E-mail Address" class="form-control"/>
+<div class="col-md-12">
+    <div class="card card-container">
+      <img
+        id="profile-img"
+        src="//ssl.gstatic.com/accounts/ui/avatar_2x.png"
+        class="profile-img-card"
+      />
+      <form
+        *ngIf="!isLoggedIn"
+        name="form"
+        (ngSubmit)="f.form.valid && onSubmit()"
+        #f="ngForm"
+        novalidate
+      >
+        <div class="form-group">
+          <label for="email">Email Address</label>
+          <input
+            type="text"
+            class="form-control"
+            name="email"
+            [(ngModel)]="form.email"
+            required
+            #username="ngModel"
+          />
+          <div
+            class="alert alert-danger"
+            role="alert"
+            *ngIf="f.submitted && username.invalid"
+          >
+            Username is required!
+          </div>
         </div>
-        <div class = "form-group">
-            <input #password type='password' placeholder="Password" class="form-control"/>
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input
+            type="password"
+            class="form-control"
+            name="password"
+            [(ngModel)]="form.password"
+            required
+            minlength="6"
+            #password="ngModel"
+          />
+          <div
+            class="alert alert-danger"
+            role="alert"
+            *ngIf="f.submitted && password.invalid"
+          >
+            <div *ngIf="password.errors.required">Password is required</div>
+            <div *ngIf="password.errors.minlength">
+              Password must be at least 6 characters
+            </div>
+          </div>
         </div>
-        <div>
-            <p>Haven't created an account yet? No problem! <a  class="text-info" [routerLink]="'/register'">Register here.</a></p>
+        <div class="form-group">
+          <button class="btn btn-primary btn-block">
+            Login
+          </button>
         </div>
-        <br />
-        <div class="form-group text-right">
-            <button class="btn btn-info" [routerLink] = "'/user/profile'">Log In</button>
+        <div class="form-group">
+          <div
+            class="alert alert-danger"
+            role="alert"
+            *ngIf="f.submitted && isLoginFailed"
+          >
+            Login failed: {{ errorMessage }}
+          </div>
         </div>
-    </form>
-</div>
+      </form>
+  
+      <div class="alert alert-success" *ngIf="isLoggedIn">
+        Logged in as {{ roles }}.
+      </div>
+    </div>
+  </div>
