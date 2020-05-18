@@ -20,21 +20,11 @@ export class Project {
         this.roomLength = roomLength;
         this.roomWidth = roomWidth;
         this.roomHeight = roomHeight;
+        this.itemDetails = [];
+        this.materials = new Materials;
+        this.labor = new Labor;
     }
 
-    addItemDetails(itemDetails: ItemDetails) {
-        this.itemDetails.push(itemDetails);
-    }
-
-    // Returns the index of itemDetails matching itemId, -1 if not found
-    findItemDetailsByItemId(itemId: number): number {
-        for(let i = 0; i < this.itemDetails.length; i++) {
-            if(this.itemDetails[i].itemId === itemId) {
-                return i;
-            }
-        }
-        return -1;
-    }
 }
 
 

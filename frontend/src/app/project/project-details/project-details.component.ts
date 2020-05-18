@@ -5,6 +5,8 @@ import { Selection } from 'src/app/selection';
 import { ItemDetails } from 'src/app/item-details';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { Materials } from 'src/app/materials';
+import { Labor } from 'src/app/labor';
 
 
 
@@ -60,7 +62,13 @@ export class ProjectDetailsComponent implements OnInit {
         this.project = new Project(json.name, json.roomType, json.roomLength, json.roomWidth, json.roomHeight);
         console.log("Project name is", this.project.name);
         this.project.id = json.id;
-        this.project.itemDetails = json.itemDetails; // get last saved array to prefill form with last saved values
+        this.project.itemDetails = json.itemDetails;
+        // this.project.materials = json.materials; // why is this coming in as null?
+        // this.project.labor = json.labor; // also null?
+        this.project.materials = new Materials; // temporary
+        this.project.labor = new Labor; // temporary
+        console.log("materials object is", this.project.materials);
+        console.log("labor object is", this.project.labor);
         // this.project.estimate = []; // reset so new estimate can be built
         this.loadItems(); // put here so things load in order
         console.log("Items loaded.");
@@ -141,18 +149,7 @@ export class ProjectDetailsComponent implements OnInit {
   }
 
 
-  // UPON FORM SUBMISSION, GATHER SELECTED ITEMS, CALCULATE, AND SAVE TO PROJECT
-
-  getItemByTypeAndName(itemType: string, name: string): Item {
-    let item: Item;
-    for (let i=0; i < this.itemsArray.length; i++) {
-      item = this.itemsArray[i];
-      if (item.type === itemType && item.name === name) {
-        return item;
-      }
-    }
-    return null;
-  }
+  // GETTERS
 
   getItemByID(itemID: number): number {
     let item: Item;
@@ -165,9 +162,7 @@ export class ProjectDetailsComponent implements OnInit {
     return -1;
   }
 
-  //
   getItemIdByName(name: string): number {
-    let id: number;
     let item: Item;
     for (let i=0; i < this.itemsArray.length; i++) {
       item = this.itemsArray[i];
@@ -176,6 +171,9 @@ export class ProjectDetailsComponent implements OnInit {
       }
     }
   }
+
+
+  // CALCULATE ESTIMATE
 
   // use data from original JSON file of all items to calculate for each selected item
   calculateFinalPrice(item: Item, details: ItemDetails): number {
@@ -204,6 +202,9 @@ export class ProjectDetailsComponent implements OnInit {
     // call all three calculation helper methods
   }
 
+
+  // BUILD PROJECT OBJECT AND SAVE ALL OBJECTS TO DATABASE
+
   // iterate through selectionArray, build itemDetails array and Estimate object
   buildProject() {
     this.project.itemDetails = []; // reset project's itemDetails array to remove any prior saved objects and values
@@ -211,7 +212,6 @@ export class ProjectDetailsComponent implements OnInit {
     let id: number;
     let item: Item;
     let details: ItemDetails;
-    let detailsArray: ItemDetails[] = [];
     for (let i=0; i < this.selectionArray.length; i++) {
       selection = this.selectionArray[i];
       if (selection.checked) { // create itemDetails object only if user checked the box for this type
