@@ -1,11 +1,10 @@
 <div class="container">
-    
+
     <!--Nested container with divs side-by-side to move project name, type, and dimensions to top right-->
     <div class="container mt-5">
         <div class="row justify-content-between">
             <div class="col-6">
-
-                <h2 class="text-info">Project Details</h2>
+                <h2 class="text-info mt-5">Project Details</h2>
                 <p>Tell us what you need to make your vision a reality! Don't worry if you aren't sure about some of the details; you can come back and edit your project at any time.</p>
             </div>
 
@@ -28,7 +27,7 @@
                         <span class="lead">Room Type </span>
                         <div class = "form-group">
                             <div class="form-check indent-left" *ngFor="let room of rooms; let r = index">
-                                <label class="form-check-label"><input #roomType [(ngModel)]="project.roomType" (change)="createSelection()" [value]="rooms[r]" type="radio" class = "form-check-input" />{{roomTitles[r]}}</label>
+                                <label class="form-check-label"><input #roomType [(ngModel)]="project.roomType" (change)="createSelections()" [value]="rooms[r]" type="radio" class = "form-check-input" />{{roomTitles[r]}}</label>
                             </div>
                         </div>
                     </div>
@@ -52,8 +51,8 @@
             <!--do not show appliance section unless the room is kitchen-->
             <ng-container *ngIf=" project.roomType === 'kitchen' || (project.roomType !== 'kitchen' && category !== 'appliance') ">
                 <div class="form-group" >
-                    <h4 class="mt-5">{{categoryTitles[c]}}</h4>
-                    <div class="input-group mt-2" *ngFor="let selection of selectionArray; let i = index">
+                    <h4 class="mt-4">{{categoryTitles[c]}}</h4>
+                    <div class="input-group mt-1" *ngFor="let selection of selectionArray; let i = index">
                         <ng-container *ngIf=" category === selection.category">
                             <div class="col-4">
                                 <label class="lead"><input #type="ngModel" [(ngModel)]="selectionArray[i].checked" type="checkbox" /> {{selection.type}}</label>

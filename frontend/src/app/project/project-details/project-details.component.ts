@@ -60,15 +60,14 @@ export class ProjectDetailsComponent implements OnInit {
     fetch(this.projectURL).then(function (response) {
       response.json().then(function (json) {
         this.project = new Project(json.name, json.roomType, json.roomLength, json.roomWidth, json.roomHeight);
-        console.log("Project name is", this.project.name);
         this.project.id = json.id;
         this.project.itemDetails = json.itemDetails;
         // this.project.materials = json.materials; // why is this coming in as null?
         // this.project.labor = json.labor; // also null?
         this.project.materials = new Materials; // temporary
         this.project.labor = new Labor; // temporary
-        console.log("materials object is", this.project.materials);
-        console.log("labor object is", this.project.labor);
+        // console.log("materials object is", this.project.materials);
+        // console.log("labor object is", this.project.labor);
         // this.project.estimate = []; // reset so new estimate can be built
         this.loadItems(); // put here so things load in order
         console.log("Items loaded.");
@@ -229,10 +228,10 @@ export class ProjectDetailsComponent implements OnInit {
   // save everything to database
   saveProject() {
 
-    // create ItemDetails array and Estimate object from form data
+    // create ItemDetails array and run calculations based on user input
     this.buildProject();
 
-    // save itemDetails to project
+    // save itemDetails objects to database
     fetch("http://localhost:8080/api/project/" + this.project.id + "/details", {
       method: 'POST',
       headers: {
@@ -249,41 +248,7 @@ export class ProjectDetailsComponent implements OnInit {
       console.error('Error:', error);
     });
 
-    // save Materials object to project
-    fetch("http://localhost:8080/api/project/" + this.project.id + "/materials", {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Credentials': 'true'
-      },
-      body: JSON.stringify(this.project.materials),
-    }).then(function (response) {
-      return response.json();
-    }).then(function (data) {
-      console.log('Success:', data);
-    }).catch(function (error) {
-      console.error('Error:', error);
-    });
-
-    // save Labor object to project
-    fetch("http://localhost:8080/api/project/" + this.project.id + "/labor", {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Credentials': 'true'
-      },
-      body: JSON.stringify(this.project.labor),
-    }).then(function (response) {
-      return response.json();
-    }).then(function (data) {
-      console.log('Success:', data);
-    }).catch(function (error) {
-      console.error('Error:', error);
-    });
-
-    // TODO: save Estimate object to project
+    // TODO? Do Materials, Labor, and Estimate objects need to be added separately or will they just save with the project?
 
     // save entire Project object to database
     fetch("http://localhost:8080/api/project/" + this.project.id, {
