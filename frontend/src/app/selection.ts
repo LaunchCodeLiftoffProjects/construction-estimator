@@ -1,6 +1,9 @@
 
 export class Selection {
 
+    // does not contain itemID because instances of this class must remain open to any item of this type until an option is chosen in the form
+    // a string match on the 'selected' property will assign the itemID to the itemDetails object that will be saved to the project
+
     category: string;
     type: string;
     checked: boolean;

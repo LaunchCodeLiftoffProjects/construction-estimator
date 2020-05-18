@@ -36,9 +36,7 @@ export class ProjectDetailsComponent implements OnInit {
               'Windows'];
               
 
-  selectionArray: Selection[]; // for facilitating data binding with item selections
-  
-  currentID: number = 1; // this is temporary, only because of the way the itemDetails constructor is set up (both its own id and itemId)
+  selectionArray: Selection[] = []; // for facilitating data binding with item selections
 
   
   constructor(private route: ActivatedRoute) { }
@@ -62,7 +60,8 @@ export class ProjectDetailsComponent implements OnInit {
         this.project = new Project(json.name, json.roomType, json.roomLength, json.roomWidth, json.roomHeight);
         console.log("Project name is", this.project.name);
         this.project.id = json.id;
-        this.project.itemDetails = json.itemDetails;
+        this.project.itemDetails = json.itemDetails; // get last saved array to prefill form with last saved values
+        // this.project.estimate = []; // reset so new estimate can be built
         this.loadItems(); // put here so things load in order
         console.log("Items loaded.");
       }.bind(this));
@@ -105,13 +104,13 @@ export class ProjectDetailsComponent implements OnInit {
   createSelections() {
     this.selectionArray = []; // reset this array if method is called again prior to form submission due to roomType change
     let selection: Selection;
-    let details: ItemDetails; // single object
+    let details: ItemDetails; 
     let item: Item;
     if (this.project.itemDetails.length > 0) { // if project already has a saved itemDetails array
       for (let i=0; i < this.project.itemDetails.length; i++) {
         details = this.project.itemDetails[i];
         item = this.itemsArray[this.getItemByID(details.itemId)]; 
-        if (item.room.includes(this.project.roomType)) { // just in case the room type has been changed for some reason
+        if (item.room.includes(this.project.roomType)) { // if the room type has been changed for some reason
           selection = new Selection(item.category, item.type, true, item.name, details.quantity);
           this.selectionArray.push(selection);
         }
@@ -140,35 +139,9 @@ export class ProjectDetailsComponent implements OnInit {
     optionsArray.sort((a, b) => (a.name > b.name) ? 1 : -1);
     return optionsArray;
   }
-  
-
-
-  // GET INFO ON MATERIALS & LABOR FOR CALCULATIONS
-
-  // need to set this up
-
 
 
   // UPON FORM SUBMISSION, GATHER SELECTED ITEMS, CALCULATE, AND SAVE TO PROJECT
-
-  // look to see if itemDetails object already exists in project itemsDetails array
-  findItemDetails(itemType: string): ItemDetails {
-    if (this.project.itemDetails.length > 0) {
-      for (let i=0; i < this.itemsArray.length; i++) {
-        let item: Item;
-        let details: ItemDetails;
-        for (let j=0; j < this.project.itemDetails.length; j++) {
-          item = this.itemsArray[i];
-          details = this.project.itemDetails[j]
-          // check all available items in itemsArray with current type against item IDs saved in project.itemDetails
-          if (item.type === itemType && item.id === details.itemId) {
-            return details;
-          }
-        }
-      }
-    }
-    return null; // if not found
-  }
 
   getItemByTypeAndName(itemType: string, name: string): Item {
     let item: Item;
@@ -192,26 +165,72 @@ export class ProjectDetailsComponent implements OnInit {
     return -1;
   }
 
-  //get fresh ID number for new ItemDetails items - can't remember how this is supposed to happen otherwise
-  getID(): number {
-    this.currentID++;
-    return this.currentID;
+  //
+  getItemIdByName(name: string): number {
+    let id: number;
+    let item: Item;
+    for (let i=0; i < this.itemsArray.length; i++) {
+      item = this.itemsArray[i];
+      if (item.name === name) {
+        return item.id;
+      }
+    }
   }
 
   // use data from original JSON file of all items to calculate for each selected item
-  calculateItemDetails() {
-    // calculations not yet written
+  calculateFinalPrice(item: Item, details: ItemDetails): number {
+    let itemCost: number;
+    // TODO: calculate for one item based on quantity, linear feet, or square feet
+    return itemCost;
   }
 
-  // calculate category totals and save to an estimate object
-  saveEstimate() {
-    // this needs to be written once estimate class is available on both ends
-    // reference completed itemDetailsArray and get subtotals by category
-    // return estimate object
+  // assign factors and determine additional costs for materials needed
+  calculateMaterials(selection: Selection): number {
+    let materialCost: number;
+    // TODO: calculate additional cost for materials needed for an item
+    return materialCost;
   }
 
- // save itemDetails array and estimate object to project and save project to database
- saveProject() {
+  // assign factors and determine additional costs for labor needed
+  calculateLabor(selection: Selection): number {
+    let laborCost: number;
+    // TODO: calculate additional cost for materials needed for an item
+    return laborCost;
+  }
+
+  // build estimate object as each item is calculated
+  buildEstimate(item: Item, cost: number) {
+    // TODO: check each item for category and add cost to matching subtotals
+    // call all three calculation helper methods
+  }
+
+  // iterate through selectionArray, build itemDetails array and Estimate object
+  buildProject() {
+    this.project.itemDetails = []; // reset project's itemDetails array to remove any prior saved objects and values
+    let selection: Selection;
+    let id: number;
+    let item: Item;
+    let details: ItemDetails;
+    let detailsArray: ItemDetails[] = [];
+    for (let i=0; i < this.selectionArray.length; i++) {
+      selection = this.selectionArray[i];
+      if (selection.checked) { // create itemDetails object only if user checked the box for this type
+        id = this.getItemIdByName(selection.selected);
+        item = this.itemsArray[this.getItemByID(id)];
+        details = new ItemDetails(id); // create and set itemId property
+        details.quantity = selection.quantity;
+        // details.finalPrice = calculateFinalPrice(item, details);
+        this.project.itemDetails.push(details);
+        // this.buildEstimate(item, details.finalPrice);
+      }
+    }
+  }
+
+  // save everything to database
+  saveProject() {
+
+    // create ItemDetails array and Estimate object from form data
+    this.buildProject();
 
     // save itemDetails to project
     fetch("http://localhost:8080/api/project/" + this.project.id + "/details", {
@@ -230,10 +249,13 @@ export class ProjectDetailsComponent implements OnInit {
       console.error('Error:', error);
     });
 
-    // save estimate to project
-    // TODO
+    // TODO: save Materials object to project
 
-    // save entire project object to database
+    // TODO: save Labor object to project
+
+    // TODO: save Estimate object to project
+
+    // save entire Project object to database
     fetch("http://localhost:8080/api/project/" + this.project.id, {
       method: 'PUT',
       headers: {
