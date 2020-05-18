@@ -41,8 +41,11 @@ export class ProjectDetailsComponent implements OnInit {
 
   selectionArray: Selection[] = []; // for facilitating data binding with item selections
 
+  // materials: Materials;
+  // labor: Labor;
   materials: Materials = new Materials; // had to initialize to new instance because project object is bringing null objects
   labor: Labor = new Labor; // had to initialize to new instance because project object is bringing null objects
+
   estimate: Estimate = new Estimate; // not needed for modeling but for calculations
   
   constructor(private route: ActivatedRoute) { }
@@ -68,7 +71,7 @@ export class ProjectDetailsComponent implements OnInit {
         this.project.itemDetails = json.itemDetails;
         // this.materials = json.materials; // null?
         // this.labor = json.labor; // null?
-        // do not need to load previous estimate because a new one will be created from scratch
+        // do not need to load previous estimate because a new one will be built from scratch
         this.loadItems(); // put here so things load in order
         console.log("Items loaded.");
       }.bind(this));
@@ -88,8 +91,9 @@ export class ProjectDetailsComponent implements OnInit {
           this.itemsArray.push(item);
         });
         this.itemsArray.sort((a, b) => (a.type > b.type) ? 1 : -1);
-        this.createSelections(); // now that items have been loaded
+        this.createSelections(); // now that project and items have been loaded
         console.log("Selection objects created.");
+        // TODO: toggle boolean to allow page to display
       }.bind(this));
     }.bind(this));
   }
@@ -241,9 +245,6 @@ export class ProjectDetailsComponent implements OnInit {
     // create ItemDetails array and run calculations for estimate based on user input
     this.buildProject();
 
-    this.project.materials = this.materials; // save values from form ngModel
-    this.project.labor = this.labor; // save values from form ngModel
-
     // save itemDetails objects to database
     fetch("http://localhost:8080/api/project/" + this.project.id + "/details", {
       method: 'POST',
@@ -260,6 +261,12 @@ export class ProjectDetailsComponent implements OnInit {
     }).catch(function (error) {
       console.error('Error:', error);
     });
+
+    // TODO: materials
+
+    // TODO: labor
+
+    // TODO: estimate
 
     // save entire Project object to database
     fetch("http://localhost:8080/api/project/" + this.project.id, {

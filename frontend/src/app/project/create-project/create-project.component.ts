@@ -30,7 +30,6 @@ export class CreateProjectComponent implements OnInit {
     let project = new Project(name, this.selectedRoom, roomLength, roomWidth, roomHeight);
     let id: number;
     console.log("saved project", project);
-    // TODO: POST TO SERVER
     fetch('http://localhost:8080/api/project', {
       method: 'POST',
       headers: {
