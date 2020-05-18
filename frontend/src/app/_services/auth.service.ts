@@ -23,6 +23,8 @@ export class AuthService {
     }, httpOptions);
   }
 
+
+  //FIGURE OUT IF YOU WANT TO USE FETCH OR NOT
   register(user: User): Observable<any> {
     return this.http.post(AUTH_API + 'register', {
       firstName: user.firstName,

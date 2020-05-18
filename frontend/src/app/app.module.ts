@@ -46,8 +46,8 @@ import { authInterceptorProviders } from './_helpers/auth.interceptor';
   imports: [
     FormsModule,
     BrowserModule,
-    FormsModule,
-    AppRoutingModule // brings over info from app-routing.module.ts
+    AppRoutingModule, // brings over info from app-routing.module.ts
+    HttpClientModule
   ],
   providers: [authInterceptorProviders],
   bootstrap: [AppComponent]
