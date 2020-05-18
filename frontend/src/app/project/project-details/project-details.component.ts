@@ -7,7 +7,7 @@ import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { Materials } from 'src/app/materials';
 import { Labor } from 'src/app/labor';
-
+import { Estimate } from 'src/app/estimate';
 
 
 @Component({
@@ -15,7 +15,6 @@ import { Labor } from 'src/app/labor';
   templateUrl: './project-details.component.html',
   styleUrls: ['./project-details.component.css']
 })
-
 
 
 export class ProjectDetailsComponent implements OnInit {
@@ -32,17 +31,19 @@ export class ProjectDetailsComponent implements OnInit {
   categories: string[] = [ "appliance", "fixture", "finish" ];
   categoryTitles = [ "Appliances", "Fixtures", "Finishes" ];
 
-  needsQuantity: string[] = ['Dishwasher','Disposal','Microwave/Hood','Oven/Range','Refrigerator',
+  calcByQuantity: string[] = ['Dishwasher','Disposal','Microwave/Hood','Oven/Range','Refrigerator',
               'Bath & Shower', 'Ceiling Light/Fan', 'Electrical Outlets', 'Electrical Switches', 
-              'Lighting', 'Sink', 'Specialty', 'Toilet', 'Doors', 'Lower Cabinets', 'Upper Cabinets', 
+              'Lighting', 'Shelving', 'Sink', 'Toilet', 'Doors', 'Cabinets, Lower', 'Cabinets, Upper', 
               'Windows'];
+  calcByLF: string[] = ['Backsplash','Baseboards','Countertop','Trim'];
+  calcBySF: string[] = ['Flooring','Specialty','Walls'];
               
 
   selectionArray: Selection[] = []; // for facilitating data binding with item selections
 
   materials: Materials = new Materials; // had to initialize to new instance because project object is bringing null objects
   labor: Labor = new Labor; // had to initialize to new instance because project object is bringing null objects
-
+  estimate: Estimate = new Estimate; // not needed for modeling but for calculations
   
   constructor(private route: ActivatedRoute) { }
 
@@ -67,6 +68,7 @@ export class ProjectDetailsComponent implements OnInit {
         this.project.itemDetails = json.itemDetails;
         // this.materials = json.materials; // null?
         // this.labor = json.labor; // null?
+        // do not need to load estimate for this page because a new one will be created from scratch
         this.loadItems(); // put here so things load in order
         console.log("Items loaded.");
       }.bind(this));
@@ -106,7 +108,7 @@ export class ProjectDetailsComponent implements OnInit {
   }
 
   // check to see if details have been saved to this project before or not, and create Selection objects accordingly
-  createSelections() {
+  createSelections() { // right now this is not working properly if roomType is edited at top
     this.selectionArray = []; // reset this array if method is called again prior to form submission due to roomType change
     let selection: Selection;
     let details: ItemDetails; 
@@ -129,6 +131,7 @@ export class ProjectDetailsComponent implements OnInit {
         this.selectionArray.push(selection);
       }
     }
+    this.selectionArray.sort((a, b) => (a.type > b.type) ? 1 : -1);
   }  
 
   // for each type, build a list of available options to display for dropdown lists - string value will save upon form submission
@@ -176,6 +179,7 @@ export class ProjectDetailsComponent implements OnInit {
   calculateFinalPrice(item: Item, selection: Selection): number {
     let itemCost: number;
     // TODO: calculate for one item based on quantity, linear feet, or square feet
+
     return itemCost;
   }
 
@@ -196,7 +200,7 @@ export class ProjectDetailsComponent implements OnInit {
   // build estimate object as each item is calculated
   buildEstimate(item: Item, cost: number) {
     // TODO: check each item for category and add cost to matching subtotals
-    // call all three calculation helper methods
+    // call all three calculation helper methods (maybe do this differently since that would calculate per item cost twice)
   }
 
 
@@ -223,7 +227,7 @@ export class ProjectDetailsComponent implements OnInit {
     }
   }
 
-  // send everything to database
+  // called only when submit button is clicked - processes input and sends everything to database
   saveProject() {
 
     // create ItemDetails array and run calculations for estimate based on user input

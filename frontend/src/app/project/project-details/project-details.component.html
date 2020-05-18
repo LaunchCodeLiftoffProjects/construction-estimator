@@ -39,6 +39,7 @@
                         </div>
                     </div>
                     <span class="badge badge-success" (click) = "editingProject = false" >Save Changes</span>
+                    <!--What if they want to cancel the changes? Need to have a cancel button, but with ngModel not sure how to revert-->
                 </ng-template>
 
             </div>
@@ -53,7 +54,7 @@
                 <div class="form-group" >
                     <h4 class="mt-4">{{categoryTitles[c]}}</h4>
                     <div class="input-group mt-1" *ngFor="let selection of selectionArray; let i = index">
-                        <ng-container *ngIf=" category === selection.category">
+                        <ng-container *ngIf="category === selection.category">
                             <div class="col-4">
                                 <label class="lead"><input #type="ngModel" [(ngModel)]="selectionArray[i].checked" type="checkbox" /> {{selection.type}}</label>
                             </div>
@@ -64,7 +65,7 @@
                                 </select>
                             </div>
                             <div class="col-2">
-                                <ng-container *ngIf="needsQuantity.includes(selection.type)">
+                                <ng-container *ngIf="calcByQuantity.includes(selection.type)">
                                     <input #quantity="ngModel" [(ngModel)]="selectionArray[i].quantity" type="number" step="1" min = 0 class="form-control form-control-sm w-75 h-100" />
                                 </ng-container>
                             </div> 
