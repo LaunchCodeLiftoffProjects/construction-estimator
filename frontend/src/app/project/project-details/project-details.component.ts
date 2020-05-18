@@ -40,6 +40,9 @@ export class ProjectDetailsComponent implements OnInit {
 
   selectionArray: Selection[] = []; // for facilitating data binding with item selections
 
+  materials: Materials = new Materials; // had to initialize to new instance because project object is bringing null objects
+  labor: Labor = new Labor; // had to initialize to new instance because project object is bringing null objects
+
   
   constructor(private route: ActivatedRoute) { }
 
@@ -62,13 +65,8 @@ export class ProjectDetailsComponent implements OnInit {
         this.project = new Project(json.name, json.roomType, json.roomLength, json.roomWidth, json.roomHeight);
         this.project.id = json.id;
         this.project.itemDetails = json.itemDetails;
-        // this.project.materials = json.materials; // why is this coming in as null?
-        // this.project.labor = json.labor; // also null?
-        this.project.materials = new Materials; // temporary
-        this.project.labor = new Labor; // temporary
-        // console.log("materials object is", this.project.materials);
-        // console.log("labor object is", this.project.labor);
-        // this.project.estimate = []; // reset so new estimate can be built
+        // this.materials = json.materials; // null?
+        // this.labor = json.labor; // null?
         this.loadItems(); // put here so things load in order
         console.log("Items loaded.");
       }.bind(this));
@@ -225,11 +223,14 @@ export class ProjectDetailsComponent implements OnInit {
     }
   }
 
-  // save everything to database
+  // send everything to database
   saveProject() {
 
-    // create ItemDetails array and run calculations based on user input
+    // create ItemDetails array and run calculations for estimate based on user input
     this.buildProject();
+
+    this.project.materials = this.materials; // save values from form ngModel
+    this.project.labor = this.labor; // save values from form ngModel
 
     // save itemDetails objects to database
     fetch("http://localhost:8080/api/project/" + this.project.id + "/details", {
@@ -247,8 +248,6 @@ export class ProjectDetailsComponent implements OnInit {
     }).catch(function (error) {
       console.error('Error:', error);
     });
-
-    // TODO? Do Materials, Labor, and Estimate objects need to be added separately or will they just save with the project?
 
     // save entire Project object to database
     fetch("http://localhost:8080/api/project/" + this.project.id, {
