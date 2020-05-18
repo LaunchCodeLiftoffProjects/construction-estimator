@@ -13,7 +13,7 @@
                 <!--Name, type, and dimensions with edit button-->
                 <div *ngIf="!editingProject; else editProjectBlock" class="text-right">
                     <h4>{{project.name}} </h4>
-                    <p class="lead">{{project.roomType.toUpperCase()}}<br />
+                    <p class="lead">{{roomTitles[rooms.indexOf(project.roomType)]}}<br />
                     {{project.roomLength}}'L x {{project.roomWidth}}'W x {{project.roomHeight}}'H</p>
                     <span class = "badge badge-info" (click) = "editingProject = true;">Edit</span>
                 </div>
@@ -24,7 +24,7 @@
                         <label class="lead">Project Name <input #name="ngModel" [(ngModel)]="project.name"
                                 type="text" class="form-control form-control-sm" /></label>
                         <br />
-                        <span class="lead">Room Type </span>
+                        <span class="lead">Room Type: {{roomTitles[rooms.indexOf(project.roomType)]}} </span>
                         <div class = "form-group">
                             <div class="form-check indent-left" *ngFor="let room of rooms; let r = index">
                                 <label class="form-check-label"><input #roomType [(ngModel)]="project.roomType" (change)="createSelections()" [value]="rooms[r]" type="radio" class = "form-check-input" />{{roomTitles[r]}}</label>
@@ -38,8 +38,7 @@
                             <label><input #roomHeight="ngModel" [(ngModel)]="project.roomHeight" type="number" class="form-control form-control-sm" step="0.1" min = 0 /> Ceiling Height (ft.)</label>
                         </div>
                     </div>
-                    <span class="badge badge-success" (click) = "editingProject = false" >Save Changes</span>
-                    <!--What if they want to cancel the changes? Need to have a cancel button, but with ngModel not sure how to revert-->
+                    <span class="badge badge-success" (click) = "editingProject = false" >Done Editing</span>
                 </ng-template>
 
             </div>
@@ -56,7 +55,7 @@
                     <div class="input-group mt-1" *ngFor="let selection of selectionArray; let i = index">
                         <ng-container *ngIf="category === selection.category">
                             <div class="col-4">
-                                <label class="lead"><input #type="ngModel" [(ngModel)]="selectionArray[i].checked" type="checkbox" /> {{selection.type}}</label>
+                                <label class="lead"><input #type="ngModel" [(ngModel)]="selectionArray[i].checked" (change)="selectionArray[i].quantity = changeQuantity(selection, selectionArray[i].quantity)" type="checkbox" /> {{selection.type}}</label>
                             </div>
                             <div class = "col-4">
                                 <select #selected="ngModel" [(ngModel)]="selectionArray[i].selected" class="custom-select w-100">

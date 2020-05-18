@@ -26,7 +26,7 @@ export class ProjectDetailsComponent implements OnInit {
 
   itemsArray: Item[]; // to get all possible items (serves dual purpose - display and data for calculations)
 
-  rooms: string[] = [ "kitchen", "bathroom", "living" ];
+  rooms: string[] = [ "kitchen", "bath", "living" ];
   roomTitles: string[] = [ "Kitchen", "Bathroom", "Bedroom/Living/Other" ];
   categories: string[] = [ "appliance", "fixture", "finish" ];
   categoryTitles = [ "Appliances", "Fixtures", "Finishes" ];
@@ -68,7 +68,7 @@ export class ProjectDetailsComponent implements OnInit {
         this.project.itemDetails = json.itemDetails;
         // this.materials = json.materials; // null?
         // this.labor = json.labor; // null?
-        // do not need to load estimate for this page because a new one will be created from scratch
+        // do not need to load previous estimate because a new one will be created from scratch
         this.loadItems(); // put here so things load in order
         console.log("Items loaded.");
       }.bind(this));
@@ -92,7 +92,6 @@ export class ProjectDetailsComponent implements OnInit {
         console.log("Selection objects created.");
       }.bind(this));
     }.bind(this));
-
   }
 
   // helper function to locate item types already included in selectionArray as it is being filled
@@ -108,12 +107,12 @@ export class ProjectDetailsComponent implements OnInit {
   }
 
   // check to see if details have been saved to this project before or not, and create Selection objects accordingly
-  createSelections() { // right now this is not working properly if roomType is edited at top
-    this.selectionArray = []; // reset this array if method is called again prior to form submission due to roomType change
+  createSelections() {
+    this.selectionArray = []; // rebuild this array if method is called again prior to form submission due to roomType change
     let selection: Selection;
     let details: ItemDetails; 
     let item: Item;
-    if (this.project.itemDetails.length > 0) { // if project already has a saved itemDetails array
+    if (this.project.itemDetails.length > 0) { // if project already has a saved itemDetails array, get values
       for (let i=0; i < this.project.itemDetails.length; i++) {
         details = this.project.itemDetails[i];
         item = this.itemsArray[this.getItemByID(details.itemId)]; 
@@ -146,6 +145,15 @@ export class ProjectDetailsComponent implements OnInit {
     }
     optionsArray.sort((a, b) => (a.name > b.name) ? 1 : -1);
     return optionsArray;
+  }
+
+  // when item selection is checked in form, if zero, raise to 1
+  changeQuantity(selection: Selection, qty: number): number {
+    if (this.calcByQuantity.includes(selection.type) && selection.checked === true && qty === 0) {
+      return 1;
+    } else {
+      return qty;
+    }
   }
 
 
