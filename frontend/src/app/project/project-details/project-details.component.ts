@@ -176,7 +176,7 @@ export class ProjectDetailsComponent implements OnInit {
   // CALCULATE ESTIMATE
 
   // use data from original JSON file of all items to calculate for each selected item
-  calculateFinalPrice(item: Item, details: ItemDetails): number {
+  calculateFinalPrice(item: Item, selection: Selection): number {
     let itemCost: number;
     // TODO: calculate for one item based on quantity, linear feet, or square feet
     return itemCost;
@@ -219,7 +219,7 @@ export class ProjectDetailsComponent implements OnInit {
         item = this.itemsArray[this.getItemByID(id)];
         details = new ItemDetails(id); // create and set itemId property
         details.quantity = selection.quantity;
-        // details.finalPrice = calculateFinalPrice(item, details);
+        // details.finalPrice = calculateFinalPrice(item, selection);
         this.project.itemDetails.push(details);
         // this.buildEstimate(item, details.finalPrice);
       }
@@ -249,9 +249,39 @@ export class ProjectDetailsComponent implements OnInit {
       console.error('Error:', error);
     });
 
-    // TODO: save Materials object to project
+    // save Materials object to project
+    fetch("http://localhost:8080/api/project/" + this.project.id + "/materials", {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Credentials': 'true'
+      },
+      body: JSON.stringify(this.project.materials),
+    }).then(function (response) {
+      return response.json();
+    }).then(function (data) {
+      console.log('Success:', data);
+    }).catch(function (error) {
+      console.error('Error:', error);
+    });
 
-    // TODO: save Labor object to project
+    // save Labor object to project
+    fetch("http://localhost:8080/api/project/" + this.project.id + "/labor", {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Credentials': 'true'
+      },
+      body: JSON.stringify(this.project.labor),
+    }).then(function (response) {
+      return response.json();
+    }).then(function (data) {
+      console.log('Success:', data);
+    }).catch(function (error) {
+      console.error('Error:', error);
+    });
 
     // TODO: save Estimate object to project
 
