@@ -7,7 +7,6 @@ export class ItemDetails {
     quantity: number;
     finalPrice: number;
 
-
     constructor(id: number) {
         this.itemId = id;
         this.quantity = 0;
