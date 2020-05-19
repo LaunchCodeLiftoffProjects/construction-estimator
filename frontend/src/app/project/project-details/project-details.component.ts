@@ -32,6 +32,8 @@ export class ProjectDetailsComponent implements OnInit {
   categories: string[] = [ "appliance", "fixture", "finish" ];
   categoryTitles = [ "Appliances", "Fixtures", "Finishes" ];
 
+  selectionArray: Selection[] = []; // for facilitating data binding with item selections
+
   calcByQuantity: string[] = ['Dishwasher','Disposal','Microwave/Hood','Oven/Range','Refrigerator',
               'Bath & Shower', 'Ceiling Light/Fan', 'Electrical Outlets', 'Electrical Switches', 
               'Lighting', 'Shelving', 'Sink', 'Toilet', 'Doors', 'Cabinets, Lower', 'Cabinets, Upper', 
@@ -40,7 +42,12 @@ export class ProjectDetailsComponent implements OnInit {
   calcBySF: string[] = ['Flooring','Walls'];
   calcByCabinet: string[] = ['Backsplash','Countertop'];
               
-  selectionArray: Selection[] = []; // for facilitating data binding with item selections
+  factorIntoPlumbing: string[] = ['Dishwasher','Disposal','Refrigerator','Bath & Shower','Sink','Toilet'];
+  factorIntoElectrical: string[] = ['Dishwasher','Disposal','Microwave/Hood','Oven/Range','Refrigerator',
+              'Ceiling Light/Fan','Electrical Outlets','Electrical Switches','Lighting'];
+  factorIntoFinishWork: string[] = ['Shelving','Doors','Cabinets, Lower','Cabinets, Upper','Windows',
+              'Baseboards','Trim','Flooring','Walls','Backsplash','Countertop'];
+
 
   // materials: Materials;
   // labor: Labor;
@@ -94,7 +101,7 @@ export class ProjectDetailsComponent implements OnInit {
         this.itemsArray.sort((a, b) => (a.type > b.type) ? 1 : -1);
         this.createSelections(); // now that project and items have been loaded
         console.log("Selection objects created.");
-        this.dataLoaded = true;
+        this.dataLoaded = true; // allow page to render
       }.bind(this));
     }.bind(this));
   }
@@ -211,29 +218,59 @@ export class ProjectDetailsComponent implements OnInit {
   }
 
   // TODO: put realistic costs for each item into JSON file (keep in mind the calculation units)
+  // TODO: add material and labor factors to each item in JSON file???
 
   // assign factors and determine additional costs for materials needed
   calculateMaterials(selection: Selection): number {
-    let materialCost: number;
+    let materialCost: number = 0;
     // TODO: calculate additional cost for materials needed for an item
     return materialCost;
   }
 
   // assign factors and determine additional costs for labor needed
   calculateLabor(selection: Selection): number {
-    let laborCost: number;
+    let laborCost: number = 0;
     // TODO: calculate additional cost for materials needed for an item
     return laborCost;
   }
 
   // build estimate object as each item is calculated
-  buildEstimate(item: Item, cost: number) {
-    // TODO: check each item for category and add cost to matching subtotals
-    // call all three calculation helper methods (maybe do this differently since that would calculate per item cost twice)
+  buildEstimate(selection: Selection, cost: number) {
+    // check each item for category and add cost to matching subtotals
+    if (selection.category === 'appliance') {
+      this.estimate.appliancesCost += cost;
+    } else if (selection.category === 'fixture') {
+      this.estimate.fixturesCost += cost;
+    } else if (selection.category === 'finish') {
+      this.estimate.finishesCost += cost;
+    }
+    // add any related materials cost
+    // FIXME: this needs to account for situations where both plumbing and electrical may be involved
+    if (this.materials.needPlumbingSystem === true && this.factorIntoPlumbing.includes(selection.type)) {
+      this.estimate.materialsCost += this.calculateMaterials(selection);
+    }
+    if (this.materials.needElectricalSystem === true && this.factorIntoElectrical.includes(selection.type)) {
+      this.estimate.materialsCost += this.calculateMaterials(selection);
+    }
+    // Note: framing and drywall costs added separately since not tied to specific items, just dimensions of room
+
+    // add any related labor cost
+    // FIXME: this needs to account for situations where both plumbing and electrical may be involved
+    if (this.labor.needPlumbingSub === true && this.factorIntoPlumbing.includes(selection.type)) {
+      this.estimate.laborCost += this.calculateLabor(selection);
+    }
+    if (this.labor.needElectricalSub === true && this.factorIntoElectrical.includes(selection.type)) {
+      this.estimate.laborCost += this.calculateLabor(selection);
+    }
+    // Note: rough carpentry costs added separately since not tied to specific items, just dimensions of room
+    if (this.labor.needFinishWork === true && this.factorIntoFinishWork.includes(selection.type)) {
+      this.estimate.laborCost += this.calculateLabor(selection);
+    }
+  
   }
 
 
-  // BUILD PROJECT OBJECT AND SAVE ALL OBJECTS TO DATABASE
+  // BUILD PROJECT AND SAVE ALL OBJECTS TO DATABASE
 
   // iterate through selectionArray, build itemDetails array and Estimate object
   buildProject() {
@@ -251,9 +288,12 @@ export class ProjectDetailsComponent implements OnInit {
         details.quantity = selection.quantity;
         details.finalPrice = this.calculateFinalPrice(item, selection);
         this.project.itemDetails.push(details);
-        // this.buildEstimate(item, details.finalPrice);
+        this.buildEstimate(selection, details.finalPrice);
       }
     }
+    // TODO: add framing and drywall costs one time separately since not tied to specific items, just dimensions of room
+    // TODO: add rough carpentry cost one time separately since not tied to specific items, just dimensions of room
+
   }
 
   // called only when submit button is clicked - processes input and sends everything to database
