@@ -9,35 +9,31 @@ import java.util.List;
 
 public class ProjectDetailsRequest {
 
-    private List<ItemDetails> itemDetailsList;
+    private List<ItemDetails> itemDetails = new ArrayList<>();
 
     private Labor labor;
     private Materials materials;
 
-    public ProjectDetailsRequest(List<ItemDetails> itemDetailsList, Labor labor, Materials materials) {
-        this.itemDetailsList = itemDetailsList;
-        this.labor = labor;
-        this.materials = materials;
-    }
+    public ProjectDetailsRequest() {}
 
     public List<ItemDetails> getItemDetailsList() {
-        return itemDetailsList;
-    }
-
-    public void setItemDetailsList(List<ItemDetails> itemDetailsList) {
-        this.itemDetailsList = itemDetailsList;
+        return itemDetails;
     }
 
     public Labor getLabor() {
         return labor;
     }
 
-    public void setLabor(Labor labor) {
-        this.labor = labor;
-    }
-
     public Materials getMaterials() {
         return materials;
+    }
+
+    public void setItemDetails(List<ItemDetails> itemDetails) {
+        this.itemDetails = itemDetails;
+    }
+
+    public void setLabor(Labor labor) {
+        this.labor = labor;
     }
 
     public void setMaterials(Materials materials) {

@@ -247,7 +247,7 @@ export class ProjectDetailsComponent implements OnInit {
     this.buildProject();
     let projectDetailsPayload = new ProjectDetailsPayload(this.project.itemDetails, this.project.labor, this.project.materials);
 
-    console.log(projectDetailsPayload);
+    console.log(JSON.stringify(projectDetailsPayload));
 
     // save itemDetails objects to database
     fetch("http://localhost:8080/api/project/" + this.project.id + "/details", {
