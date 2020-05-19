@@ -17,6 +17,8 @@ public class Labor extends AbstractEntity {
     @JsonBackReference
     private Project project;
 
+    public Labor() {}
+
     public boolean isNeedPlumbingSub() {
         return needPlumbingSub;
     }

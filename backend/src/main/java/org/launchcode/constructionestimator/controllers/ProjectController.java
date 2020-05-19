@@ -42,6 +42,9 @@ public class ProjectController {
     @PostMapping
     public ResponseEntity postProject(@RequestBody Project project) {
 
+        project.setLabor(null);
+        project.setMaterials(null);
+
         projectRepository.save(project);
 
         Integer id = project.getId();

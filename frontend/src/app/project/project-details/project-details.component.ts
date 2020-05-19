@@ -8,6 +8,7 @@ import { FormsModule } from '@angular/forms';
 import { Materials } from 'src/app/materials';
 import { Labor } from 'src/app/labor';
 import { Estimate } from 'src/app/estimate';
+import { ProjectDetailsPayload } from 'src/app/project-details-payload'
 
 
 @Component({
@@ -43,8 +44,8 @@ export class ProjectDetailsComponent implements OnInit {
 
   // materials: Materials;
   // labor: Labor;
-  materials: Materials = new Materials; // had to initialize to new instance because project object is bringing null objects
-  labor: Labor = new Labor; // had to initialize to new instance because project object is bringing null objects
+  materials: Materials; // had to initialize to new instance because project object is bringing null objects
+  labor: Labor; // had to initialize to new instance because project object is bringing null objects
 
   estimate: Estimate = new Estimate; // not needed for modeling but for calculations
   
@@ -69,8 +70,8 @@ export class ProjectDetailsComponent implements OnInit {
         this.project = new Project(json.name, json.roomType, json.roomLength, json.roomWidth, json.roomHeight);
         this.project.id = json.id;
         this.project.itemDetails = json.itemDetails;
-        // this.materials = json.materials; // null?
-        // this.labor = json.labor; // null?
+        this.materials = json.materials === null ? new Materials : json.materials;
+        this.labor = json.labor === null ? new Labor : json.labor;
         // do not need to load previous estimate because a new one will be built from scratch
         this.loadItems(); // put here so things load in order
         console.log("Items loaded.");
@@ -244,6 +245,9 @@ export class ProjectDetailsComponent implements OnInit {
 
     // create ItemDetails array and run calculations for estimate based on user input
     this.buildProject();
+    let projectDetailsPayload = new ProjectDetailsPayload(this.project.itemDetails, this.project.labor, this.project.materials);
+
+    console.log(projectDetailsPayload);
 
     // save itemDetails objects to database
     fetch("http://localhost:8080/api/project/" + this.project.id + "/details", {
@@ -253,7 +257,7 @@ export class ProjectDetailsComponent implements OnInit {
         'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Credentials': 'true'
       },
-      body: JSON.stringify(this.project.itemDetails),
+      body: JSON.stringify(projectDetailsPayload),
     }).then(function (response) {
       return response.json();
     }).then(function (data) {
