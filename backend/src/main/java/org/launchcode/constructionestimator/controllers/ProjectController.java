@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.constraints.NotNull;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Optional;
@@ -35,10 +36,9 @@ public class ProjectController {
     @Autowired
     UserAuthService userAuthService;
 
-    // Use this with @RequestParam to search all projects by field, leave params empty to return all projects
     @GetMapping
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<?> getProjects(@RequestParam int userId, @RequestHeader HttpHeaders headers) {
+    public ResponseEntity<?> getProjects(@RequestParam @NotNull int userId, @RequestHeader HttpHeaders headers) {
 
         String headerAuth = headers.getFirst("Authorization");
 
