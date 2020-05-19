@@ -35,10 +35,10 @@ export class ProjectDetailsComponent implements OnInit {
               'Bath & Shower', 'Ceiling Light/Fan', 'Electrical Outlets', 'Electrical Switches', 
               'Lighting', 'Shelving', 'Sink', 'Toilet', 'Doors', 'Cabinets, Lower', 'Cabinets, Upper', 
               'Windows'];
-  calcByLF: string[] = ['Backsplash','Baseboards','Countertop','Trim'];
+  calcByLF: string[] = ['Baseboards','Trim'];
   calcBySF: string[] = ['Flooring','Walls'];
+  calcByCabinet: string[] = ['Backsplash','Countertop'];
               
-
   selectionArray: Selection[] = []; // for facilitating data binding with item selections
 
   // materials: Materials;
@@ -98,12 +98,12 @@ export class ProjectDetailsComponent implements OnInit {
     }.bind(this));
   }
 
-  // helper function to locate item types already included in selectionArray as it is being filled
-  locateSelection(item: Item): number {
+  // locate item types already included in selectionArray as it is being filled
+  locateSelection(type: string): number {
     let selection: Selection;
     for (let i=0; i<this.selectionArray.length; i++) {
       selection = this.selectionArray[i];
-      if (selection.type === item.type) {
+      if (selection.type === type) {
         return i;
       } 
     }
@@ -129,7 +129,7 @@ export class ProjectDetailsComponent implements OnInit {
     // create Selection objects for any types not previously saved to project
     for (let j=0; j < this.itemsArray.length; j++) {
       item = this.itemsArray[j];
-      if (item.room.includes(this.project.roomType) && this.locateSelection(item) === -1) {
+      if (item.room.includes(this.project.roomType) && this.locateSelection(item.type) === -1) {
         selection = new Selection(item.category, item.type, false); // default to initialized values for 'selected' & 'quantity'
         this.selectionArray.push(selection);
       }
@@ -189,9 +189,23 @@ export class ProjectDetailsComponent implements OnInit {
 
   // use data from original JSON file of all items to calculate for each selected item
   calculateFinalPrice(item: Item, selection: Selection): number {
-    let itemCost: number;
-    // TODO: calculate for one item based on quantity, linear feet, or square feet
-
+    let itemCost: number = 0;
+    let perimeter = 2 * this.project.roomLength + 2 * this.project.roomWidth;
+    let wall = perimeter * this.project.roomHeight;
+    let area = this.project.roomLength * this.project.roomWidth;
+    if (this.calcByQuantity.includes(item.type)) {
+      itemCost = selection.quantity * item.price;
+    } else if (this.calcByLF.includes(item.type)) {
+      itemCost = perimeter * item.price;
+    } else if (this.calcByCabinet.includes(item.type)) {
+      let index = this.locateSelection("Cabinets, Lower");
+      let selection = this.selectionArray[index];
+      itemCost = selection.quantity * 2 * item.price; // right now if no lower cabinets have beens selected, this will result in 0
+    } else if (item.type === "Wall") {
+      itemCost = wall * item.price;
+    } else if (item.type === "Flooring") { 
+      itemCost = area * item.price;
+    }
     return itemCost;
   }
 
