@@ -22,6 +22,7 @@ export class ProjectDetailsComponent implements OnInit {
   project: Project;
   projectURL = "http://localhost:8080/api/project/";
   id: string; // project ID
+  dataLoaded: boolean = false; // to prevent page from rendering before project, items, and selections are ready
   editingProject: boolean = false; // for editing basic project info at top right of page
 
   itemsArray: Item[]; // to get all possible items (serves dual purpose - display and data for calculations)
@@ -93,7 +94,7 @@ export class ProjectDetailsComponent implements OnInit {
         this.itemsArray.sort((a, b) => (a.type > b.type) ? 1 : -1);
         this.createSelections(); // now that project and items have been loaded
         console.log("Selection objects created.");
-        // TODO: toggle boolean to allow page to display
+        this.dataLoaded = true;
       }.bind(this));
     }.bind(this));
   }
@@ -187,7 +188,7 @@ export class ProjectDetailsComponent implements OnInit {
 
   // CALCULATE ESTIMATE
 
-  // use data from original JSON file of all items to calculate for each selected item
+  // calculate for each selected item based on quantity or measurements
   calculateFinalPrice(item: Item, selection: Selection): number {
     let itemCost: number = 0;
     let perimeter = 2 * this.project.roomLength + 2 * this.project.roomWidth;
@@ -198,8 +199,8 @@ export class ProjectDetailsComponent implements OnInit {
     } else if (this.calcByLF.includes(item.type)) {
       itemCost = perimeter * item.price;
     } else if (this.calcByCabinet.includes(item.type)) {
-      let index = this.locateSelection("Cabinets, Lower");
-      let selection = this.selectionArray[index];
+      let index: number = this.locateSelection("Cabinets, Lower");
+      let selection: Selection = this.selectionArray[index];
       itemCost = selection.quantity * 2 * item.price; // right now if no lower cabinets have beens selected, this will result in 0
     } else if (item.type === "Wall") {
       itemCost = wall * item.price;
@@ -208,6 +209,8 @@ export class ProjectDetailsComponent implements OnInit {
     }
     return itemCost;
   }
+
+  // TODO: put realistic costs for each item into JSON file (keep in mind the calculation units)
 
   // assign factors and determine additional costs for materials needed
   calculateMaterials(selection: Selection): number {
@@ -246,7 +249,7 @@ export class ProjectDetailsComponent implements OnInit {
         item = this.itemsArray[this.getItemByID(id)];
         details = new ItemDetails(id); // create and set itemId property
         details.quantity = selection.quantity;
-        // details.finalPrice = calculateFinalPrice(item, selection);
+        details.finalPrice = this.calculateFinalPrice(item, selection);
         this.project.itemDetails.push(details);
         // this.buildEstimate(item, details.finalPrice);
       }

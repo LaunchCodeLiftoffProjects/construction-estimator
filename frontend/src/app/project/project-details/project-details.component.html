@@ -1,5 +1,4 @@
-<div class="container">
-    <!--TODO: use ngIf to display only after data loads-->
+<div class="container" *ngIf="dataLoaded">
 
     <!--Nested container with divs side-by-side to move project name, type, and dimensions to top right-->
     <div class="container mt-5">
@@ -77,7 +76,7 @@
         </ng-container>
         <br />
 
-        <h4 class="mt-5">Materials</h4>
+        <h4 class="mt-4">Materials</h4>
         <div class="form-group">
             <p class="lead">Will you be adding or replacing any of the following?</p>
             <label class = "checkbox"><input #plumbingSystem="ngModel" [(ngModel)]="materials.needPlumbingSystem" type="checkbox" /> Plumbing System</label>
@@ -87,7 +86,7 @@
         </div>
         <br />
 
-        <h4 class="mt-5">Labor</h4>
+        <h4 class="mt-4">Labor</h4>
         <div class="form-group">
             <p class="lead">Will you be hiring any subcontractors?</p>
             <label class = "checkbox"><input #plumbing="ngModel" [(ngModel)]="labor.needPlumbingSub"  type="checkbox" /> Plumbing</label>
