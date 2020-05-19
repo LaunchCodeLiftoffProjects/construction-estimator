@@ -51,12 +51,12 @@ public class ProjectController {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
 
-
     }
 
     @GetMapping("/{projectId}")
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<?> getProjectById(@PathVariable("projectId") int projectId, @RequestHeader HttpHeaders headers) {
+    public ResponseEntity<?> getProjectById(@PathVariable("projectId") int projectId,
+                                            @RequestHeader HttpHeaders headers) {
 
         String headerAuth = headers.getFirst("Authorization");
         Optional<Project> projectOptional = projectRepository.findById(projectId);
