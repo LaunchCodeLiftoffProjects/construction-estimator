@@ -80,4 +80,19 @@ public class Project extends NamedEntity {
         this.user = user;
     }
 
+    public Labor getLabor() {
+        return labor;
+    }
+
+    public void setLabor(Labor labor) {
+        this.labor = labor;
+    }
+
+    public Materials getMaterials() {
+        return materials;
+    }
+
+    public void setMaterials(Materials materials) {
+        this.materials = materials;
+    }
 }
