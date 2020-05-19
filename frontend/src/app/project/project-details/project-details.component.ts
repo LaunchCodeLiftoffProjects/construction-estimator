@@ -36,7 +36,7 @@ export class ProjectDetailsComponent implements OnInit {
               'Lighting', 'Shelving', 'Sink', 'Toilet', 'Doors', 'Cabinets, Lower', 'Cabinets, Upper', 
               'Windows'];
   calcByLF: string[] = ['Backsplash','Baseboards','Countertop','Trim'];
-  calcBySF: string[] = ['Flooring','Specialty','Walls'];
+  calcBySF: string[] = ['Flooring','Walls'];
               
 
   selectionArray: Selection[] = []; // for facilitating data binding with item selections

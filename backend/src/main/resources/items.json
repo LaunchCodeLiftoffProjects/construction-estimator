@@ -599,40 +599,6 @@
         "price": 926
     },
     {
-        "id": 51,
-        "name": "Fire suppression system",
-        "room": [
-            "kitchen",
-            "bath",
-            "living"
-        ],
-        "category": "fixture",
-        "type": "Specialty",
-        "price": 139
-    },
-    {
-        "id": 52,
-        "name": "Heated flooring",
-        "room": [
-            "kitchen",
-            "bath",
-            "living"
-        ],
-        "category": "fixture",
-        "type": "Specialty",
-        "price": 685
-    },
-    {
-        "id": 53,
-        "name": "Sound system",
-        "room": [
-            "living"
-        ],
-        "category": "fixture",
-        "type": "Specialty",
-        "price": 1592
-    },
-    {
         "id": 54,
         "name": "Painted wood",
         "room": [
