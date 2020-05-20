@@ -15,7 +15,7 @@ export class Selection {
         this.type = type;
         this.checked = checked ? checked : false;
         this.selected = selected; // until selection is made from drop-down box or details are returned from saved project
-        this.quantity = quantity; // if item is one that is based on SF or LF, calculations will change this, not form
+        this.quantity = quantity; // if item is one that is based on SF or LF, calculations will ignore this
     }
 
 }
