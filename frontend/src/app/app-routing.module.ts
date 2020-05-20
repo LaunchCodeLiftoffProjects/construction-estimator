@@ -11,6 +11,9 @@ import { ProjectDetailsComponent } from './project/project-details/project-detai
 import { ProjectListComponent } from './project/project-list/project-list.component';
 import { EditProjectComponent } from './project/edit-project/edit-project.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
+import { BoardUserComponent } from './board-user/board-user.component';
+import { BoardModeratorComponent } from './board-moderator/board-moderator.component';
+import { BoardAdminComponent } from './board-admin/board-admin.component';
 
 const routes: Routes = [
   {path: 'login' , component: LoginComponent},
@@ -23,6 +26,10 @@ const routes: Routes = [
   {path: 'project/list', component: ProjectListComponent},
   {path: 'project/edit' , component: EditProjectComponent},
   {path: '**', component: PageNotFoundComponent},
+  { path: 'user', component: BoardUserComponent },
+  { path: 'mod', component: BoardModeratorComponent },
+  { path: 'admin', component: BoardAdminComponent },
+  { path: '', redirectTo: 'home', pathMatch: 'full' }
 ];
 
 @NgModule({
