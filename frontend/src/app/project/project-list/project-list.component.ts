@@ -10,20 +10,27 @@ import { TokenStorageService } from 'src/app/_services/token-storage.service';
 })
 export class ProjectListComponent implements OnInit {
 
-  projectUrl = "http://localhost:8080/api/project/";
-  id: number;
-  project: Project[]
+  projectUrl = "http://localhost:8080/api/project";
+  userId: number;
+  projects: Project[]
 
-  constructor(private tokenStorage: TokenStorageService) { }
+  constructor(private tokenStorageService: TokenStorageService) { }
 
   ngOnInit() {
-    this.id = this.tokenStorage.getUser().id;
-    this.projectUrl += this.id;
+    this.userId = this.tokenStorageService.getUser().id;
     this.loadProject();
   }
 
   loadProject() {
-    fetch(this.projectUrl).then(function(response) {
+    fetch(this.projectUrl + "?userId=" + this.userId, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Credentials': 'true',
+        'Authorization': 'Barer ' + this.tokenStorageService.getToken()
+      }
+    }).then(function(response) {
       response.json().then(function(json) {
         let refreshProject: Project[] = [];
         json.forEach(obj => {

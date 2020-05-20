@@ -8,6 +8,7 @@ import { FormsModule } from '@angular/forms';
 import { Materials } from 'src/app/materials';
 import { Labor } from 'src/app/labor';
 import { Estimate } from 'src/app/estimate';
+import { TokenStorageService } from 'src/app/_services/token-storage.service';
 
 
 @Component({
@@ -23,6 +24,12 @@ export class ProjectDetailsComponent implements OnInit {
   projectURL = "http://localhost:8080/api/project/";
   id: string; // project ID
   editingProject: boolean = false; // for editing basic project info at top right of page
+  private roles: string[];
+  isLoggedIn = false;
+  showAdminBoard = false;
+  showModeratorBoard = false;
+  username: string;
+  userId: number;
 
   itemsArray: Item[]; // to get all possible items (serves dual purpose - display and data for calculations)
 
@@ -48,11 +55,24 @@ export class ProjectDetailsComponent implements OnInit {
 
   estimate: Estimate = new Estimate; // not needed for modeling but for calculations
   
-  constructor(private route: ActivatedRoute) { }
+  constructor(private route: ActivatedRoute, private tokenStorageService: TokenStorageService) { }
 
   ngOnInit() {
     this.id = this.route.snapshot.paramMap.get("id");
     console.log("Id", this.id);
+    this.isLoggedIn = !!this.tokenStorageService.getToken();
+
+    if (this.isLoggedIn) {
+      const user = this.tokenStorageService.getUser();
+      this.roles = user.roles;
+
+      this.showAdminBoard = this.roles.includes('ROLE_ADMIN');
+      this.showModeratorBoard = this.roles.includes('ROLE_MODERATOR');
+
+      this.username = user.name;
+      this.userId = user.id;
+      console.log("id", this.userId);
+    }
     this.projectURL = this.projectURL + this.id;
     this.loadProject();
     console.log("Project Loaded");
@@ -64,7 +84,15 @@ export class ProjectDetailsComponent implements OnInit {
   // get project object from database (and any saved information from previous session if not first time)
   loadProject() {
 
-    fetch(this.projectURL).then(function (response) {
+    fetch(this.projectURL, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Credentials': 'true',
+        'Authorization': 'Barer ' + this.tokenStorageService.getToken()
+      }
+    }).then(function (response) {
       response.json().then(function (json) {
         this.project = new Project(json.name, json.roomType, json.roomLength, json.roomWidth, json.roomHeight);
         this.project.id = json.id;
@@ -251,7 +279,8 @@ export class ProjectDetailsComponent implements OnInit {
       headers: {
         'Content-Type': 'application/json',
         'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Credentials': 'true'
+        'Access-Control-Allow-Credentials': 'true',
+        'Authorization': 'Barer ' + this.tokenStorageService.getToken()
       },
       body: JSON.stringify(this.project.itemDetails),
     }).then(function (response) {
@@ -274,7 +303,8 @@ export class ProjectDetailsComponent implements OnInit {
       headers: {
         'Content-Type': 'application/json',
         'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Credentials': 'true'
+        'Access-Control-Allow-Credentials': 'true',
+        'Authorization': 'Barer ' + this.tokenStorageService.getToken()
       },
       body: JSON.stringify(this.project),
     }).then(function (response) {

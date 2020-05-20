@@ -101,7 +101,7 @@ public class ProjectController {
     // returns json in form { "id": "project.id" }
     // this is probably unnecessary but left it for consistency with the post mapping
     @PutMapping("/{projectId}")
-    @PreAuthorize("HasRole('USER')")
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<?> updateProject(@PathVariable("projectId") int projectId, @RequestBody Project project,
                                            @RequestHeader HttpHeaders headers) {
 
