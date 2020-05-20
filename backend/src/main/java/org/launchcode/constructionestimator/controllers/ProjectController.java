@@ -42,6 +42,7 @@ public class ProjectController {
     @PostMapping
     public ResponseEntity postProject(@RequestBody Project project) {
 
+        // TODO: Figure out if this is even necessary
         project.setLabor(null);
         project.setMaterials(null);
 
@@ -63,6 +64,8 @@ public class ProjectController {
         } else {
             projectRepository.save(project);
 
+            //TODO: Check this as well
+
             Integer id = projectId;
             Map<String, String> map = Collections.singletonMap("id", id.toString());
             return new ResponseEntity(map, HttpStatus.OK);
@@ -83,6 +86,8 @@ public class ProjectController {
             for (ItemDetails itemDetails : project.getItemDetails()) {
                 itemDetailsRepository.deleteById(itemDetails.getId());
             }
+
+            //TODO: Delete Labor and Materials entities
 
             // lastly delete the project
             projectRepository.deleteById(projectId);

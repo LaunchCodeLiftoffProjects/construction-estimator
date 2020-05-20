@@ -14,7 +14,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Optional;
 
@@ -43,6 +42,8 @@ public class ProjectDetailsController {
         if(projectOptional.isEmpty()) {
             return new ResponseEntity(HttpStatus.NOT_FOUND);
         } else {
+
+            //TODO: Verify all of this
 
             // pull out each component from projectDetails request
             Labor labor = projectDetails.getLabor();
