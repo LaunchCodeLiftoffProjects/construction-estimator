@@ -34,7 +34,6 @@ export class RegisterComponent implements OnInit {
 
     let user = new User(firstName, lastName, email, password, null, []);
     console.log("saved user", user);
-    // TODO: POST TO SERVER
     fetch('http://localhost:8080/api/user', {
       method: 'POST',
       headers: {

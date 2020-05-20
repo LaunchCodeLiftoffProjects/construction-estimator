@@ -17,6 +17,8 @@ public class Materials extends AbstractEntity {
     @JsonBackReference
     private Project project;
 
+    public Materials() {}
+
     public boolean isNeedPlumbingSystem() {
         return needPlumbingSystem;
     }

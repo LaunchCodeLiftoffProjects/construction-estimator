@@ -1,10 +1,14 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Project } from 'src/app/project';
 import { Item } from 'src/app/item';
+import { Selection } from 'src/app/selection';
 import { ItemDetails } from 'src/app/item-details';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-
+import { Materials } from 'src/app/materials';
+import { Labor } from 'src/app/labor';
+import { Estimate } from 'src/app/estimate';
+import { ProjectDetailsPayload } from 'src/app/project-details-payload'
 
 
 @Component({
@@ -12,7 +16,6 @@ import { FormsModule } from '@angular/forms';
   templateUrl: './project-details.component.html',
   styleUrls: ['./project-details.component.css']
 })
-
 
 
 export class ProjectDetailsComponent implements OnInit {
@@ -24,27 +27,36 @@ export class ProjectDetailsComponent implements OnInit {
 
   itemsArray: Item[]; // to get all possible items (serves dual purpose - display and data for calculations)
 
-  categories = [ "appliance", "fixture", "finish" ];
+  rooms: string[] = [ "kitchen", "bath", "living" ];
+  roomTitles: string[] = [ "Kitchen", "Bathroom", "Bedroom/Living/Other" ];
+  categories: string[] = [ "appliance", "fixture", "finish" ];
   categoryTitles = [ "Appliances", "Fixtures", "Finishes" ];
 
-  needsQuantity: string[] = ['Dishwasher','Disposal','Microwave/Hood','Oven/Range','Refrigerator',
+  calcByQuantity: string[] = ['Dishwasher','Disposal','Microwave/Hood','Oven/Range','Refrigerator',
               'Bath & Shower', 'Ceiling Light/Fan', 'Electrical Outlets', 'Electrical Switches', 
-              'Lighting', 'Sink', 'Specialty', 'Toilet', 'Doors', 'Lower Cabinets', 'Upper Cabinets', 
+              'Lighting', 'Shelving', 'Sink', 'Toilet', 'Doors', 'Cabinets, Lower', 'Cabinets, Upper', 
               'Windows'];
+  calcByLF: string[] = ['Backsplash','Baseboards','Countertop','Trim'];
+  calcBySF: string[] = ['Flooring','Specialty','Walls'];
+              
 
-  currentID: number = 1;
+  selectionArray: Selection[] = []; // for facilitating data binding with item selections
+
+  // materials: Materials;
+  // labor: Labor;
+  materials: Materials; // had to initialize to new instance because project object is bringing null objects
+  labor: Labor; // had to initialize to new instance because project object is bringing null objects
+
+  estimate: Estimate = new Estimate; // not needed for modeling but for calculations
   
   constructor(private route: ActivatedRoute) { }
 
   ngOnInit() {
     this.id = this.route.snapshot.paramMap.get("id");
-
     console.log("Id", this.id);
-
     this.projectURL = this.projectURL + this.id;
     this.loadProject();
     console.log("Project Loaded");
-
   }
 
 
@@ -58,45 +70,19 @@ export class ProjectDetailsComponent implements OnInit {
         this.project = new Project(json.name, json.roomType, json.roomLength, json.roomWidth, json.roomHeight);
         this.project.id = json.id;
         this.project.itemDetails = json.itemDetails;
-        this.loadItems(); // should problem move this to ngOnInit() since it is independent of project object
+        this.materials = json.materials === null ? new Materials : json.materials;
+        this.labor = json.labor === null ? new Labor : json.labor;
+        // do not need to load previous estimate because a new one will be built from scratch
+        this.loadItems(); // put here so things load in order
         console.log("Items loaded.");
       }.bind(this));
     }.bind(this));
-
-  }
-
-
-  // UPDATE BASIC PROJECT INFO AT TOP OF PAGE (IF EDITING)
-
-  updateProjectName(name: string) {
-    this.project.name = name;
-    console.log("changed project name:", this.project.name);
-  }
-
-  updateProjectRoomType(event: any) {
-    this.project.roomType = event.target.value;;
-    console.log("changed project room type:", this.project.roomType);
-  }
-
-  updateProjectRoomLength(roomLength: number) {
-    this.project.roomLength = roomLength;
-    console.log("changed project room length:", this.project.roomLength);
-  }
-
-  updateProjectRoomWidth(roomWidth: number) {
-    this.project.roomWidth = roomWidth;
-    console.log("changed project room width:", this.project.roomWidth);
-  }
-
-  updateProjectRoomHeight(roomHeight: number) {
-    this.project.roomHeight = roomHeight;
-    console.log("changed project room height:", this.project.roomHeight);
   }
 
 
   // GET BASIC ITEMS AND PROPERTIES FOR DISPLAY 
 
-  // get all possible items that could be displayed and selected
+  // get all possible items that could be displayed and selected from JSON file
   loadItems() {
     fetch("http://localhost:8080/api/item/").then(function (response) {
       response.json().then(function (json) {
@@ -106,32 +92,59 @@ export class ProjectDetailsComponent implements OnInit {
           this.itemsArray.push(item);
         });
         this.itemsArray.sort((a, b) => (a.type > b.type) ? 1 : -1);
+        this.createSelections(); // now that project and items have been loaded
+        console.log("Selection objects created.");
+        // TODO: toggle boolean to allow page to display
       }.bind(this));
     }.bind(this));
-
   }
 
-  // for each roomType and category, build a list of unduplicated types to display
-  getTypes(itemRoom: string, itemCat: string): string[] {
-    let typesArray: string[] = [];
+  // helper function to locate item types already included in selectionArray as it is being filled
+  locateSelection(item: Item): number {
+    let selection: Selection;
+    for (let i=0; i<this.selectionArray.length; i++) {
+      selection = this.selectionArray[i];
+      if (selection.type === item.type) {
+        return i;
+      } 
+    }
+    return -1; // if not found
+  }
+
+  // check to see if details have been saved to this project before or not, and create Selection objects accordingly
+  createSelections() {
+    this.selectionArray = []; // rebuild this array if method is called again prior to form submission due to roomType change
+    let selection: Selection;
+    let details: ItemDetails; 
     let item: Item;
-    for (let i=0; i < this.itemsArray.length; i++) {
-      item = this.itemsArray[i];
-      if (item.room.includes(itemRoom) && item.category === itemCat && ! typesArray.includes(item.type)) {
-        typesArray.push(item.type);
+    if (this.project.itemDetails.length > 0) { // if project already has a saved itemDetails array, get values
+      for (let i=0; i < this.project.itemDetails.length; i++) {
+        details = this.project.itemDetails[i];
+        item = this.itemsArray[this.getItemByID(details.itemId)]; 
+        if (item.room.includes(this.project.roomType)) { // if the room type has been changed for some reason
+          selection = new Selection(item.category, item.type, true, item.name, details.quantity);
+          this.selectionArray.push(selection);
+        }
       }
-  }
-    return typesArray;
-  }
-  
+    }
+    // create Selection objects for any types not previously saved to project
+    for (let j=0; j < this.itemsArray.length; j++) {
+      item = this.itemsArray[j];
+      if (item.room.includes(this.project.roomType) && this.locateSelection(item) === -1) {
+        selection = new Selection(item.category, item.type, false); // default to initialized values for 'selected' & 'quantity'
+        this.selectionArray.push(selection);
+      }
+    }
+    this.selectionArray.sort((a, b) => (a.type > b.type) ? 1 : -1);
+  }  
 
-  // for each type, build a list of available options to display for dropdown lists
-  getOptions(itemType: string, itemRoom: string) {
+  // for each type, build a list of available options to display for dropdown lists - string value will save upon form submission
+  getOptions(itemType: string) {
     let optionsArray = [];
     let item: Item;
     for (let i=0; i < this.itemsArray.length; i++) {
       item = this.itemsArray[i];
-      if (item.type === itemType && item.room.includes(itemRoom)) {
+      if (item.type === itemType && item.room.includes(this.project.roomType)) {
         optionsArray.push(item);
       }
     }
@@ -139,129 +152,104 @@ export class ProjectDetailsComponent implements OnInit {
     return optionsArray;
   }
 
-  // look to see if an item is already included in the project and should be checked by default
-  locateItem(itemType: string): boolean { 
-      if (this.findItemDetails(itemType) === null) {
-        return false;
-      } else {
-        return true
+  // when item selection is checked in form, if zero, raise to 1
+  changeQuantity(selection: Selection, qty: number): number {
+    if (this.calcByQuantity.includes(selection.type) && selection.checked === true && qty === 0) {
+      return 1;
+    } else {
+      return qty;
     }
   }
 
-  // THIS IS NOT WORKING - need different approach (most research says to use ngModel but...)
-  // getSelection(itemType: string): string {
-  //   let result = this.getItem(itemType);
-  //   if (result[0] !== null) {
-  //     return "(Select an option)";
-  //   } else {
-  //     return result[0].name;
-  //   }
-  // }
 
-  // getQuantity(itemType: string): number {
-  //   let result = this.getItem(itemType);
-  //   if (result[1] === null) {
-  //     return 0;
-  //   } else {
-  //     return result[1].quantity;
-  //   }
-  // }
+  // GETTERS
 
-
-  
-  // GET INFO ON MATERIALS & LABOR FOR CALCULATIONS
-
-  // need to set this up
-
-
-
-  // UPON FORM SUBMISSION, GATHER SELECTED ITEMS, CALCULATE, AND SAVE TO PROJECT
-
-  // look to see if itemDetails object already exists in project itemsDetails array
-  findItemDetails(itemType: string): ItemDetails {
-    if (this.project.itemDetails.length > 0) {
-      for (let i=0; i < this.itemsArray.length; i++) {
-        let item: Item;
-        let details: ItemDetails;
-        for (let j=0; j < this.project.itemDetails.length; j++) {
-          item = this.itemsArray[i];
-          details = this.project.itemDetails[j]
-          // check all available items in itemsArray with current type against item IDs saved in project.itemDetails
-          if (item.type === itemType && item.id === details.itemId) {
-            return details;
-          }
-        }
-      }
-    }
-    return null; // if not found
-  }
-
-  getItemByTypeAndName(itemType: string, name: string): Item {
+  getItemByID(itemID: number): number {
     let item: Item;
     for (let i=0; i < this.itemsArray.length; i++) {
       item = this.itemsArray[i];
-      if (item.type === itemType && item.name === name) {
-        return item;
+      if (item.id === itemID) {
+        return i;
       }
     }
-    return null;
+    return -1;
   }
 
-  //get fresh ID number for new ItemDetails items - can't remember how this is supposed to happen otherwise
-  getID(): number {
-    this.currentID++;
-    return this.currentID;
+  getItemIdByName(name: string): number {
+    let item: Item;
+    for (let i=0; i < this.itemsArray.length; i++) {
+      item = this.itemsArray[i];
+      if (item.name === name) {
+        return item.id;
+      }
+    }
   }
 
-  // if checked, make sure ItemDetails object is included in selected Array - if unchecked, remove from array
-  includeItem(itemType: string, checked: boolean) {
-    console.log(itemType, "checked:", checked);
-    let existingDetails: ItemDetails = this.findItemDetails(itemType);
-    if (existingDetails !== null && checked === false) {
-      this.project.itemDetails.splice(this.project.itemDetails.indexOf(existingDetails), 1); // remove object from array in project
-      console.log("removed", itemType, "from project");
-    } else if (existingDetails === null && checked === true) {
-      let newDetails: ItemDetails = new ItemDetails(this.getID()); // values for properties will be added elsewhere
-      this.project.itemDetails.push(newDetails); // add object to array in project
-      console.log("added", itemType, "to project")
-    } 
-  }
 
-  // save itemID of the selected Item object to the ItemDetails array in the project
-  setSelection(itemType: string, selection: string) {
-    console.log("selected option ", selection, "for", itemType);
-    let existingDetails: ItemDetails = this.findItemDetails(itemType);
-    let item: Item = this.getItemByTypeAndName(itemType, selection);
-    let index: number = this.project.itemDetails.indexOf(existingDetails);
-    this.project.itemDetails[index].itemId = item.id; // set itemID to itemDetails object in project
-    console.log("set item ID for", selection, "to itemDetails in project");
-  }
-
-  // get quantity if required for calculation
-  setQuantity(itemType: string, quantity: number) {
-    console.log("user input quantity of", quantity, "for", itemType);
-    let existingDetails: ItemDetails = this.findItemDetails(itemType);
-    let index: number = this.project.itemDetails.indexOf(existingDetails);
-    this.project.itemDetails[index].quantity = quantity; // set quantity to itemDetails object in project
-    console.log("set quantity for", itemType, "to itemDetails in project");
-  }
+  // CALCULATE ESTIMATE
 
   // use data from original JSON file of all items to calculate for each selected item
-  calculateItemDetails() {
-    // calculations not yet written
+  calculateFinalPrice(item: Item, selection: Selection): number {
+    let itemCost: number;
+    // TODO: calculate for one item based on quantity, linear feet, or square feet
+
+    return itemCost;
   }
 
-  // calculate category totals and save to an estimate object
-  saveEstimate() {
-    // this needs to be written once estimate class is available on both ends
-    // reference completed itemDetailsArray and get subtotals by category
-    // return estimate object
+  // assign factors and determine additional costs for materials needed
+  calculateMaterials(selection: Selection): number {
+    let materialCost: number;
+    // TODO: calculate additional cost for materials needed for an item
+    return materialCost;
   }
 
- // save itemDetails array and estimate object to project and save project to database
- saveProject() {
+  // assign factors and determine additional costs for labor needed
+  calculateLabor(selection: Selection): number {
+    let laborCost: number;
+    // TODO: calculate additional cost for materials needed for an item
+    return laborCost;
+  }
 
-    // save itemDetails to project
+  // build estimate object as each item is calculated
+  buildEstimate(item: Item, cost: number) {
+    // TODO: check each item for category and add cost to matching subtotals
+    // call all three calculation helper methods (maybe do this differently since that would calculate per item cost twice)
+  }
+
+
+  // BUILD PROJECT OBJECT AND SAVE ALL OBJECTS TO DATABASE
+
+  // iterate through selectionArray, build itemDetails array and Estimate object
+  buildProject() {
+    this.project.itemDetails = []; // reset project's itemDetails array to remove any prior saved objects and values
+    let selection: Selection;
+    let id: number;
+    let item: Item;
+    let details: ItemDetails;
+    for (let i=0; i < this.selectionArray.length; i++) {
+      selection = this.selectionArray[i];
+      if (selection.checked) { // create itemDetails object only if user checked the box for this type
+        id = this.getItemIdByName(selection.selected);
+        item = this.itemsArray[this.getItemByID(id)];
+        details = new ItemDetails(id); // create and set itemId property
+        details.quantity = selection.quantity;
+        // details.finalPrice = calculateFinalPrice(item, selection);
+        this.project.itemDetails.push(details);
+        // this.buildEstimate(item, details.finalPrice);
+      }
+    }
+  }
+
+  // called only when submit button is clicked - processes input and sends everything to database
+  saveProject() {
+
+    // create ItemDetails array and run calculations for estimate based on user input
+    this.buildProject();
+    let projectDetailsPayload = new ProjectDetailsPayload(this.project.itemDetails, this.project.labor, this.project.materials);
+
+    console.log(JSON.stringify(projectDetailsPayload));
+
+    // save itemDetails objects to database
     fetch("http://localhost:8080/api/project/" + this.project.id + "/details", {
       method: 'POST',
       headers: {
@@ -269,7 +257,7 @@ export class ProjectDetailsComponent implements OnInit {
         'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Credentials': 'true'
       },
-      body: JSON.stringify(this.project.itemDetails),
+      body: JSON.stringify(projectDetailsPayload),
     }).then(function (response) {
       return response.json();
     }).then(function (data) {
@@ -278,11 +266,13 @@ export class ProjectDetailsComponent implements OnInit {
       console.error('Error:', error);
     });
 
-    // save estimate to project
-    // TODO
+    // TODO: materials
 
-    // save entire project object to database
-    // NOTE: This needs to be replaced with Shaun's newer PUT function
+    // TODO: labor
+
+    // TODO: estimate
+
+    // save entire Project object to database
     fetch("http://localhost:8080/api/project/" + this.project.id, {
       method: 'PUT',
       headers: {
