@@ -3,6 +3,7 @@ package org.launchcode.constructionestimator.models;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 
 @Entity

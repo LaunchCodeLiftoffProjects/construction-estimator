@@ -15,7 +15,7 @@ public class Project extends NamedEntity {
     private double roomWidth;
     private double roomHeight;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name="project_id")
     private List<ItemDetails> itemDetails = new ArrayList<>();
 
@@ -23,13 +23,13 @@ public class Project extends NamedEntity {
     @JsonBackReference
     private User user;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     private Labor labor;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     private Materials materials;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     private Estimate estimate;
 
     // necessary for hibernate to use model binding I think

@@ -43,9 +43,9 @@ export class ProjectDetailsComponent implements OnInit {
   selectionArray: Selection[] = []; // for facilitating data binding with item selections
 
   // materials: Materials;
-  // labor: Labor;
-  materials: Materials; // had to initialize to new instance because project object is bringing null objects
-  labor: Labor; // had to initialize to new instance because project object is bringing null objects
+  // // labor: Labor;
+  // materials: Materials; // had to initialize to new instance because project object is bringing null objects
+  // labor: Labor; // had to initialize to new instance because project object is bringing null objects
 
   estimate: Estimate = new Estimate; // not needed for modeling but for calculations
   
@@ -70,8 +70,11 @@ export class ProjectDetailsComponent implements OnInit {
         this.project = new Project(json.name, json.roomType, json.roomLength, json.roomWidth, json.roomHeight);
         this.project.id = json.id;
         this.project.itemDetails = json.itemDetails;
-        this.materials = json.materials === null ? new Materials : json.materials;
-        this.labor = json.labor === null ? new Labor : json.labor;
+
+        // pull out materials and labor objects. create new ones if null
+        this.project.materials = json.materials === null ? new Materials : json.materials;
+        this.project.labor = json.labor === null ? new Labor : json.labor;
+
         // do not need to load previous estimate because a new one will be built from scratch
         this.loadItems(); // put here so things load in order
         console.log("Items loaded.");
@@ -245,7 +248,8 @@ export class ProjectDetailsComponent implements OnInit {
 
     // create ItemDetails array and run calculations for estimate based on user input
     this.buildProject();
-    let projectDetailsPayload = new ProjectDetailsPayload(this.project.itemDetails, this.project.labor, this.project.materials);
+    this.project.estimate = this.estimate;
+    let projectDetailsPayload = new ProjectDetailsPayload(this.project.itemDetails, this.project.labor, this.project.materials, this.project.estimate);
 
     console.log(JSON.stringify(projectDetailsPayload));
 
@@ -259,7 +263,7 @@ export class ProjectDetailsComponent implements OnInit {
       },
       body: JSON.stringify(projectDetailsPayload),
     }).then(function (response) {
-      return response.json();
+      return response;
     }).then(function (data) {
       console.log('Success:', data);
     }).catch(function (error) {
@@ -273,21 +277,21 @@ export class ProjectDetailsComponent implements OnInit {
     // TODO: estimate
 
     // save entire Project object to database
-    fetch("http://localhost:8080/api/project/" + this.project.id, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Credentials': 'true'
-      },
-      body: JSON.stringify(this.project),
-    }).then(function (response) {
-      return response.json();
-    }).then(function (data) {
-      console.log('Success:', data);
-    }).catch(function (error) {
-      console.error('Error:', error);
-    });
+  //   fetch("http://localhost:8080/api/project/" + this.project.id, {
+  //     method: 'PUT',
+  //     headers: {
+  //       'Content-Type': 'application/json',
+  //       'Access-Control-Allow-Origin': '*',
+  //       'Access-Control-Allow-Credentials': 'true'
+  //     },
+  //     body: JSON.stringify(this.project),
+  //   }).then(function (response) {
+  //     return response.json();
+  //   }).then(function (data) {
+  //     console.log('Success:', data);
+  //   }).catch(function (error) {
+  //     console.error('Error:', error);
+  //   });
 
   }
 

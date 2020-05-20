@@ -2,8 +2,7 @@ package org.launchcode.constructionestimator.controllers;
 
 import org.launchcode.constructionestimator.models.ItemDetails;
 import org.launchcode.constructionestimator.models.Project;
-import org.launchcode.constructionestimator.models.data.ItemDetailsRepository;
-import org.launchcode.constructionestimator.models.data.ProjectRepository;
+import org.launchcode.constructionestimator.models.data.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +20,16 @@ public class ProjectController {
 
     @Autowired
     ItemDetailsRepository itemDetailsRepository;
-  
+
+    @Autowired
+    MaterialsRepository materialsRepository;
+
+    @Autowired
+    LaborRepository laborRepository;
+
+    @Autowired
+    EstimateRepository estimateRepository;
+
     // Use this with @RequestParam to search all projects by field, leave params empty to return all projects
     @GetMapping
     public ResponseEntity getProjects() {
@@ -41,10 +49,6 @@ public class ProjectController {
     // Returns json in form { 'id': project.id }
     @PostMapping
     public ResponseEntity postProject(@RequestBody Project project) {
-
-        // TODO: Figure out if this is even necessary
-        project.setLabor(null);
-        project.setMaterials(null);
 
         projectRepository.save(project);
 

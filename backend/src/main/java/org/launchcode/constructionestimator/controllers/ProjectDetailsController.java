@@ -1,13 +1,7 @@
 package org.launchcode.constructionestimator.controllers;
 
-import org.launchcode.constructionestimator.models.Labor;
-import org.launchcode.constructionestimator.models.Materials;
-import org.launchcode.constructionestimator.models.Project;
-import org.launchcode.constructionestimator.models.ItemDetails;
-import org.launchcode.constructionestimator.models.data.ItemDetailsRepository;
-import org.launchcode.constructionestimator.models.data.LaborRepository;
-import org.launchcode.constructionestimator.models.data.MaterialsRepository;
-import org.launchcode.constructionestimator.models.data.ProjectRepository;
+import org.launchcode.constructionestimator.models.*;
+import org.launchcode.constructionestimator.models.data.*;
 import org.launchcode.constructionestimator.payload.request.ProjectDetailsRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,15 +17,6 @@ public class ProjectDetailsController {
 
     @Autowired
     ProjectRepository projectRepository;
-
-    @Autowired
-    ItemDetailsRepository itemDetailsRepository;
-
-    @Autowired
-    MaterialsRepository materialsRepository;
-
-    @Autowired
-    LaborRepository laborRepository;
 
     @PostMapping
     public ResponseEntity postProjectDetails(@RequestBody ProjectDetailsRequest projectDetails,
@@ -49,17 +34,17 @@ public class ProjectDetailsController {
             Labor labor = projectDetails.getLabor();
             Materials materials = projectDetails.getMaterials();
             List<ItemDetails> itemDetailsList = projectDetails.getItemDetailsList();
+            Estimate estimate = projectDetails.getEstimate();
             Project project = projectOptional.get();
-
-            // save all individual components
-            laborRepository.save(labor);
-            materialsRepository.save(materials);
-            itemDetailsRepository.saveAll(itemDetailsList);
 
             // update and save the project to set relations
             project.setItemDetails(itemDetailsList);
             project.setMaterials(materials);
+            materials.setProject(project);
             project.setLabor(labor);
+            labor.setProject(project);
+            project.setEstimate(estimate);
+            estimate.setProject(project);
             projectRepository.save(project);
 
             return new ResponseEntity(HttpStatus.CREATED);

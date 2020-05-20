@@ -2,8 +2,11 @@ package org.launchcode.constructionestimator.models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
+import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 
+@Entity
 public class Estimate extends AbstractEntity {
 
     private float appliancesCost;
@@ -65,5 +68,13 @@ public class Estimate extends AbstractEntity {
 
     public void setTotalCost(float totalCost) {
         this.totalCost = totalCost;
+    }
+
+    public Project getProject() {
+        return project;
+    }
+
+    public void setProject(Project project) {
+        this.project = project;
     }
 }
