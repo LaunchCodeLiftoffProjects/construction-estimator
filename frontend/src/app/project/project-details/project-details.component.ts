@@ -25,6 +25,10 @@ export class ProjectDetailsComponent implements OnInit {
   dataLoaded: boolean = false; // to prevent page from rendering before project, items, and selections are ready
   editingProject: boolean = false; // for editing basic project info at top right of page
 
+  perimeter: number = 2 * this.project.roomLength + 2 * this.project.roomWidth;
+  wallArea: number = this.perimeter * this.project.roomHeight;
+  floorArea: number = this.project.roomLength * this.project.roomWidth;
+
   itemsArray: Item[]; // to get all possible items (serves dual purpose - display and data for calculations)
 
   rooms: string[] = [ "kitchen", "bath", "living" ];
@@ -34,25 +38,23 @@ export class ProjectDetailsComponent implements OnInit {
 
   selectionArray: Selection[] = []; // for facilitating data binding with item selections
 
-  calcByQuantity: string[] = ['Dishwasher','Disposal','Microwave/Hood','Oven/Range','Refrigerator',
+  calcByQuantity: string[] = ['Dishwasher', 'Disposal', 'Range Hood', 'Oven/Range', 'Refrigerator',
               'Bath & Shower', 'Ceiling Light/Fan', 'Electrical Outlets', 'Electrical Switches', 
-              'Lighting', 'Shelving', 'Sink', 'Toilet', 'Doors', 'Cabinets, Lower', 'Cabinets, Upper', 
-              'Windows'];
-  calcByLF: string[] = ['Baseboards','Trim'];
-  calcBySF: string[] = ['Flooring','Walls'];
-  calcByCabinet: string[] = ['Backsplash','Countertop'];
+              'Lighting', 'Shelving', 'Sink', 'Faucet', 'Toilet', 'Doors', 'Cabinets, Lower', 
+              'Cabinets, Upper', 'Windows'];
+  calcByLF: string[] = ['Baseboards', 'Trim'];
+  calcBySF: string[] = ['Flooring', 'Walls'];
+  calcByCabinet: string[] = ['Backsplash', 'Countertop'];
               
-  factorIntoPlumbing: string[] = ['Dishwasher','Disposal','Refrigerator','Bath & Shower','Sink','Toilet'];
-  factorIntoElectrical: string[] = ['Dishwasher','Disposal','Microwave/Hood','Oven/Range','Refrigerator',
-              'Ceiling Light/Fan','Electrical Outlets','Electrical Switches','Lighting'];
-  factorIntoFinishWork: string[] = ['Shelving','Doors','Cabinets, Lower','Cabinets, Upper','Windows',
-              'Baseboards','Trim','Flooring','Walls','Backsplash','Countertop'];
+  factorIntoPlumbing: string[] = ['Dishwasher', 'Disposal', 'Refrigerator', 'Bath & Shower', 'Sink', 'Faucet', 'Toilet'];
+  factorIntoElectrical: string[] = ['Dishwasher', 'Disposal', 'Range Hood', 'Oven/Range', 'Refrigerator',
+              'Ceiling Light/Fan', 'Electrical Outlets', 'Electrical Switches', 'Lighting'];
+  factorIntoFinishWork: string[] = ['Shelving', 'Doors', 'Cabinets, Lower', 'Cabinets, Upper', 'Windows',
+              'Baseboards', 'Trim', 'Flooring', 'Walls', 'Backsplash', 'Countertop'];
 
 
-  // materials: Materials;
-  // labor: Labor;
-  materials: Materials = new Materials; // had to initialize to new instance because project object is bringing null objects
-  labor: Labor = new Labor; // had to initialize to new instance because project object is bringing null objects
+  materials: Materials;
+  labor: Labor;
 
   estimate: Estimate = new Estimate; // not needed for modeling but for calculations
   
@@ -77,8 +79,8 @@ export class ProjectDetailsComponent implements OnInit {
         this.project = new Project(json.name, json.roomType, json.roomLength, json.roomWidth, json.roomHeight);
         this.project.id = json.id;
         this.project.itemDetails = json.itemDetails;
-        // this.materials = json.materials; // null?
-        // this.labor = json.labor; // null?
+        this.materials = json.materials;
+        this.labor = json.labor;
         // do not need to load previous estimate because a new one will be built from scratch
         this.loadItems(); // put here so things load in order
         console.log("Items loaded.");
@@ -95,7 +97,7 @@ export class ProjectDetailsComponent implements OnInit {
       response.json().then(function (json) {
         this.itemsArray = [];
         json.forEach(obj => {
-          let item = new Item(obj.id, obj.name, obj.room, obj.category, obj.type, obj.price);
+          let item = new Item(obj.id, obj.name, obj.room, obj.category, obj.type, obj.price, obj.roughMaterials, obj.labor);
           this.itemsArray.push(item);
         });
         this.itemsArray.sort((a, b) => (a.type > b.type) ? 1 : -1);
@@ -119,7 +121,7 @@ export class ProjectDetailsComponent implements OnInit {
   }
 
   // check to see if details have been saved to this project before or not, and create Selection objects accordingly
-  createSelections() {
+  createSelections() { // FIXME: Rework this so current selections aren't lost if room type is changed
     this.selectionArray = []; // rebuild this array if method is called again prior to form submission due to roomType change
     let selection: Selection;
     let details: ItemDetails; 
@@ -196,75 +198,66 @@ export class ProjectDetailsComponent implements OnInit {
   // CALCULATE ESTIMATE
 
   // calculate for each selected item based on quantity or measurements
-  calculateFinalPrice(item: Item, selection: Selection): number {
+  calculateCosts(item: Item, selection: Selection): number[] {
     let itemCost: number = 0;
-    let perimeter = 2 * this.project.roomLength + 2 * this.project.roomWidth;
-    let wall = perimeter * this.project.roomHeight;
-    let area = this.project.roomLength * this.project.roomWidth;
+    let materialCost: number = 0;
+    let laborCost: number = 0;
+    let costs: number[] = [];
     if (this.calcByQuantity.includes(item.type)) {
       itemCost = selection.quantity * item.price;
+      materialCost = selection.quantity * item.roughMaterials;
+      laborCost = selection.quantity * item.labor;
     } else if (this.calcByLF.includes(item.type)) {
-      itemCost = perimeter * item.price;
+      itemCost = this.perimeter * item.price;
+      materialCost = this.perimeter * item.roughMaterials;
+      laborCost = this.perimeter * item.labor;
     } else if (this.calcByCabinet.includes(item.type)) {
       let index: number = this.locateSelection("Cabinets, Lower");
-      let selection: Selection = this.selectionArray[index];
-      itemCost = selection.quantity * 2 * item.price; // right now if no lower cabinets have beens selected, this will result in 0
+      let cabinet: Selection = this.selectionArray[index];
+      itemCost = cabinet.quantity * 2 * item.price; // if no lower cabinets have beens selected, this will result in 0
+      materialCost = cabinet.quantity * item.roughMaterials;
+      laborCost = cabinet.quantity * item.labor;
     } else if (item.type === "Wall") {
-      itemCost = wall * item.price;
+      itemCost = this.wallArea * item.price;
+      materialCost = this.wallArea * item.roughMaterials;
+      laborCost = this.wallArea * item.labor;
     } else if (item.type === "Flooring") { 
-      itemCost = area * item.price;
+      itemCost = this.floorArea * item.price;
+      materialCost = this.floorArea * item.roughMaterials;
+      laborCost = this.floorArea * item.labor;
     }
-    return itemCost;
-  }
-
-  // TODO: put realistic costs for each item into JSON file (keep in mind the calculation units)
-  // TODO: add material and labor factors to each item in JSON file???
-
-  // assign factors and determine additional costs for materials needed
-  calculateMaterials(selection: Selection): number {
-    let materialCost: number = 0;
-    // TODO: calculate additional cost for materials needed for an item
-    return materialCost;
-  }
-
-  // assign factors and determine additional costs for labor needed
-  calculateLabor(selection: Selection): number {
-    let laborCost: number = 0;
-    // TODO: calculate additional cost for materials needed for an item
-    return laborCost;
+    costs = [itemCost, materialCost, laborCost];
+    return costs;
   }
 
   // build estimate object as each item is calculated
-  buildEstimate(selection: Selection, cost: number) {
-    // check each item for category and add cost to matching subtotals
+  buildEstimate(item: Item, selection: Selection, costs: number[]) {
+
+    // check item for category and add cost to matching subtotal
     if (selection.category === 'appliance') {
-      this.estimate.appliancesCost += cost;
+      this.estimate.appliancesCost += costs[0];
     } else if (selection.category === 'fixture') {
-      this.estimate.fixturesCost += cost;
+      this.estimate.fixturesCost += costs[0];
     } else if (selection.category === 'finish') {
-      this.estimate.finishesCost += cost;
+      this.estimate.finishesCost += costs[0];
     }
-    // add any related materials cost
-    // FIXME: this needs to account for situations where both plumbing and electrical may be involved
+    // add any related materials cost - will add in only once if appliance involveds both plumbing & electrical
     if (this.materials.needPlumbingSystem === true && this.factorIntoPlumbing.includes(selection.type)) {
-      this.estimate.materialsCost += this.calculateMaterials(selection);
-    }
-    if (this.materials.needElectricalSystem === true && this.factorIntoElectrical.includes(selection.type)) {
-      this.estimate.materialsCost += this.calculateMaterials(selection);
+      this.estimate.materialsCost += costs[1];
+    } else if (this.materials.needElectricalSystem === true && this.factorIntoElectrical.includes(selection.type)) {
+      this.estimate.materialsCost += costs[1];
     }
     // Note: framing and drywall costs added separately since not tied to specific items, just dimensions of room
 
-    // add any related labor cost
-    // FIXME: this needs to account for situations where both plumbing and electrical may be involved
+    // add any related labor cost - will add in only once if appliance involves both plumbing & electrical
     if (this.labor.needPlumbingSub === true && this.factorIntoPlumbing.includes(selection.type)) {
-      this.estimate.laborCost += this.calculateLabor(selection);
+      this.estimate.laborCost += costs[2];
+    } else if (this.labor.needElectricalSub === true && this.factorIntoElectrical.includes(selection.type)) {
+      this.estimate.laborCost += costs[2];
     }
-    if (this.labor.needElectricalSub === true && this.factorIntoElectrical.includes(selection.type)) {
-      this.estimate.laborCost += this.calculateLabor(selection);
-    }
-    // Note: rough carpentry costs added separately since not tied to specific items, just dimensions of room
+    // Note: rough carpentry labor costs added separately since not tied to specific items, just dimensions of room
     if (this.labor.needFinishWork === true && this.factorIntoFinishWork.includes(selection.type)) {
-      this.estimate.laborCost += this.calculateLabor(selection);
+      this.estimate.laborCost += costs[2];
     }
   
   }
@@ -274,26 +267,53 @@ export class ProjectDetailsComponent implements OnInit {
 
   // iterate through selectionArray, build itemDetails array and Estimate object
   buildProject() {
+
     this.project.itemDetails = []; // reset project's itemDetails array to remove any prior saved objects and values
     let selection: Selection;
     let id: number;
     let item: Item;
     let details: ItemDetails;
+    let costs: number[];
+
     for (let i=0; i < this.selectionArray.length; i++) {
       selection = this.selectionArray[i];
-      if (selection.checked) { // create itemDetails object only if user checked the box for this type
+      if (selection.checked) { 
         id = this.getItemIdByName(selection.selected);
-        item = this.itemsArray[this.getItemByID(id)];
+        item = this.itemsArray[this.getItemByID(id)]
+        costs = this.calculateCosts(item, selection); // costs for item, rough materials, and labor
+
+        // create itemDetails object and add to project
         details = new ItemDetails(id); // create and set itemId property
-        details.quantity = selection.quantity;
-        details.finalPrice = this.calculateFinalPrice(item, selection);
+        details.quantity = selection.quantity; // set quantity
+        details.finalPrice = costs[0]; // set finalPrice
         this.project.itemDetails.push(details);
-        this.buildEstimate(selection, details.finalPrice);
+
+        // add per-item costs into estimate
+        this.buildEstimate(item, selection, costs);
       }
     }
-    // TODO: add framing and drywall costs one time separately since not tied to specific items, just dimensions of room
-    // TODO: add rough carpentry cost one time separately since not tied to specific items, just dimensions of room
 
+    // add remaining material & labor costs based on room dimensions, not items
+    if (this.materials.needFraming === true) {
+      this.estimate.materialsCost += 10 * this.wallArea; // $10/SF of wall area
+    }
+    if (this.materials.needDrywall === true) {
+      this.estimate.materialsCost += 25 * this.wallArea; // $25/SF of wall area
+    }
+    if (this.labor.needRoughCarpentry === true) {
+      this.estimate.laborCost += 10 * this.wallArea; // $10/SF of wall area
+    }
+
+    // calculate total cost and save to estimate
+    this.estimate.totalCost = this.estimate.appliancesCost +
+                              this.estimate.fixturesCost +
+                              this.estimate.finishesCost +
+                              this.estimate.materialsCost +
+                              this.estimate.laborCost;
+
+    console.log("ESTIMATE: \nAppliances:", this.estimate.appliancesCost, "\nFixtures:", this.estimate.fixturesCost,
+                "\nFinishes:", this.estimate.finishesCost, "\nMaterials:", this.estimate.materialsCost,
+                "\nLabor:", this.estimate.laborCost, "\nTOTAL COST:", this.estimate.totalCost);
   }
 
   // called only when submit button is clicked - processes input and sends everything to database
