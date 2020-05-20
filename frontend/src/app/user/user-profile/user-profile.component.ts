@@ -13,7 +13,7 @@ import { TokenStorageService } from 'src/app/_services/token-storage.service';
 export class UserProfileComponent implements OnInit {
 
   userUrl = "http://localhost:8080/api/user/";
-  id: String;
+  id: number;
   loadCompleted: boolean = false;
   editUser: boolean = false;
   editDetails: boolean = false;
@@ -22,32 +22,36 @@ export class UserProfileComponent implements OnInit {
   showAdminBoard = false;
   showModeratorBoard = false;
   username: string;
-  userObj: User;
+  user: User;
 
   constructor(private route: ActivatedRoute, private router: Router, private tokenStorageService: TokenStorageService) { }
 
   ngOnInit() {
-    this.id = this.route.snapshot.paramMap.get("id");
-    this.userUrl += this.id;
+    // this.id = this.route.snapshot.paramMap.get("id");
+    // this.userUrl += this.id;
     
-   
+    console.log("test", "test");
     this.isLoggedIn = !!this.tokenStorageService.getToken();
+    console.log("token", this.tokenStorageService.getToken());
+    console.log("logged in", this.isLoggedIn);
 
     if (this.isLoggedIn) {
       const user = this.tokenStorageService.getUser();
       this.roles = user.roles;
-      this.loadUser();
-
+    
       this.showAdminBoard = this.roles.includes('ROLE_ADMIN');
       this.showModeratorBoard = this.roles.includes('ROLE_MODERATOR');
 
       this.username = user.email;
+      this.id = user.id;
+      console.log("id", this.id);
+      this.loadUser();
     }
   }
  
   
   loadUser() {
-    fetch(this.userUrl, {method: 'POST',
+    fetch(this.userUrl + this.id, {method: 'GET',
       headers: {
         'Content-Type': 'application/json',
         'Access-Control-Allow-Origin': '*',
@@ -56,9 +60,9 @@ export class UserProfileComponent implements OnInit {
       },
     }).then(function(response) {
       response.json().then(function(json) {
-        this.userObj = new User(json.firstName, json.lastName, json.email, json.password, json.userDetails, json.projects);
-        this.userObj.id = json.id;
-        console.log("user object", this.userObj);
+        this.user = new User(json.firstName, json.lastName, json.email, json.password, json.userDetails, json.projects);
+        this.user.id = json.id;
+        console.log("user object", this.user);
 
         this.loadCompleted = true;
       }.bind(this));

@@ -47,7 +47,8 @@ export class CreateProjectComponent implements OnInit {
       headers: {
         'Content-Type': 'application/json',
         'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Credentials': 'true'
+        'Access-Control-Allow-Credentials': 'true',
+        'Authorization': 'Barer ' + this.tokenStorageService.getToken()
       },
       body: JSON.stringify(project),
     }).then(function(response) {

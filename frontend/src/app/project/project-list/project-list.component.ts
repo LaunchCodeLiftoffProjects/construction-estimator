@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { User } from 'src/app/user';
 import { Project } from 'src/app/project';
+import { TokenStorageService } from 'src/app/_services/token-storage.service';
 
 @Component({
   selector: 'app-project-list',
@@ -10,11 +11,14 @@ import { Project } from 'src/app/project';
 export class ProjectListComponent implements OnInit {
 
   projectUrl = "http://localhost:8080/api/project/";
+  id: number;
   project: Project[]
 
-  constructor() { }
+  constructor(private tokenStorage: TokenStorageService) { }
 
   ngOnInit() {
+    this.id = this.tokenStorage.getUser().id;
+    this.projectUrl += this.id;
     this.loadProject();
   }
 
