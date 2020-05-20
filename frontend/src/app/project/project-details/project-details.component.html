@@ -1,10 +1,11 @@
 <div class="container">
+    <!--TODO: use ngIf to display only after data loading-->
+
     <!--Nested container with divs side-by-side to move project name, type, and dimensions to top right-->
     <div class="container mt-5">
         <div class="row justify-content-between">
             <div class="col-6">
-
-                <h2 class="text-info">Project Details</h2>
+                <h2 class="text-info mt-5">Project Details</h2>
                 <p>Tell us what you need to make your vision a reality! Don't worry if you aren't sure about some of the details; you can come back and edit your project at any time.</p>
             </div>
 
@@ -13,7 +14,7 @@
                 <!--Name, type, and dimensions with edit button-->
                 <div *ngIf="!editingProject; else editProjectBlock" class="text-right">
                     <h4>{{project.name}} </h4>
-                    <p class="lead">{{project.roomType.toUpperCase()}}<br />
+                    <p class="lead">{{roomTitles[rooms.indexOf(project.roomType)]}}<br />
                     {{project.roomLength}}'L x {{project.roomWidth}}'W x {{project.roomHeight}}'H</p>
                     <span class = "badge badge-info" (click) = "editingProject = true;">Edit</span>
                 </div>
@@ -21,30 +22,24 @@
                 <!--Visible only while editing name, type, and dimensions-->
                 <ng-template #editProjectBlock>
                     <div class="form-group">
-                        <label class="lead">Project Name <input #name (change)="updateProjectName(name.value)"
-                                type="text" value="{{project.name}}" class="form-control form-control-sm" /></label>
+                        <label class="lead">Project Name <input #name="ngModel" [(ngModel)]="project.name"
+                                type="text" class="form-control form-control-sm" /></label>
                         <br />
-                        <span class="lead">Room Type </span>
+                        <span class="lead">Room Type: {{roomTitles[rooms.indexOf(project.roomType)]}} </span>
                         <div class = "form-group">
-                            <div class="form-check indent-left">
-                                <label class="form-check-label"><input #roomType name="roomType" type="radio" class = "form-check-input" value="kitchen" [checked]="project.roomType == 'kitchen'" (change)="updateProjectRoomType($event)"/>Kitchen</label>
+                            <div class="form-check indent-left" *ngFor="let room of rooms; let r = index">
+                                <label class="form-check-label"><input #roomType [(ngModel)]="project.roomType" (change)="createSelections()" [value]="rooms[r]" type="radio" class = "form-check-input" />{{roomTitles[r]}}</label>
                             </div>
-                            <div class="form-check indent-left">
-                                <label class="form-check-label"><input #roomType name="roomType" type="radio" class = "form-check-input" value="bath" [checked]="project.roomType == 'bathroom'" (change)="updateProjectRoomType($event)"/>Bathroom</label>
-                            </div>
-                            <div class="form-check indent-left">
-                                <label class="form-check-label"><input #roomType name="roomType" type="radio" class = "form-check-input" value="living" [checked]="project.roomType == 'living'" (change)="updateProjectRoomType($event)"/>Bedroom, Living Room, Office, Etc.</label>
-                            </div> 
                         </div>
                     </div>
                     <div class="form-group">
                         <div class = "input-group"> 
-                            <label><input #roomLength type="number" class="form-control form-control-sm" step="0.1" min = 0 placeholder="0.0" (change)="updateProjectRoomLength(roomLength.value)" value="{{project.roomLength}}" /> Length (ft.)</label>
-                            <label><input #roomWidth type="number" class="form-control form-control-sm" step="0.1" min = 0 placeholder="0.0" (change)="updateProjectRoomWidth(roomWidth.value)" value="{{project.roomWidth}}" /> Width (ft.)</label>
-                            <label><input #roomHeight type="number" class="form-control form-control-sm" step="0.1" min = 0 placeholder="0.0" (change)="updateProjectRoomHeight(roomHeight.value)" value="{{project.roomHeight}}" /> Ceiling Height (ft.)</label>
+                            <label><input #roomLength="ngModel" [(ngModel)]="project.roomLength" type="number" class="form-control form-control-sm" step="0.1" min = 0 /> Length (ft.)</label>
+                            <label><input #roomWidth="ngModel" [(ngModel)]="project.roomWidth" type="number" class="form-control form-control-sm" step="0.1" min = 0 /> Width (ft.)</label>
+                            <label><input #roomHeight="ngModel" [(ngModel)]="project.roomHeight" type="number" class="form-control form-control-sm" step="0.1" min = 0 /> Ceiling Height (ft.)</label>
                         </div>
                     </div>
-                    <span class="badge badge-success"(click) = "editingProject = false;" >Save Changes</span>
+                    <span class="badge badge-success" (click) = "editingProject = false" >Done Editing</span>
                 </ng-template>
 
             </div>
@@ -52,28 +47,30 @@
     </div>
 
     <div class = "container col-12">
-        <!--iterate through appliance, fixture, and finish-->
-        <ng-container *ngFor="let category of categories">
+        <!--iterate through appliance, fixture, and finish sections-->
+        <ng-container *ngFor="let category of categories; let c = index">
             <!--do not show appliance section unless the room is kitchen-->
             <ng-container *ngIf=" project.roomType === 'kitchen' || (project.roomType !== 'kitchen' && category !== 'appliance') ">
                 <div class="form-group" >
-                    <h4 class="mt-5">{{categoryTitles[categories.indexOf(category)]}}</h4>
-                    <div class="input-group mt-2" *ngFor="let itemType of getTypes(project.roomType, category); let i = index">
-                        <div class="col-4">
-                            <label class="lead"><input #type [(ngModel)]="getTypes(project.roomType, category)[i].type" (change)="includeItem(itemType, type.checked)" type="checkbox" /> {{itemType}}</label>
-                        </div>
-                        <div class = "col-4">
-                            <select #selection="ngModel" [(ngModel)]="getTypes(project.roomType, category)[i].selection" (change)="setSelection(itemType, selection.value)" class="custom-select w-100">
-                                <!-- <option>(Select an option)</option> -->
-                                <option *ngFor="let options of getOptions(itemType, project.roomType)">{{options.name}}</option>
-                            </select>
-                        </div>
-                        <div class="col-2">
-                            <ng-container *ngIf="needsQuantity.includes(itemType)">
-                                <input #quantity="ngModel" [(ngModel)]="getTypes(project.roomType, category)[i].quantity" (change)="setQuantity(itemType, quantity.value)" type="number" step="1" min = 0 placeholder="0" class="form-control form-control-sm w-75 h-100" />
-                            </ng-container>
-                        </div> 
-                        <div class="col-2"></div>
+                    <h4 class="mt-4">{{categoryTitles[c]}}</h4>
+                    <div class="input-group mt-1" *ngFor="let selection of selectionArray; let i = index">
+                        <ng-container *ngIf="category === selection.category">
+                            <div class="col-4">
+                                <label class="lead"><input #type="ngModel" [(ngModel)]="selectionArray[i].checked" (change)="selectionArray[i].quantity = changeQuantity(selection, selectionArray[i].quantity)" type="checkbox" /> {{selection.type}}</label>
+                            </div>
+                            <div class = "col-4">
+                                <select #selected="ngModel" [(ngModel)]="selectionArray[i].selected" class="custom-select w-100">
+                                    <!-- <option>(Select an option)</option> -->
+                                    <option *ngFor="let options of getOptions(selection.type)">{{options.name}}</option>
+                                </select>
+                            </div>
+                            <div class="col-2">
+                                <ng-container *ngIf="calcByQuantity.includes(selection.type)">
+                                    <input #quantity="ngModel" [(ngModel)]="selectionArray[i].quantity" type="number" step="1" min = 0 class="form-control form-control-sm w-75 h-100" />
+                                </ng-container>
+                            </div> 
+                            <div class="col-2"></div>
+                        </ng-container>
                     </div>
                 </div>
             </ng-container>
@@ -83,20 +80,20 @@
         <h4 class="mt-5">Materials</h4>
         <div class="form-group">
             <p class="lead">Will you be adding or replacing any of the following?</p>
-            <label class = "checkbox"><input #plumbingSystem type="checkbox" value="plumbing system" /> Plumbing System</label>
-            <label class = "checkbox"><input #electricalSystem type="checkbox" value="electrical system" /> Electrical System</label>
-            <label class = "checkbox"><input #framing type="checkbox" value="wall framing" /> Wall Framing</label>
-            <label class = "checkbox"><input #drywall type="checkbox" value="drywall" /> Plaster/Drywall</label>
+            <label class = "checkbox"><input #plumbingSystem="ngModel" [(ngModel)]="materials.needPlumbingSystem" type="checkbox" /> Plumbing System</label>
+            <label class = "checkbox"><input #electricalSystem="ngModel" [(ngModel)]="materials.needElectricalSystem"  type="checkbox" /> Electrical System</label>
+            <label class = "checkbox"><input #framing="ngModel" [(ngModel)]="materials.needFraming"  type="checkbox" /> Wall Framing</label>
+            <label class = "checkbox"><input #drywall="ngModel" [(ngModel)]="materials.needDrywall"  type="checkbox" /> Plaster/Drywall</label>
         </div>
         <br />
 
         <h4 class="mt-5">Labor</h4>
         <div class="form-group">
             <p class="lead">Will you be hiring any subcontractors?</p>
-            <label class = "checkbox"><input #plumbing type="checkbox" value="plumbing" /> Plumbing</label>
-            <label class = "checkbox"><input #electrical type="checkbox" value="electrical" /> Electrical</label>
-            <label class = "checkbox"><input #roughCarpentry type="checkbox" value="roughCarpentry" /> Rough Carpentry</label>
-            <label class = "checkbox"><input #finishWork type="checkbox" value="finishWork" /> Finish Work</label>
+            <label class = "checkbox"><input #plumbing="ngModel" [(ngModel)]="labor.needPlumbingSub"  type="checkbox" /> Plumbing</label>
+            <label class = "checkbox"><input #electrical="ngModel" [(ngModel)]="labor.needElectricalSub"  type="checkbox" /> Electrical</label>
+            <label class = "checkbox"><input #roughCarpentry="ngModel" [(ngModel)]="labor.needRoughCarpentry"  type="checkbox" /> Rough Carpentry</label>
+            <label class = "checkbox"><input #finishWork="ngModel" [(ngModel)]="labor.needFinishWork"  type="checkbox" /> Finish Work</label>
         </div>
         <br />
 

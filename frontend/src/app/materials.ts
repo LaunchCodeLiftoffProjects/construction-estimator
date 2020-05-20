@@ -6,11 +6,11 @@ export class Materials {
     needFraming: boolean;
     needDrywall: boolean;
 
-    constructor(needPlumbingSystem: boolean, needElectricalSystem: boolean, needFraming: boolean, needDrywall: boolean) {
-        this.needPlumbingSystem = needPlumbingSystem;
-        this.needElectricalSystem = needElectricalSystem;
-        this.needFraming = needFraming;
-        this.needDrywall = needDrywall;
+    constructor() {
+        this.needPlumbingSystem = false;
+        this.needElectricalSystem = false;
+        this.needFraming = false;
+        this.needDrywall = false;
     }
 
 }
