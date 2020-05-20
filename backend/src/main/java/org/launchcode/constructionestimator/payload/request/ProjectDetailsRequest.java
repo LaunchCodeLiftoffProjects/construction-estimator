@@ -1,5 +1,6 @@
 package org.launchcode.constructionestimator.payload.request;
 
+import org.launchcode.constructionestimator.models.Estimate;
 import org.launchcode.constructionestimator.models.ItemDetails;
 import org.launchcode.constructionestimator.models.Labor;
 import org.launchcode.constructionestimator.models.Materials;
@@ -13,6 +14,7 @@ public class ProjectDetailsRequest {
 
     private Labor labor;
     private Materials materials;
+    private Estimate estimate;
 
     public ProjectDetailsRequest() {}
 
@@ -38,5 +40,17 @@ public class ProjectDetailsRequest {
 
     public void setMaterials(Materials materials) {
         this.materials = materials;
+    }
+
+    public List<ItemDetails> getItemDetails() {
+        return itemDetails;
+    }
+
+    public Estimate getEstimate() {
+        return estimate;
+    }
+
+    public void setEstimate(Estimate estimate) {
+        this.estimate = estimate;
     }
 }
