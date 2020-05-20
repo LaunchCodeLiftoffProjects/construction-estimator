@@ -1,7 +1,7 @@
 [
     {
         "id": 1,
-        "name": "Hardwood",
+        "name": "Hardwood flooring",
         "room": [
             "living"
         ],
@@ -13,7 +13,7 @@
     },
     {
         "id": 2,
-        "name": "Ceramic tile",
+        "name": "Ceramic floor tile",
         "room": [
             "kitchen",
             "bath"
@@ -38,7 +38,7 @@
     },
     {
         "id": 4,
-        "name": "Vinyl tile or linoleum",
+        "name": "Vinyl floor tile or linoleum",
         "room": [
             "kitchen",
             "bath"
@@ -65,7 +65,7 @@
     },
     {
         "id": 6,
-        "name": "Ceramic tile",
+        "name": "Ceramic wall tile",
         "room": [
             "bath"
         ],
@@ -225,7 +225,7 @@
     },
     {
         "id": 15,
-        "name": "Single Switch",
+        "name": "Single switch",
         "room": [
             "living",
             "kitchen",
@@ -239,7 +239,7 @@
     },
     {
         "id": 85,
-        "name": "Double Switch",
+        "name": "Double switch",
         "room": [
             "living",
             "kitchen",
