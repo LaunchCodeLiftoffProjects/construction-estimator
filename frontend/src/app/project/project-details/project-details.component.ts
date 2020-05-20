@@ -339,11 +339,11 @@ export class ProjectDetailsComponent implements OnInit {
       console.error('Error:', error);
     });
 
-    // TODO: materials
+    // TODO: save this.materials to this.project.materials and send to database
 
-    // TODO: labor
+    // TODO: save this.labor to this.project.labor and send to database
 
-    // TODO: estimate
+    // TODO: save this.estimate to this.project.estimate and send to database
 
     // save entire Project object to database
     fetch("http://localhost:8080/api/project/" + this.project.id, {
