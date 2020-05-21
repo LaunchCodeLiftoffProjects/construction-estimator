@@ -37,20 +37,20 @@
         <div class="form-group">
             <h5>What are the room's general dimensions?</h5>
             <div class="input-group">
-                <label><input [(ngModel)]="roomLength" type="number" class="form-control" step="0.1" min=0
+                <label><input [(ngModel)]="roomLength" type="number" class="form-control" step="0.1" min='1'
                         placeholder="0.0" name="roomLength" required (change)="changedDimensions = changedDimensions + 1;" (blur)="changedDimensions = changedDimensions + 1;"/>Length
                     (ft.)</label>
-                <label><input [(ngModel)]="roomWidth" type="number" class="form-control" step="0.1" min=0
+                <label><input [(ngModel)]="roomWidth" type="number" class="form-control" step="0.1" min='1'
                         placeholder="0.0" name="roomWidth" required (change)="changedDimensions = changedDimensions + 1;" (blur)="changedDimensions = changedDimensions + 1;"/>Width
                     (ft.)</label>
-                <label><input [(ngModel)]="roomHeight" type="number" class="form-control" step="0.1" min=0
+                <label><input [(ngModel)]="roomHeight" type="number" class="form-control" step="0.1" min='1'
                         placeholder="0.0" name="roomHeight" required (change)="changedDimensions = changedDimensions + 1;" (blur)="changedDimensions = changedDimensions + 1;"/>Ceiling
                     Height (ft.)</label>
             </div>
 
-            <div *ngIf="changedDimensions >= 3 && (!isNumber(roomHeight) || !isNumber(roomLength) || !isNumber(roomWidth))"
+            <div *ngIf="changedDimensions > 4 && (roomHeight < 1 || roomLength < 1 || roomWidth < 1 || (!isNumber(roomHeight) || !isNumber(roomLength) || !isNumber(roomWidth)))"
                 class="alert alert-danger">
-                All Room Dimensions are required and must be valid numbers.
+                All Room Dimensions are required and must be valid numbers greater than zero.
             </div>
 
         </div>

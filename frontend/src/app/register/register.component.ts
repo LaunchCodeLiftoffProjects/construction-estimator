@@ -65,7 +65,7 @@ export class RegisterComponent implements OnInit {
         this.isLoginFailed = false;
         this.isLoggedIn = true;
         this.tokenStorage.saveUser(data);
-
+        this.router.navigate(['/user/profile/']);
         
        
       },

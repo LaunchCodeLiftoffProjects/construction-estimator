@@ -181,12 +181,27 @@ export class ProjectDetailsComponent implements OnInit {
     return optionsArray;
   }
 
+  setValue(selection) {
+
+    let options = this.getOptions(selection.type);
+    return options[0];
+
+
+    //  if (selection.checked) {
+       
+    //  } else {
+    //    selection.selected = '';
+    //  }
+
+	}
+
   // when item selection is checked in form, if zero, raise to 1
-  changeQuantity(selection: Selection, qty: number): number {
-    if (this.calcByQuantity.includes(selection.type) && selection.checked === true && qty === 0) {
+  changeQuantity(selection: Selection): number {
+    
+    if (this.calcByQuantity.includes(selection.type) && selection.checked === true && selection.quantity === 0) {
       return 1;
     } else {
-      return qty;
+      return selection.quantity;
     }
   }
 
@@ -318,5 +333,8 @@ export class ProjectDetailsComponent implements OnInit {
     });
 
   }
+
+
+  
 
 }

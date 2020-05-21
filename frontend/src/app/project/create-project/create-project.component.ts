@@ -3,6 +3,7 @@ import { Project } from '../../project';
 
 import { Router, RouterModule, ActivatedRoute, ParamMap, NavigationExtras } from '@angular/router';
 import { TokenStorageService } from 'src/app/_services/token-storage.service';
+import { FormGroup, Validators, FormControl } from '@angular/forms';
 
 
 @Component({
@@ -22,6 +23,7 @@ export class CreateProjectComponent implements OnInit {
   showModeratorBoard = false;
   username: string;
 
+
   constructor(private route: ActivatedRoute, private router: Router, private tokenStorageService: TokenStorageService) { }
 
   ngOnInit() {
@@ -38,6 +40,8 @@ export class CreateProjectComponent implements OnInit {
     } else {
       this.router.navigate(['/login']);
     }
+
+   
     
   }
 
