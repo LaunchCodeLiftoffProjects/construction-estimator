@@ -41,13 +41,6 @@ export class ProjectDetailsComponent implements OnInit {
               
 
   selectionArray: Selection[] = []; // for facilitating data binding with item selections
-
-  // materials: Materials;
-  // // labor: Labor;
-  // materials: Materials; // had to initialize to new instance because project object is bringing null objects
-  // labor: Labor; // had to initialize to new instance because project object is bringing null objects
-
-  estimate: Estimate = new Estimate; // not needed for modeling but for calculations
   
   constructor(private route: ActivatedRoute) { }
 
@@ -67,6 +60,8 @@ export class ProjectDetailsComponent implements OnInit {
 
     fetch(this.projectURL).then(function (response) {
       response.json().then(function (json) {
+
+        console.log(JSON.stringify(json));
         this.project = new Project(json.name, json.roomType, json.roomLength, json.roomWidth, json.roomHeight);
         this.project.id = json.id;
         this.project.itemDetails = json.itemDetails;
@@ -74,6 +69,7 @@ export class ProjectDetailsComponent implements OnInit {
         // pull out materials and labor objects. create new ones if null
         this.project.materials = json.materials === null ? new Materials : json.materials;
         this.project.labor = json.labor === null ? new Labor : json.labor;
+        this.project.estimate = json.estimate === null ? new Estimate : json.estimate;
 
         // do not need to load previous estimate because a new one will be built from scratch
         this.loadItems(); // put here so things load in order
@@ -248,7 +244,6 @@ export class ProjectDetailsComponent implements OnInit {
 
     // create ItemDetails array and run calculations for estimate based on user input
     this.buildProject();
-    this.project.estimate = this.estimate;
     let projectDetailsPayload = new ProjectDetailsPayload(this.project.itemDetails, this.project.labor, this.project.materials, this.project.estimate);
 
     console.log(JSON.stringify(projectDetailsPayload));
@@ -270,28 +265,6 @@ export class ProjectDetailsComponent implements OnInit {
       console.error('Error:', error);
     });
 
-    // TODO: materials
-
-    // TODO: labor
-
-    // TODO: estimate
-
-    // save entire Project object to database
-  //   fetch("http://localhost:8080/api/project/" + this.project.id, {
-  //     method: 'PUT',
-  //     headers: {
-  //       'Content-Type': 'application/json',
-  //       'Access-Control-Allow-Origin': '*',
-  //       'Access-Control-Allow-Credentials': 'true'
-  //     },
-  //     body: JSON.stringify(this.project),
-  //   }).then(function (response) {
-  //     return response.json();
-  //   }).then(function (data) {
-  //     console.log('Success:', data);
-  //   }).catch(function (error) {
-  //     console.error('Error:', error);
-  //   });
 
   }
 

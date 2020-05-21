@@ -1,6 +1,7 @@
 
 export class Materials {
 
+    id: number;
     needPlumbingSystem: boolean;
     needElectricalSystem: boolean;
     needFraming: boolean;
