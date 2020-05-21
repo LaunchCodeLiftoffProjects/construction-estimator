@@ -20,7 +20,9 @@ export class ProjectListComponent implements OnInit {
   showModeratorBoard = false;
   username: string;
 
-  constructor(private tokenStorageService: TokenStorageService, private router: Router) { }
+  constructor(private tokenStorageService: TokenStorageService, private router: Router) {
+    
+   }
 
   ngOnInit() {
     this.isLoggedIn = !!this.tokenStorageService.getToken();

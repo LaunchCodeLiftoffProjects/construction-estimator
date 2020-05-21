@@ -35,10 +35,10 @@
 
     <ul *ngIf="!isLoggedIn" class="navbar-nav ml-auto">
       <li class="nav-item">
-        <a class="nav-link" (click)="logout()" [routerLink]="'/login'">LOG IN</a>
+        <a class="nav-link" (click)="logout(); load()" [routerLink]="'/login'">LOG IN</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" (click)="logout()" [routerLink]="'/register'">REGISTER</a>
+        <a class="nav-link" (click)="logout(); load()" [routerLink]="'/register'">REGISTER</a>
       </li>
     </ul>
 

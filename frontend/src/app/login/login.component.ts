@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../_services/auth.service';
 import { TokenStorageService } from '../_services/token-storage.service';
 import { EmailValidator } from '@angular/forms';
-import { Router, RouterModule, ActivatedRoute, ParamMap, NavigationExtras } from '@angular/router';
+import { Router, RouterModule, ActivatedRoute, ParamMap, NavigationExtras, NavigationEnd } from '@angular/router';
 import { HeaderComponent } from '../header/header.component';
 
 @Component({
@@ -18,34 +18,46 @@ export class LoginComponent implements OnInit {
   isLoginFailed = false;
   errorMessage = '';
   roles: string[] = [];
+  header: HeaderComponent;
+  mySubscription: any;
 
   
-  constructor(private authService: AuthService, private tokenStorage: TokenStorageService, private router: Router) { }
+  constructor(private authService: AuthService, private tokenStorage: TokenStorageService, private router: Router) {
+   
+   }
 
   ngOnInit() {
+    
     if (this.tokenStorage.getToken()) {
       this.isLoggedIn = true;
       this.roles = this.tokenStorage.getUser().roles;
+      this.router.navigate(['/project/list/']);
+    }
+
+    
+  }
+
+  ngOnDestroy() {
+    if (this.mySubscription) {
+      this.mySubscription.unsubscribe();
     }
   }
 
   onSubmit() {
+
     this.authService.login(this.form).subscribe(
       data => {
         this.tokenStorage.saveToken(data.token);
+        
         this.tokenStorage.saveUser(data);
 
-        this.isLoginFailed = false;
-        this.isLoggedIn = true;
-        this.roles = this.tokenStorage.getUser().roles;
-        this.router.navigate(['/project/list/']);
-        
       },
       err => {
         this.errorMessage = err.error.message;
         this.isLoginFailed = true;
       }
     );
+
   }
 
   reloadPage() {

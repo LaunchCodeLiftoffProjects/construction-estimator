@@ -8,6 +8,7 @@
         (ngSubmit)="f.form.valid && onSubmit()"
         #f="ngForm"
         novalidate
+        
       >
         <div class="form-group">
           
@@ -57,15 +58,15 @@
         <div class="form-group text-right">
             <button class="btn btn-info" type="submit" [disabled]="!f.form.valid">Log in</button>
         </div>
-        <div class="form-group">
+        
           <div
             class="alert alert-danger"
             role="alert"
             *ngIf="f.submitted && isLoginFailed"
           >
-            Login failed: {{ errorMessage }}
+            Login Failed: Email or Password is incorrect.
           </div>
-        </div>
+        
 
       </form>
   

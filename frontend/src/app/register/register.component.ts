@@ -28,6 +28,14 @@ export class RegisterComponent implements OnInit {
  constructor(private route: ActivatedRoute, private router: Router, private authService: AuthService, private tokenStorage: TokenStorageService) { }
 
   ngOnInit() {
+    if (this.tokenStorage.getToken()) {
+      this.isLoggedIn = true;
+    
+    }
+
+    if (this.isLoggedIn) {
+      this.router.navigate(['/user/profile/']);
+    }
   }
 
 
@@ -54,11 +62,12 @@ export class RegisterComponent implements OnInit {
         //this is where you have to grab the type + token response and send it to token storage
         this.tokenStorage.saveToken(data.token);
         console.log(data.token);
-        this.tokenStorage.saveUser(data);
-
         this.isLoginFailed = false;
         this.isLoggedIn = true;
-        this.router.navigate(['/user/profile/']);
+        this.tokenStorage.saveUser(data);
+
+        
+       
       },
       err => {
         this.errorMessage = err.error.message;

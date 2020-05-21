@@ -15,14 +15,19 @@ export class HeaderComponent implements OnInit {
   mySubscription: any;
 
   constructor(private router: Router, private tokenStorageService: TokenStorageService) {
-
-
+   
    }
 
   ngOnInit() {
-  
+   
    this.load();
 
+  }
+
+  ngOnDestroy() {
+    if (this.mySubscription) {
+      this.mySubscription.unsubscribe();
+    }
   }
 
 
@@ -31,9 +36,11 @@ export class HeaderComponent implements OnInit {
       this.isLoggedIn = true;
       this.roles = this.tokenStorageService.getUser().roles;
     }
+   
   }
 
 
+ 
   logout() {
     this.tokenStorageService.signOut();
     this.isLoggedIn = false;
