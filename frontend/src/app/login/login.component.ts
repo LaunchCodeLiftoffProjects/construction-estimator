@@ -3,6 +3,7 @@ import { AuthService } from '../_services/auth.service';
 import { TokenStorageService } from '../_services/token-storage.service';
 import { EmailValidator } from '@angular/forms';
 import { Router, RouterModule, ActivatedRoute, ParamMap, NavigationExtras } from '@angular/router';
+import { HeaderComponent } from '../header/header.component';
 
 @Component({
   selector: 'app-login',
@@ -38,6 +39,7 @@ export class LoginComponent implements OnInit {
         this.isLoggedIn = true;
         this.roles = this.tokenStorage.getUser().roles;
         this.router.navigate(['/project/list/']);
+        
       },
       err => {
         this.errorMessage = err.error.message;

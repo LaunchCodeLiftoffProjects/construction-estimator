@@ -13,7 +13,9 @@ export class AppComponent implements OnInit {
   showModeratorBoard = false;
   username: string;
 
-  constructor(private tokenStorageService: TokenStorageService) { }
+  constructor(private tokenStorageService: TokenStorageService) {
+    
+   }
 
   ngOnInit() {
     this.isLoggedIn = !!this.tokenStorageService.getToken();
@@ -27,6 +29,7 @@ export class AppComponent implements OnInit {
 
       this.username = user.username;
     }
+    
   }
 
   logout() {
