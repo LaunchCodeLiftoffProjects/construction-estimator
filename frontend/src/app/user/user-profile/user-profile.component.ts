@@ -46,7 +46,10 @@ export class UserProfileComponent implements OnInit {
       this.id = user.id;
       console.log("id", this.id);
       this.loadUser();
+    } else {
+      this.router.navigate(['/login']);
     }
+    
   }
  
   

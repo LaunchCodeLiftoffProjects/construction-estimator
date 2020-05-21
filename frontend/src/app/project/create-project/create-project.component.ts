@@ -35,7 +35,10 @@ export class CreateProjectComponent implements OnInit {
       this.showModeratorBoard = this.roles.includes('ROLE_MODERATOR');
 
       this.username = user.name;
+    } else {
+      this.router.navigate(['/login']);
     }
+    
   }
 
   saveProject(name: string, roomLength: number, roomWidth: number, roomHeight: number) {

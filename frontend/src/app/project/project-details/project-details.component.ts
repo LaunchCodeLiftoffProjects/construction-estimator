@@ -55,7 +55,7 @@ export class ProjectDetailsComponent implements OnInit {
 
   estimate: Estimate = new Estimate; // not needed for modeling but for calculations
   
-  constructor(private route: ActivatedRoute, private tokenStorageService: TokenStorageService) { }
+  constructor(private route: ActivatedRoute, private router: Router, private tokenStorageService: TokenStorageService) { }
 
   ngOnInit() {
     this.id = this.route.snapshot.paramMap.get("id");
@@ -72,6 +72,8 @@ export class ProjectDetailsComponent implements OnInit {
       this.username = user.name;
       this.userId = user.id;
       console.log("id", this.userId);
+    } else {
+      this.router.navigate(['/login']);
     }
     this.projectURL = this.projectURL + this.id;
     this.loadProject();
