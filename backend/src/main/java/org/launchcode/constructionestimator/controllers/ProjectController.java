@@ -2,8 +2,7 @@ package org.launchcode.constructionestimator.controllers;
 
 import org.launchcode.constructionestimator.models.ItemDetails;
 import org.launchcode.constructionestimator.models.Project;
-import org.launchcode.constructionestimator.models.data.ItemDetailsRepository;
-import org.launchcode.constructionestimator.models.data.ProjectRepository;
+import org.launchcode.constructionestimator.models.data.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +20,16 @@ public class ProjectController {
 
     @Autowired
     ItemDetailsRepository itemDetailsRepository;
-  
+
+    @Autowired
+    MaterialsRepository materialsRepository;
+
+    @Autowired
+    LaborRepository laborRepository;
+
+    @Autowired
+    EstimateRepository estimateRepository;
+
     // Use this with @RequestParam to search all projects by field, leave params empty to return all projects
     @GetMapping
     public ResponseEntity getProjects() {
@@ -60,6 +68,8 @@ public class ProjectController {
         } else {
             projectRepository.save(project);
 
+            //TODO: Check this as well
+
             Integer id = projectId;
             Map<String, String> map = Collections.singletonMap("id", id.toString());
             return new ResponseEntity(map, HttpStatus.OK);
@@ -80,6 +90,8 @@ public class ProjectController {
             for (ItemDetails itemDetails : project.getItemDetails()) {
                 itemDetailsRepository.deleteById(itemDetails.getId());
             }
+
+            //TODO: Delete Labor and Materials entities
 
             // lastly delete the project
             projectRepository.deleteById(projectId);

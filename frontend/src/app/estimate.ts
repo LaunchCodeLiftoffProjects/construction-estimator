@@ -1,5 +1,6 @@
 export class Estimate {
 
+    id: number;
     appliancesCost: number;
     fixturesCost: number;
     finishesCost: number;

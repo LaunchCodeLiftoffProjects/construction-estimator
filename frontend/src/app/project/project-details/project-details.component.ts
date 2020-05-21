@@ -8,6 +8,7 @@ import { FormsModule } from '@angular/forms';
 import { Materials } from 'src/app/materials';
 import { Labor } from 'src/app/labor';
 import { Estimate } from 'src/app/estimate';
+import { ProjectDetailsPayload } from 'src/app/project-details-payload'
 
 
 @Component({
@@ -36,8 +37,6 @@ export class ProjectDetailsComponent implements OnInit {
   categories: string[] = [ "appliance", "fixture", "finish" ];
   categoryTitles = [ "Appliances", "Fixtures", "Finishes" ];
 
-  selectionArray: Selection[] = []; // for facilitating data binding with item selections
-
   calcByQuantity: string[] = ['Dishwasher', 'Disposal', 'Range Hood', 'Oven/Range', 'Refrigerator',
               'Bath & Shower', 'Ceiling Light/Fan', 'Electrical Outlets', 'Electrical Switches', 
               'Lighting', 'Shelving', 'Sink', 'Faucet', 'Toilet', 'Doors', 'Cabinets, Lower', 
@@ -52,11 +51,7 @@ export class ProjectDetailsComponent implements OnInit {
   factorIntoFinishWork: string[] = ['Shelving', 'Doors', 'Cabinets, Lower', 'Cabinets, Upper', 'Windows',
               'Baseboards', 'Trim', 'Flooring', 'Walls', 'Backsplash', 'Countertop'];
 
-
-  materials: Materials;
-  labor: Labor;
-
-  estimate: Estimate = new Estimate; // not needed for modeling but for calculations
+  selectionArray: Selection[] = []; // for facilitating data binding with item selections
   
   constructor(private route: ActivatedRoute) { }
 
@@ -76,11 +71,17 @@ export class ProjectDetailsComponent implements OnInit {
 
     fetch(this.projectURL).then(function (response) {
       response.json().then(function (json) {
+
+        console.log(JSON.stringify(json));
         this.project = new Project(json.name, json.roomType, json.roomLength, json.roomWidth, json.roomHeight);
         this.project.id = json.id;
         this.project.itemDetails = json.itemDetails;
-        this.materials = json.materials;
-        this.labor = json.labor;
+
+        // pull out materials and labor objects. create new ones if null
+        this.project.materials = json.materials === null ? new Materials : json.materials;
+        this.project.labor = json.labor === null ? new Labor : json.labor;
+        this.project.estimate = json.estimate === null ? new Estimate : json.estimate;
+
         // do not need to load previous estimate because a new one will be built from scratch
         this.loadItems(); // put here so things load in order
         console.log("Items loaded.");
@@ -235,29 +236,29 @@ export class ProjectDetailsComponent implements OnInit {
 
     // check item for category and add cost to matching subtotal
     if (selection.category === 'appliance') {
-      this.estimate.appliancesCost += costs[0];
+      this.project.estimate.appliancesCost += costs[0];
     } else if (selection.category === 'fixture') {
-      this.estimate.fixturesCost += costs[0];
+      this.project.estimate.fixturesCost += costs[0];
     } else if (selection.category === 'finish') {
-      this.estimate.finishesCost += costs[0];
+      this.project.estimate.finishesCost += costs[0];
     }
     // add any related materials cost - will add in only once if appliance involveds both plumbing & electrical
-    if (this.materials.needPlumbingSystem === true && this.factorIntoPlumbing.includes(selection.type)) {
-      this.estimate.materialsCost += costs[1];
-    } else if (this.materials.needElectricalSystem === true && this.factorIntoElectrical.includes(selection.type)) {
-      this.estimate.materialsCost += costs[1];
+    if (this.project.materials.needPlumbingSystem === true && this.factorIntoPlumbing.includes(selection.type)) {
+      this.project.estimate.materialsCost += costs[1];
+    } else if (this.project.materials.needElectricalSystem === true && this.factorIntoElectrical.includes(selection.type)) {
+      this.project.estimate.materialsCost += costs[1];
     }
     // Note: framing and drywall costs added separately since not tied to specific items, just dimensions of room
 
     // add any related labor cost - will add in only once if appliance involves both plumbing & electrical
-    if (this.labor.needPlumbingSub === true && this.factorIntoPlumbing.includes(selection.type)) {
-      this.estimate.laborCost += costs[2];
-    } else if (this.labor.needElectricalSub === true && this.factorIntoElectrical.includes(selection.type)) {
-      this.estimate.laborCost += costs[2];
+    if (this.project.labor.needPlumbingSub === true && this.factorIntoPlumbing.includes(selection.type)) {
+      this.project.estimate.laborCost += costs[2];
+    } else if (this.project.labor.needElectricalSub === true && this.factorIntoElectrical.includes(selection.type)) {
+      this.project.estimate.laborCost += costs[2];
     }
     // Note: rough carpentry labor costs added separately since not tied to specific items, just dimensions of room
-    if (this.labor.needFinishWork === true && this.factorIntoFinishWork.includes(selection.type)) {
-      this.estimate.laborCost += costs[2];
+    if (this.project.labor.needFinishWork === true && this.factorIntoFinishWork.includes(selection.type)) {
+      this.project.estimate.laborCost += costs[2];
     }
   
   }
@@ -294,26 +295,26 @@ export class ProjectDetailsComponent implements OnInit {
     }
 
     // add remaining material & labor costs based on room dimensions, not items
-    if (this.materials.needFraming === true) {
-      this.estimate.materialsCost += 10 * this.wallArea; // $10/SF of wall area
+    if (this.project.materials.needFraming === true) {
+      this.project.estimate.materialsCost += 10 * this.wallArea; // $10/SF of wall area
     }
-    if (this.materials.needDrywall === true) {
-      this.estimate.materialsCost += 25 * this.wallArea; // $25/SF of wall area
+    if (this.project.materials.needDrywall === true) {
+      this.project.estimate.materialsCost += 25 * this.wallArea; // $25/SF of wall area
     }
-    if (this.labor.needRoughCarpentry === true) {
-      this.estimate.laborCost += 10 * this.wallArea; // $10/SF of wall area
+    if (this.project.labor.needRoughCarpentry === true) {
+      this.project.estimate.laborCost += 10 * this.wallArea; // $10/SF of wall area
     }
 
     // calculate total cost and save to estimate
-    this.estimate.totalCost = this.estimate.appliancesCost +
-                              this.estimate.fixturesCost +
-                              this.estimate.finishesCost +
-                              this.estimate.materialsCost +
-                              this.estimate.laborCost;
+    this.project.estimate.totalCost = this.project.estimate.appliancesCost +
+                              this.project.estimate.fixturesCost +
+                              this.project.estimate.finishesCost +
+                              this.project.estimate.materialsCost +
+                              this.project.estimate.laborCost;
 
-    console.log("ESTIMATE: \nAppliances:", this.estimate.appliancesCost, "\nFixtures:", this.estimate.fixturesCost,
-                "\nFinishes:", this.estimate.finishesCost, "\nMaterials:", this.estimate.materialsCost,
-                "\nLabor:", this.estimate.laborCost, "\nTOTAL COST:", this.estimate.totalCost);
+    console.log("ESTIMATE: \nAppliances:", this.project.estimate.appliancesCost, "\nFixtures:", this.project.estimate.fixturesCost,
+                "\nFinishes:", this.project.estimate.finishesCost, "\nMaterials:", this.project.estimate.materialsCost,
+                "\nLabor:", this.project.estimate.laborCost, "\nTOTAL COST:", this.project.estimate.totalCost);
   }
 
   // called only when submit button is clicked - processes input and sends everything to database
@@ -321,6 +322,10 @@ export class ProjectDetailsComponent implements OnInit {
 
     // create ItemDetails array and run calculations for estimate based on user input
     this.buildProject();
+
+    let projectDetailsPayload = new ProjectDetailsPayload(this.project.itemDetails, this.project.labor, this.project.materials, this.project.estimate);
+
+    console.log(JSON.stringify(projectDetailsPayload));
 
     // save itemDetails objects to database
     fetch("http://localhost:8080/api/project/" + this.project.id + "/details", {
@@ -330,32 +335,9 @@ export class ProjectDetailsComponent implements OnInit {
         'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Credentials': 'true'
       },
-      body: JSON.stringify(this.project.itemDetails),
+      body: JSON.stringify(projectDetailsPayload),
     }).then(function (response) {
-      return response.json();
-    }).then(function (data) {
-      console.log('Success:', data);
-    }).catch(function (error) {
-      console.error('Error:', error);
-    });
-
-    // TODO: save this.materials to this.project.materials and send to database
-
-    // TODO: save this.labor to this.project.labor and send to database
-
-    // TODO: save this.estimate to this.project.estimate and send to database
-
-    // save entire Project object to database
-    fetch("http://localhost:8080/api/project/" + this.project.id, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Credentials': 'true'
-      },
-      body: JSON.stringify(this.project),
-    }).then(function (response) {
-      return response.json();
+      return response;
     }).then(function (data) {
       console.log('Success:', data);
     }).catch(function (error) {

@@ -23,9 +23,6 @@ export class Project {
         this.roomWidth = roomWidth;
         this.roomHeight = roomHeight;
         this.itemDetails = [];
-        this.materials = new Materials;
-        this.labor = new Labor;
-        this.estimate = new Estimate;
     }
 
 }
