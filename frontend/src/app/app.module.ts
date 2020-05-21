@@ -16,6 +16,11 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
 import { AppRoutingModule } from './app-routing.module';
 import { FormsModule } from '@angular/forms';
 import { EditUserDetailsComponent } from './user/edit-user-details/edit-user-details.component';
+import { BoardAdminComponent } from './board-admin/board-admin.component';
+import { BoardModeratorComponent } from './board-moderator/board-moderator.component';
+import { BoardUserComponent } from './board-user/board-user.component';
+import { HttpClientModule } from '@angular/common/http';
+import { authInterceptorProviders } from './_helpers/auth.interceptor';
 
 
 
@@ -32,14 +37,17 @@ import { EditUserDetailsComponent } from './user/edit-user-details/edit-user-det
     LoginComponent,
     AboutComponent,
     PageNotFoundComponent,
-    EditUserDetailsComponent],
+    EditUserDetailsComponent,
+    BoardAdminComponent,
+    BoardModeratorComponent,
+    BoardUserComponent],
   imports: [
     FormsModule,
     BrowserModule,
-    FormsModule,
-    AppRoutingModule // brings over info from app-routing.module.ts
+    AppRoutingModule, // brings over info from app-routing.module.ts
+    HttpClientModule
   ],
-  providers: [],
+  providers: [authInterceptorProviders],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

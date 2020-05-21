@@ -39,6 +39,13 @@
                 Passwords do not match.
             </div>
         </div>
+
+        <div class = "form-group">
+           
+            <div *ngIf="errorMessage.length > 0" class="alert alert-danger">
+                {{errorMessage}}
+            </div>
+        </div>
         <div>
             <p>Already registered? <a  class="text-info" [routerLink]="'/login'">Login here.</a></p>
         </div>
