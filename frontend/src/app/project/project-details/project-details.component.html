@@ -66,7 +66,7 @@
                             </div>
                             <div class="col-2">
                                 <ng-container *ngIf="calcByQuantity.includes(selection.type)">
-                                    <input #quantity="ngModel" [(ngModel)]="selectionArray[i].quantity" type="number" step="1" min = '0' class="form-control form-control-sm w-75 h-100" />
+                                    <input #quantity="ngModel" [(ngModel)]="selectionArray[i].quantity" type="number" step="1" min = '0' class="form-control form-control-sm w-75 h-100" (change)="checkValue(selectionArray[i])"/>
                                 </ng-container>
                             </div> 
                             <div class="col-2"></div>

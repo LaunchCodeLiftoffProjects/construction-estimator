@@ -183,25 +183,29 @@ export class ProjectDetailsComponent implements OnInit {
 
   setValue(selection) {
 
-    let options = this.getOptions(selection.type);
-    return options[0];
-
-
-    //  if (selection.checked) {
-       
-    //  } else {
-    //    selection.selected = '';
-    //  }
+    if (selection.checked) {
+      let options = this.getOptions(selection.type);
+      return options[0];
+    } else {
+      selection.selected = '';
+      selection.quantity = 0;
+    }
 
 	}
 
   // when item selection is checked in form, if zero, raise to 1
   changeQuantity(selection: Selection): number {
     
-    if (this.calcByQuantity.includes(selection.type) && selection.checked === true && selection.quantity === 0) {
+    if (this.calcByQuantity.includes(selection.type) && selection.checked === true && selection.quantity <= 0) {
       return 1;
     } else {
       return selection.quantity;
+    }
+  }
+
+  checkValue(selection: Selection) {
+    if (selection.checked && selection.quantity <= 0) {
+      selection.quantity = 1;
     }
   }
 
