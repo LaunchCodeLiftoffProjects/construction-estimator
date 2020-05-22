@@ -16,16 +16,16 @@
         <div class="form-group"  #roomType="ngModel" [(ngModel)]="project.roomType" >
             <h5>Select your room type:</h5>
             <div class="form-check indent-left">
-                <label class="form-check-label"><input name="roomType" type="radio" class="form-check-input" [checked]="updateProjectRoomType($event)"
-                        required />Kitchen</label>
+                <label class="form-check-label"><input name="roomType" type="radio" class="form-check-input" checked required
+                        value="kitchen" (change)="updateProjectRoomType($event)" />Kitchen</label>
             </div>
             <div class="form-check indent-left">
                 <label class="form-check-label"><input name="roomType"  type="radio" class="form-check-input" 
-                         />Bathroom</label>
+                    value="bath" (change)="updateProjectRoomType($event)" />Bathroom</label>
             </div>
             <div class="form-check indent-left">
                 <label class="form-check-label"><input name="roomType" type="radio" class="form-check-input" 
-                         />Bedroom, Living Room, Office, Etc.</label>
+                    value="living" (change)="updateProjectRoomType($event)" />Bedroom, Living Room, Office, Etc.</label>
 
             </div>
             <div [hidden]="roomType.valid || roomType.untouched">
