@@ -30,6 +30,7 @@ export class ProjectDetailsComponent implements OnInit {
   showModeratorBoard = false;
   username: string;
   userId: number;
+  changedDimensions = 0;
 
   itemsArray: Item[]; // to get all possible items (serves dual purpose - display and data for calculations)
 
@@ -179,6 +180,19 @@ export class ProjectDetailsComponent implements OnInit {
     }
     optionsArray.sort((a, b) => (a.name > b.name) ? 1 : -1);
     return optionsArray;
+  }
+
+  setChecked(selection) {
+    if (selection.quantity > 0) {
+      selection.checked = true;
+      let options = this.getOptions(selection.type);
+      return options[0];
+    } else if (selection.quantity < 0) {
+      selection.quantity = 1;
+      return selection.selected;
+    } else {
+      selection.checked = false;
+    }
   }
 
   setValue(selection) {
