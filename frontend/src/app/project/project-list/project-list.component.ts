@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { User } from 'src/app/user';
 import { Project } from 'src/app/project';
 import { TokenStorageService } from 'src/app/_services/token-storage.service';
-import { Router } from '@angular/router';
+import { Estimate } from 'src/app/estimate';
+import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 
 @Component({
   selector: 'app-project-list',
@@ -20,11 +21,12 @@ export class ProjectListComponent implements OnInit {
   showModeratorBoard = false;
   username: string;
 
-  constructor(private tokenStorageService: TokenStorageService, private router: Router) {
+  constructor(private route: ActivatedRoute, private router: Router,private tokenStorageService: TokenStorageService) {
     
    }
 
   ngOnInit() {
+    // this. = this.route.snapshot.paramMap.get("id");
     this.isLoggedIn = !!this.tokenStorageService.getToken();
 
     if (this.isLoggedIn) {

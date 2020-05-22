@@ -3,7 +3,7 @@
 
     <!--Nested container with divs side-by-side to move project name, type, and dimensions to top right-->
     <div class="container mt-5">
-        <div class="row justify-content-between">
+        <div class="row justify-content-between">     
             <div class="col-6">
                 <h2 class="text-info mt-5">Project Details</h2>
                 <p>Tell us what you need to make your vision a reality! Don't worry if you aren't sure about some of the details; you can come back and edit your project at any time.</p>
@@ -98,7 +98,7 @@
         <br />
 
         <div class="form-group text-right">
-            <button (click)='saveProject()' class="btn btn-info" [routerLink]="'/project/list'">Get Estimate</button>
+            <button (click)='saveProject()' class="btn btn-info" [routerLink]="'/project/list'" + this.project.id>Get Estimate</button>
         </div>
 
     </div>

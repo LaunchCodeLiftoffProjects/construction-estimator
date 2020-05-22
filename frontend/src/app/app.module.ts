@@ -21,6 +21,7 @@ import { BoardModeratorComponent } from './board-moderator/board-moderator.compo
 import { BoardUserComponent } from './board-user/board-user.component';
 import { HttpClientModule } from '@angular/common/http';
 import { authInterceptorProviders } from './_helpers/auth.interceptor';
+import { ProjectEstimateComponent } from './project-list/project-estimate/project-estimate.component';
 
 
 
@@ -40,7 +41,8 @@ import { authInterceptorProviders } from './_helpers/auth.interceptor';
     EditUserDetailsComponent,
     BoardAdminComponent,
     BoardModeratorComponent,
-    BoardUserComponent],
+    BoardUserComponent,
+    ProjectEstimateComponent],
   imports: [
     FormsModule,
     BrowserModule,
