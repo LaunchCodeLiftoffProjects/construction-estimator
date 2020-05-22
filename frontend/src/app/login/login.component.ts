@@ -21,6 +21,14 @@ export class LoginComponent implements OnInit {
   header: HeaderComponent;
   mySubscription: any;
 
+  imagePaths: string[] = ["/assets/examples/bath_coastal.jpg", "/assets/examples/bath_grey.jpg",
+            "/assets/examples/bath_tan.jpg", "/assets/examples/bedroom_chevron.jpg",
+            "/assets/examples/bedroom_luxe.jpg", "/assets/examples/bedroom_teal_yellow.jpg",
+            "/assets/examples/kitchen_green.jpg", "/assets/examples/kitchen_grey.jpg",
+            "/assets/examples/kitchen_white.jpg", "/assets/examples/living_farmhouse.jpg",
+            "/assets/examples/living_green.jpg", "/assets/examples/living_industrial", 
+            "/assets/examples/living_white.jpg", "/assets/examples/living_cobalt"];
+  selectedImage: string = this.getRandom(this.imagePaths);
   
   constructor(private authService: AuthService, private tokenStorage: TokenStorageService, private router: Router) {
    
@@ -34,7 +42,6 @@ export class LoginComponent implements OnInit {
       this.router.navigate(['/user/profile/']);
     }
 
-    
   }
 
   ngOnDestroy() {
@@ -66,4 +73,26 @@ export class LoginComponent implements OnInit {
   reloadPage() {
     window.location.reload();
   }
+
+  shuffle(array) {
+    var currentIndex = array.length, temporaryValue, randomIndex;
+  
+    // While there remain elements to shuffle...
+    while (0 !== currentIndex) { 
+      // Pick a remaining element...
+      randomIndex = Math.floor(Math.random() * currentIndex);
+      currentIndex -= 1;
+      // And swap it with the current element.
+      temporaryValue = array[currentIndex];
+      array[currentIndex] = array[randomIndex];
+      array[randomIndex] = temporaryValue;
+    }
+    return array;
+  }
+
+  getRandom(array) {
+    let randomIndex: number = Math.floor(Math.random()*array.length);
+    return array[randomIndex];
+  }
+
 }
