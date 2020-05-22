@@ -2,7 +2,7 @@
     <br />
     <h2 class="text-info mt-5">Create a New Project</h2>
     <br />
-    <form (ngSubmit)="saveProject(name, roomLength, roomWidth, roomHeight)" #projectForm="ngForm">
+    <form (ngSubmit)="saveProject()" #projectForm="ngForm">
         <div class="form-group">
             <h5>What would you like to call your project?</h5>
             <input type='text' #name="ngModel" [(ngModel)]="project.name" placeholder="Project Name" class="form-control" name="name" required
@@ -16,15 +16,15 @@
         <div class="form-group"  #roomType="ngModel" [(ngModel)]="project.roomType" >
             <h5>Select your room type:</h5>
             <div class="form-check indent-left">
-                <label class="form-check-label"><input name="roomType" type="radio" class="form-check-input" checked
+                <label class="form-check-label"><input name="roomType" type="radio" class="form-check-input" [checked]="updateProjectRoomType($event)"
                         required />Kitchen</label>
             </div>
             <div class="form-check indent-left">
-                <label class="form-check-label"><input name="roomType"  type="radio" class="form-check-input"
+                <label class="form-check-label"><input name="roomType"  type="radio" class="form-check-input" 
                          />Bathroom</label>
             </div>
             <div class="form-check indent-left">
-                <label class="form-check-label"><input name="roomType" type="radio" class="form-check-input"
+                <label class="form-check-label"><input name="roomType" type="radio" class="form-check-input" 
                          />Bedroom, Living Room, Office, Etc.</label>
 
             </div>
@@ -47,7 +47,7 @@
                     Height (ft.)</label>
             </div>
 
-            <div [hidden]="(roomHeight.pristine && roomLength.pristine && roomWidth.pristine) || (roomHeight.valid && roomWidth.valid && roomLength.valid)"
+            <div [hidden]="(roomHeight.pristine && roomHeight.untouched) || (roomLength.pristine && roomLength.untouched) || (roomWidth.pristine && roomWidth.untouched) || (roomHeight.valid && roomWidth.valid && roomLength.valid)"
                 class="alert alert-danger">
                 All Room Dimensions are required and must be valid numbers greater than zero.
             </div>
