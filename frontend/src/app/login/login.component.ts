@@ -74,8 +74,8 @@ export class LoginComponent implements OnInit {
     window.location.reload();
   }
 
-  shuffle(array) {
-    var currentIndex = array.length, temporaryValue, randomIndex;
+  shuffle(array: string[]): string[] {
+    let currentIndex = array.length, temporaryValue, randomIndex;
   
     // While there remain elements to shuffle...
     while (0 !== currentIndex) { 
@@ -90,7 +90,7 @@ export class LoginComponent implements OnInit {
     return array;
   }
 
-  getRandom(array) {
+  getRandom(array: string[]): string {
     let randomIndex: number = Math.floor(Math.random()*array.length);
     return array[randomIndex];
   }
