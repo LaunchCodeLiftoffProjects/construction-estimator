@@ -3,6 +3,7 @@ package org.launchcode.constructionestimator.models;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 
 @Entity
@@ -16,6 +17,8 @@ public class Labor extends AbstractEntity {
     @OneToOne
     @JsonBackReference
     private Project project;
+
+    public Labor() {}
 
     public boolean isNeedPlumbingSub() {
         return needPlumbingSub;

@@ -17,8 +17,7 @@ public class ItemController {
 
     @GetMapping(value = "/api/item", produces = MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody byte[] getAllItems() throws IOException {
-        byte[] array = Files.readAllBytes(Paths.get("src/main/resources/items.json"));
-        return array;
+        return Files.readAllBytes(Paths.get("src/main/resources/items.json"));
     }
 
 }

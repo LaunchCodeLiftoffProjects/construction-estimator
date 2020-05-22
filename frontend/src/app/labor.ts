@@ -1,6 +1,7 @@
 
 export class Labor {
 
+    id: number;
     needPlumbingSub: boolean;
     needElectricalSub: boolean;
     needRoughCarpentry: boolean;
