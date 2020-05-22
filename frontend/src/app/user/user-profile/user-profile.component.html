@@ -4,10 +4,10 @@
     <br />
 
     <div *ngIf="!editUser; else editUserBlock" class="mt-3">
-        <h5 class="mb-3">Basic Information</h5>        
+        <h5 class="mb-3">Basic Information <span (click)="editProfile()" class="badge badge-info" role="button">Edit</span></h5>  
         <p>{{user.firstName}} {{user.lastName}}<br />
             {{user.email}}</p>
-        <button type="button" (click)="editProfile()" class="btn btn-info">Edit User Profile</button>
+        
     </div>
 
     <ng-template #editUserBlock>
@@ -15,7 +15,7 @@
     </ng-template>
     
     <div class="mt-5" *ngIf="!editDetails; else editDetailsBlock">
-        <h5>My Home</h5>
+        <h5>My Home <span (click)="editHomeDetails()" class="badge badge-info" role="button">Edit</span></h5>
         <div *ngIf="user.userDetails == null; else userDetailsBlock">Details about your home will appear here.</div>
         <ng-template #userDetailsBlock>
             <label>Year Built:</label>
@@ -24,7 +24,6 @@
             <p class="lead">Notes:</p>
             <p>{{user.userDetails.homeNotes}}</p>
         </ng-template>
-        <button type="button" (click)="editHomeDetails()" class="btn btn-info">Edit Home</button>
     </div>
 
     <ng-template #editDetailsBlock>
@@ -41,6 +40,9 @@
             <ul>
                 <li class="lead" *ngFor="let project of user.projects">{{project.name}}</li>
             </ul>
+            <div class="mt-3" *ngIf="user.projects.length > 0">
+                <h2 class="text-info">+ Add Project</h2>
+            </div>
         </div>
     </div>
 </div>
