@@ -152,6 +152,7 @@ export class ProjectDetailsComponent implements OnInit {
 
   // check to see if details have been saved to this project before or not, and create Selection objects accordingly
   createSelections() { // FIXME: Rework this so current selections aren't lost if room type is changed
+    // TODO: assign selection id number to any types previously saved with project itemDetails
     this.selectionArray = []; // rebuild this array if method is called again prior to form submission due to roomType change
     let selection: Selection;
     let details: ItemDetails;
@@ -336,6 +337,9 @@ export class ProjectDetailsComponent implements OnInit {
     let item: Item;
     let details: ItemDetails;
     let costs: number[];
+
+    // FIXME: update to match itemDetails and Selection objects by id and update instead of deleting
+    // if no longer selected by user in form, zero/blank out data in existing object in database
 
     for (let i=0; i < this.selectionArray.length; i++) {
       selection = this.selectionArray[i];
