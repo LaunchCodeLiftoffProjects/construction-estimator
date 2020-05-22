@@ -16,7 +16,7 @@
                     <h4>{{project.name}} </h4>
                     <p class="lead">{{roomTitles[rooms.indexOf(project.roomType)]}}<br />
                     {{project.roomLength}}'L x {{project.roomWidth}}'W x {{project.roomHeight}}'H</p>
-                    <span class = "badge badge-info" (click) = "editingProject = true;">Edit</span>
+                    <button class = "badge badge-info" (click) = "editingProject = true;">Edit</button>
                 </div>
 
                 <!--Visible only while editing name, type, and dimensions-->
@@ -39,7 +39,7 @@
                             <label><input #roomHeight="ngModel" required [(ngModel)]="project.roomHeight" type="number" class="form-control form-control-sm" step="0.1" min='1' /> Ceiling Height (ft.)</label>
                         </div>
                     </div>
-                    <span class="badge badge-success" (click) = "editingProject = false" >Done Editing</span>
+                    <button class="badge badge-success" (click) = "editingProject = false" >Done Editing</button>
                 </ng-template>
 
             </div>
