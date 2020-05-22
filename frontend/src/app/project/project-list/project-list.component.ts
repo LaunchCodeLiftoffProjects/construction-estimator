@@ -45,7 +45,7 @@ export class ProjectListComponent implements OnInit {
       this.router.navigate(['/login']);
     }
     
-    this.loadProject();
+    this.loadProjects();
   }
 
   loadProjects() {

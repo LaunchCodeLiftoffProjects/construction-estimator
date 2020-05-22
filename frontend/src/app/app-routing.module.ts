@@ -13,7 +13,7 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
 import { BoardUserComponent } from './board-user/board-user.component';
 import { BoardModeratorComponent } from './board-moderator/board-moderator.component';
 import { BoardAdminComponent } from './board-admin/board-admin.component';
-import {ProjectEstimateComponent} from 'C:/Liftoff/construction-estimator/frontend/src/app/project-list/project-estimate/project-estimate.component'
+// import {ProjectEstimateComponent} from 'C:/Liftoff/construction-estimator/frontend/src/app/project-list/project-estimate/project-estimate.component'
   import { from } from 'rxjs'; 
 
 const routes: Routes = [
@@ -25,11 +25,11 @@ const routes: Routes = [
   {path: 'project/create' , component: CreateProjectComponent},
   {path: 'project/add-details/:id' , component: ProjectDetailsComponent},
   {path: 'project/list', component: ProjectListComponent,
-   children: [
-    {
-      path: 'project-Estimate',
-      component: ProjectEstimateComponent
-    },
+  //  children: [
+  //   {
+  //     path: 'project-Estimate',
+  //     component: ProjectEstimateComponent
+  //   },
     // {
     //     path: 'create',
     //     component: PostCreateComponent
@@ -38,7 +38,7 @@ const routes: Routes = [
     //     path: 'detail',
     //     component: PostDetailComponent
     // }
-]
+// ]
 },
   {path: '**', component: PageNotFoundComponent},
   { path: 'user', component: BoardUserComponent },

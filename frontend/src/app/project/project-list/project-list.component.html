@@ -1,101 +1,36 @@
 <div class="container">
-  <div class="mt-5">
-    <div class="row justify-content-between">
-      <div class="col-6 split left">
-        <h2 class="text-info">All Projects</h2>
-      </div>
-    </div>
-
-    <div *ngIf="!projects || projects.length === 0">
-      <p class="lead">
-        Hey there! You do not have any projects yet.<br />
-        Why not
-        <a class="text-info" [routerLink]="'/project/create'">create</a> one?
-      </p>
-    </div>
-
-    <div>
-        <li class="lead" *ngFor="let project of projects">
-            <a (click)="makeActiveProject(project)" >{{ project.name }}</a>
-            <div *ngIf="project === activeProject">
-        </li>
-      </ul>
-    </div>
-    <div class="container">
-
-    
-        <div class="row justify-content-between">
-          <div class="col-6">
-            <p>right side</p>
-            <table>
-                <thead>
-                    
-                        <th>Item Name</th>
-                        <th>Quantity</th>
-                        <th>Per Unit Price</th>
-                        <th>Total</th>
-                    
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>{{ itemDetail.item }}</td>
-                        <td>{{ itemDetail.quantity }}</td>
-                        <td>{{ itemDetail.finalPrice }}</td>
-                        <td>{{(itemDetail.finalPrice * itemDetail.quantity) | number:'1.2-2' }}</td>
-                    </tr>
-                </tbody>
-            </table>        
-    
-          </div>
+  <h2 class="text-info">All Projects</h2>
+  <p *ngIf="!projects || projects.length === 0"></p>
+  <p class="lead">
+    Hey there! You do not have any projects yet.<br />
+    Why not
+    <a class="text-info" [routerLink]="'/project/create'">create</a>
+    one?
+  </p>
+  <div class="row">
+    <div class="col">
+      1 of 2
+      <li class="lead" *ngFor="let project of projects">
+        <a (click)="makeActiveProject(project)">{{ project.name }}</a>
+        <div *ngIf="project === activeProject">
+          <div *ngFor="let itemDetail of project.itemDetails"></div>
         </div>
-      </div>
-</div>
-<div class="form-group text-right">
-  <button class="btn btn-info" [routerLink]="'project/add-details/:id' ">Edit Project</button>
-</div>
-
-  <router-outlet></router-outlet>
-      
-      <router-outlet>"project-Estimate"</router-outlet>
-</div>
-
-<!-- <div class="container">
- 
-</div> -->
-        <p class="lead">Hey there! You do not have any projects yet.<br /> 
-            Why not <a class="text-info" [routerLink]="'/project/create'">create</a> one?</p>
+      </li>
     </div>
 
-    <div>
-        <ul>
-            <li class="lead" *ngFor="let project of projects">
-                <a (click)="makeActiveProject(project)" >{{ project.name }}</a>
-                <div *ngIf="project === activeProject">
-                    <div *ngFor="let itemDetail of project.itemDetails">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Item Name</th>
-                                    <th>Quantity</th>
-                                    <th>Per Unit Price</th>
-                                    <th>Total</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>{{ itemDetail.item }}</td>
-                                    <td>{{ itemDetail.quantity }}</td>
-                                    <td>{{ itemDetail.finalPrice }}</td>
-                                    <td>{{(itemDetail.finalPrice * itemDetail.quantity) | number:'1.2-2' }}</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        Total Cost of Project &bull; {{ project.finalCost | number:'1.2-2' }}
+    <div class="col">
+      2 of 2
+      <table>
+        <tbody>
+            <tr>
+                <td>{{Estimate.appliancecost}}</td>
+                <td>{{ itemDetail.quantity }}</td>
+                <td>{{ itemDetail.finalPrice }}</td>
+                <td>{{(itemDetail.finalPrice * itemDetail.quantity) | number:'1.2-2' }}</td>
+            </tr> 
 
-                    </div>
-                </div>
-            </li>
-        </ul>
+ </tbody>
+    </table>
     </div>
-    
+  </div>
 </div>
