@@ -1,6 +1,8 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { UserDetails } from 'src/app/user-details';
 import { User } from 'src/app/user';
+import { Router } from '@angular/router';
+import { TokenStorageService } from 'src/app/_services/token-storage.service';
 
 @Component({
   selector: 'app-edit-user-details',
@@ -10,11 +12,32 @@ import { User } from 'src/app/user';
 export class EditUserDetailsComponent implements OnInit {
 
   @Input() user: User;
+  isLoggedIn = false;
+  showAdminBoard = false;
+  showModeratorBoard = false;
+  username: string;
+  private roles: string[];
   
 
-  constructor() { }
+  constructor(private router: Router, private tokenStorageService: TokenStorageService) { }
 
   ngOnInit() {
+    this.isLoggedIn = !!this.tokenStorageService.getToken();
+    console.log("token", this.tokenStorageService.getToken());
+    console.log("logged in", this.isLoggedIn);
+
+    if (this.isLoggedIn) {
+      const user = this.tokenStorageService.getUser();
+      this.roles = user.roles;
+    
+      this.showAdminBoard = this.roles.includes('ROLE_ADMIN');
+      this.showModeratorBoard = this.roles.includes('ROLE_MODERATOR');
+
+
+
+    } else {
+      this.router.navigate(['/login']);
+    }
     if(this.user.userDetails === null) {
       this.user.userDetails = new UserDetails(null, null, null);
     }
@@ -31,7 +54,8 @@ export class EditUserDetailsComponent implements OnInit {
       headers: {
         'Content-Type': 'application/json',
         'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Credentials': 'true'
+        'Access-Control-Allow-Credentials': 'true',
+        'Authorization': 'Barer ' + this.tokenStorageService.getToken()
       },
       body: JSON.stringify(this.user.userDetails),
     }).then(function (response) {

@@ -9,6 +9,7 @@ import { Materials } from 'src/app/materials';
 import { Labor } from 'src/app/labor';
 import { Estimate } from 'src/app/estimate';
 import { ProjectDetailsPayload } from 'src/app/project-details-payload'
+import { TokenStorageService } from 'src/app/_services/token-storage.service';
 
 
 @Component({
@@ -24,6 +25,12 @@ export class ProjectDetailsComponent implements OnInit {
   projectURL = "http://localhost:8080/api/project/";
   id: string; // project ID
   editingProject: boolean = false; // for editing basic project info at top right of page
+  private roles: string[];
+  isLoggedIn = false;
+  showAdminBoard = false;
+  showModeratorBoard = false;
+  username: string;
+  userId: number;
 
   itemsArray: Item[]; // to get all possible items (serves dual purpose - display and data for calculations)
 
@@ -33,20 +40,42 @@ export class ProjectDetailsComponent implements OnInit {
   categoryTitles = [ "Appliances", "Fixtures", "Finishes" ];
 
   calcByQuantity: string[] = ['Dishwasher','Disposal','Microwave/Hood','Oven/Range','Refrigerator',
-              'Bath & Shower', 'Ceiling Light/Fan', 'Electrical Outlets', 'Electrical Switches', 
-              'Lighting', 'Shelving', 'Sink', 'Toilet', 'Doors', 'Cabinets, Lower', 'Cabinets, Upper', 
+              'Bath & Shower', 'Ceiling Light/Fan', 'Electrical Outlets', 'Electrical Switches',
+              'Lighting', 'Shelving', 'Sink', 'Toilet', 'Doors', 'Cabinets, Lower', 'Cabinets, Upper',
               'Windows'];
   calcByLF: string[] = ['Backsplash','Baseboards','Countertop','Trim'];
   calcBySF: string[] = ['Flooring','Specialty','Walls'];
-              
+
 
   selectionArray: Selection[] = []; // for facilitating data binding with item selections
-  
-  constructor(private route: ActivatedRoute) { }
+
+  // materials: Materials;
+  // labor: Labor;
+  materials: Materials = new Materials; // had to initialize to new instance because project object is bringing null objects
+  labor: Labor = new Labor; // had to initialize to new instance because project object is bringing null objects
+
+  estimate: Estimate = new Estimate; // not needed for modeling but for calculations
+
+  constructor(private route: ActivatedRoute, private router: Router, private tokenStorageService: TokenStorageService) { }
 
   ngOnInit() {
     this.id = this.route.snapshot.paramMap.get("id");
     console.log("Id", this.id);
+    this.isLoggedIn = !!this.tokenStorageService.getToken();
+
+    if (this.isLoggedIn) {
+      const user = this.tokenStorageService.getUser();
+      this.roles = user.roles;
+
+      this.showAdminBoard = this.roles.includes('ROLE_ADMIN');
+      this.showModeratorBoard = this.roles.includes('ROLE_MODERATOR');
+
+      this.username = user.name;
+      this.userId = user.id;
+      console.log("id", this.userId);
+    } else {
+      this.router.navigate(['/login']);
+    }
     this.projectURL = this.projectURL + this.id;
     this.loadProject();
     console.log("Project Loaded");
@@ -58,10 +87,16 @@ export class ProjectDetailsComponent implements OnInit {
   // get project object from database (and any saved information from previous session if not first time)
   loadProject() {
 
-    fetch(this.projectURL).then(function (response) {
+    fetch(this.projectURL, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Credentials': 'true',
+        'Authorization': 'Barer ' + this.tokenStorageService.getToken()
+      }
+    }).then(function (response) {
       response.json().then(function (json) {
-
-        console.log(JSON.stringify(json));
         this.project = new Project(json.name, json.roomType, json.roomLength, json.roomWidth, json.roomHeight);
         this.project.id = json.id;
         this.project.itemDetails = json.itemDetails;
@@ -79,7 +114,7 @@ export class ProjectDetailsComponent implements OnInit {
   }
 
 
-  // GET BASIC ITEMS AND PROPERTIES FOR DISPLAY 
+  // GET BASIC ITEMS AND PROPERTIES FOR DISPLAY
 
   // get all possible items that could be displayed and selected from JSON file
   loadItems() {
@@ -105,7 +140,7 @@ export class ProjectDetailsComponent implements OnInit {
       selection = this.selectionArray[i];
       if (selection.type === item.type) {
         return i;
-      } 
+      }
     }
     return -1; // if not found
   }
@@ -114,12 +149,12 @@ export class ProjectDetailsComponent implements OnInit {
   createSelections() {
     this.selectionArray = []; // rebuild this array if method is called again prior to form submission due to roomType change
     let selection: Selection;
-    let details: ItemDetails; 
+    let details: ItemDetails;
     let item: Item;
     if (this.project.itemDetails.length > 0) { // if project already has a saved itemDetails array, get values
       for (let i=0; i < this.project.itemDetails.length; i++) {
         details = this.project.itemDetails[i];
-        item = this.itemsArray[this.getItemByID(details.itemId)]; 
+        item = this.itemsArray[this.getItemByID(details.itemId)];
         if (item.room.includes(this.project.roomType)) { // if the room type has been changed for some reason
           selection = new Selection(item.category, item.type, true, item.name, details.quantity);
           this.selectionArray.push(selection);
@@ -135,7 +170,7 @@ export class ProjectDetailsComponent implements OnInit {
       }
     }
     this.selectionArray.sort((a, b) => (a.type > b.type) ? 1 : -1);
-  }  
+  }
 
   // for each type, build a list of available options to display for dropdown lists - string value will save upon form submission
   getOptions(itemType: string) {
@@ -254,7 +289,8 @@ export class ProjectDetailsComponent implements OnInit {
       headers: {
         'Content-Type': 'application/json',
         'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Credentials': 'true'
+        'Access-Control-Allow-Credentials': 'true',
+        'Authorization': 'Barer ' + this.tokenStorageService.getToken()
       },
       body: JSON.stringify(projectDetailsPayload),
     }).then(function (response) {

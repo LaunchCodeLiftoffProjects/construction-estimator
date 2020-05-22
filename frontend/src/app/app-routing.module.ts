@@ -10,21 +10,32 @@ import { CreateProjectComponent } from './project/create-project/create-project.
 import { ProjectDetailsComponent } from './project/project-details/project-details.component';
 import { ProjectListComponent } from './project/project-list/project-list.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
+import { BoardUserComponent } from './board-user/board-user.component';
+import { BoardModeratorComponent } from './board-moderator/board-moderator.component';
+import { BoardAdminComponent } from './board-admin/board-admin.component';
 
 const routes: Routes = [
   {path: 'login' , component: LoginComponent},
   {path: 'register' , component: RegisterComponent},
   {path: 'about' , component: AboutComponent},
-  {path: 'user/profile/:id' , component: UserProfileComponent},
+  {path: 'user/profile' , component: UserProfileComponent},
   {path: 'user/profile/edit' , component: EditUserProfileComponent},
   {path: 'project/create' , component: CreateProjectComponent},
   {path: 'project/add-details/:id' , component: ProjectDetailsComponent},
   {path: 'project/list', component: ProjectListComponent},
   {path: '**', component: PageNotFoundComponent},
+  { path: 'user', component: BoardUserComponent },
+  { path: 'mod', component: BoardModeratorComponent },
+  { path: 'admin', component: BoardAdminComponent },
+  { path: '', redirectTo: 'login', pathMatch: 'full' }
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [RouterModule.forRoot(routes, {
+    onSameUrlNavigation: 'reload'
+  })],
   exports: [RouterModule]
 })
+
+
 export class AppRoutingModule { }
