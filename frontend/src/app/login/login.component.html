@@ -3,7 +3,7 @@
     <h3 class="text-info mt-5">Log in to an Existing Account</h3>
     <br>
       <form
-        *ngIf="!isLoggedIn"
+       
         name="form"
         (ngSubmit)="f.form.valid && onSubmit()"
         #f="ngForm"
@@ -70,10 +70,6 @@
 
       </form>
   
-      <div class="alert alert-success" *ngIf="isLoggedIn">
-        Logged in as {{ roles }}.
-      </div>
-
 
     
   </div>
