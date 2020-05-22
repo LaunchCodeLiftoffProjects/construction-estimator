@@ -30,6 +30,7 @@ export class ProjectDetailsComponent implements OnInit {
   showModeratorBoard = false;
   username: string;
   userId: number;
+  changedDimensions = 0;
 
   itemsArray: Item[]; // to get all possible items (serves dual purpose - display and data for calculations)
 
@@ -181,12 +182,44 @@ export class ProjectDetailsComponent implements OnInit {
     return optionsArray;
   }
 
+  setChecked(selection) {
+    if (selection.quantity > 0) {
+      selection.checked = true;
+      let options = this.getOptions(selection.type);
+      return options[0];
+    } else if (selection.quantity < 0) {
+      selection.quantity = 1;
+      return selection.selected;
+    } else {
+      selection.checked = false;
+    }
+  }
+
+  setValue(selection) {
+
+    if (selection.checked) {
+      let options = this.getOptions(selection.type);
+      return options[0];
+    } else {
+      selection.selected = '';
+      selection.quantity = 0;
+    }
+
+	}
+
   // when item selection is checked in form, if zero, raise to 1
-  changeQuantity(selection: Selection, qty: number): number {
-    if (this.calcByQuantity.includes(selection.type) && selection.checked === true && qty === 0) {
+  changeQuantity(selection: Selection): number {
+    
+    if (this.calcByQuantity.includes(selection.type) && selection.checked === true && selection.quantity <= 0) {
       return 1;
     } else {
-      return qty;
+      return selection.quantity;
+    }
+  }
+
+  checkValue(selection: Selection) {
+    if (selection.checked && selection.quantity <= 0) {
+      selection.quantity = 1;
     }
   }
 
@@ -318,5 +351,8 @@ export class ProjectDetailsComponent implements OnInit {
     });
 
   }
+
+
+  
 
 }

@@ -57,9 +57,13 @@ public class UserController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } else if (userAuthService.doesUserMatch(id, headerAuth)) {
 
-            if (user.getPassword() != null) {
+            if(user.getPassword() != null) {
                 user.setPassword(encoder.encode(user.getPassword()));
+            } else {
+                user.setPassword(userRepository.findById(id).get().getPassword());
             }
+
+            user.setRoles(userRepository.findById(id).get().getRoles());
 
             userRepository.save(user);
             return new ResponseEntity<>(HttpStatus.OK);
