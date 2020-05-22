@@ -34,11 +34,9 @@ export class ProjectDetailsComponent implements OnInit {
   userId: number;
   changedDimensions = 0;
 
-  perimeter: number = 2 * this.project.roomLength + 2 * this.project.roomWidth;
-  wallArea: number = this.perimeter * this.project.roomHeight;
-  floorArea: number = this.project.roomLength * this.project.roomWidth;
+  itemsArray: Item[]; // to get all possible items (serves dual purpose - info for display and data for calculations)
 
-  itemsArray: Item[]; // to get all possible items (serves dual purpose - display and data for calculations)
+  selectionArray: Selection[] = []; // for facilitating data binding with item selections in form
 
   rooms: string[] = [ "kitchen", "bath", "living" ];
   roomTitles: string[] = [ "Kitchen", "Bathroom", "Bedroom/Living/Other" ];
@@ -59,14 +57,9 @@ export class ProjectDetailsComponent implements OnInit {
   factorIntoFinishWork: string[] = ['Shelving', 'Doors', 'Cabinets, Lower', 'Cabinets, Upper', 'Windows',
               'Baseboards', 'Trim', 'Flooring', 'Walls', 'Backsplash', 'Countertop'];
 
-  selectionArray: Selection[] = []; // for facilitating data binding with item selections
-
-  // materials: Materials;
-  // labor: Labor;
-  materials: Materials = new Materials; // had to initialize to new instance because project object is bringing null objects
-  labor: Labor = new Labor; // had to initialize to new instance because project object is bringing null objects
-
-  estimate: Estimate = new Estimate; // not needed for modeling but for calculations
+  perimeter: number = 2 * this.project.roomLength + 2 * this.project.roomWidth;
+  wallArea: number = this.perimeter * this.project.roomHeight;
+  floorArea: number = this.project.roomLength * this.project.roomWidth;
 
   constructor(private route: ActivatedRoute, private router: Router, private tokenStorageService: TokenStorageService) { }
 
@@ -94,9 +87,9 @@ export class ProjectDetailsComponent implements OnInit {
   }
 
 
-  // GET EXISTING PROJECT
+  // GET PROJECT
 
-  // get project object from database (and any saved information from previous session if not first time)
+  // get project object from database (and any saved information from previous session if revising estimate)
   loadProject() {
 
     fetch(this.projectURL, {
@@ -118,9 +111,9 @@ export class ProjectDetailsComponent implements OnInit {
         this.project.labor = json.labor === null ? new Labor : json.labor;
         this.project.estimate = json.estimate === null ? new Estimate : json.estimate;
 
-        // do not need to load previous estimate because a new one will be built from scratch
         this.loadItems(); // put here so things load in order
         console.log("Items loaded.");
+        
       }.bind(this));
     }.bind(this));
   }

@@ -15,6 +15,7 @@ import { BoardModeratorComponent } from './board-moderator/board-moderator.compo
 import { BoardAdminComponent } from './board-admin/board-admin.component';
 
 const routes: Routes = [
+  {path: '', redirectTo: 'login', pathMatch: 'full'},
   {path: 'login' , component: LoginComponent},
   {path: 'register' , component: RegisterComponent},
   {path: 'about' , component: AboutComponent},
@@ -23,11 +24,14 @@ const routes: Routes = [
   {path: 'project/create' , component: CreateProjectComponent},
   {path: 'project/add-details/:id' , component: ProjectDetailsComponent},
   {path: 'project/list', component: ProjectListComponent},
-  {path: '**', component: PageNotFoundComponent},
-  { path: 'user', component: BoardUserComponent },
-  { path: 'mod', component: BoardModeratorComponent },
-  { path: 'admin', component: BoardAdminComponent },
-  { path: '', redirectTo: 'login', pathMatch: 'full' }
+  {path: 'user', component: BoardUserComponent},
+  {path: 'mod', component: BoardModeratorComponent},
+  {path: 'admin', component: BoardAdminComponent},
+
+  // otherwise send to custom 404 page -- but it doesn't work...
+  // this is begin overridden by ngOnInit() in app.component.ts
+  {path: '**', component: PageNotFoundComponent}
+
 ];
 
 @NgModule({
