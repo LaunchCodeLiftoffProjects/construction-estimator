@@ -27,7 +27,7 @@ export class UserProfileComponent implements OnInit {
   constructor(private route: ActivatedRoute, private router: Router, private tokenStorageService: TokenStorageService) { }
 
   ngOnInit() {
-    //don't need this anymore because the id is sent through the user object 
+    // don't need this anymore because the id is sent through the user object 
     // this.id = this.route.snapshot.paramMap.get("id");
     // this.userUrl += this.id;
     
