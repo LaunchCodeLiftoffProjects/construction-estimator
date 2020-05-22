@@ -15,7 +15,7 @@ public class Project extends NamedEntity {
     private double roomWidth;
     private double roomHeight;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name="project_id")
     private List<ItemDetails> itemDetails = new ArrayList<>();
 
@@ -23,11 +23,14 @@ public class Project extends NamedEntity {
     @JsonBackReference
     private User user;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     private Labor labor;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     private Materials materials;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    private Estimate estimate;
 
     // necessary for hibernate to use model binding I think
     public Project() {}
@@ -44,7 +47,7 @@ public class Project extends NamedEntity {
         return roomLength;
     }
 
-    public void setRoomLength(int roomLength) {
+    public void setRoomLength(double roomLength) {
         this.roomLength = roomLength;
     }
 
@@ -52,7 +55,7 @@ public class Project extends NamedEntity {
         return roomWidth;
     }
 
-    public void setRoomWidth(int roomWidth) {
+    public void setRoomWidth(double roomWidth) {
         this.roomWidth = roomWidth;
     }
 
@@ -60,7 +63,7 @@ public class Project extends NamedEntity {
         return roomHeight;
     }
 
-    public void setRoomHeight(int roomHeight) {
+    public void setRoomHeight(double roomHeight) {
         this.roomHeight = roomHeight;
     }
 
@@ -80,4 +83,27 @@ public class Project extends NamedEntity {
         this.user = user;
     }
 
+    public Labor getLabor() {
+        return labor;
+    }
+
+    public void setLabor(Labor labor) {
+        this.labor = labor;
+    }
+
+    public Materials getMaterials() {
+        return materials;
+    }
+
+    public void setMaterials(Materials materials) {
+        this.materials = materials;
+    }
+
+    public Estimate getEstimate() {
+        return estimate;
+    }
+
+    public void setEstimate(Estimate estimate) {
+        this.estimate = estimate;
+    }
 }

@@ -6,7 +6,7 @@ import javax.persistence.Entity;
 import javax.persistence.OneToOne;
 
 @Entity
-public class UserDetails extends AbstractEntity {
+public class HomeDetails extends AbstractEntity {
 
     private int homeAge;
     private String homeBuild;

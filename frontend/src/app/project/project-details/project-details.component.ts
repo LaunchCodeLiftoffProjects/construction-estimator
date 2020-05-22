@@ -8,6 +8,8 @@ import { FormsModule } from '@angular/forms';
 import { Materials } from 'src/app/materials';
 import { Labor } from 'src/app/labor';
 import { Estimate } from 'src/app/estimate';
+import { ProjectDetailsPayload } from 'src/app/project-details-payload'
+import { TokenStorageService } from 'src/app/_services/token-storage.service';
 
 
 @Component({
@@ -23,6 +25,13 @@ export class ProjectDetailsComponent implements OnInit {
   projectURL = "http://localhost:8080/api/project/";
   id: string; // project ID
   editingProject: boolean = false; // for editing basic project info at top right of page
+  private roles: string[];
+  isLoggedIn = false;
+  showAdminBoard = false;
+  showModeratorBoard = false;
+  username: string;
+  userId: number;
+  changedDimensions = 0;
 
   itemsArray: Item[]; // to get all possible items (serves dual purpose - display and data for calculations)
 
@@ -32,12 +41,12 @@ export class ProjectDetailsComponent implements OnInit {
   categoryTitles = [ "Appliances", "Fixtures", "Finishes" ];
 
   calcByQuantity: string[] = ['Dishwasher','Disposal','Microwave/Hood','Oven/Range','Refrigerator',
-              'Bath & Shower', 'Ceiling Light/Fan', 'Electrical Outlets', 'Electrical Switches', 
-              'Lighting', 'Shelving', 'Sink', 'Toilet', 'Doors', 'Cabinets, Lower', 'Cabinets, Upper', 
+              'Bath & Shower', 'Ceiling Light/Fan', 'Electrical Outlets', 'Electrical Switches',
+              'Lighting', 'Shelving', 'Sink', 'Toilet', 'Doors', 'Cabinets, Lower', 'Cabinets, Upper',
               'Windows'];
   calcByLF: string[] = ['Backsplash','Baseboards','Countertop','Trim'];
   calcBySF: string[] = ['Flooring','Specialty','Walls'];
-              
+
 
   selectionArray: Selection[] = []; // for facilitating data binding with item selections
 
@@ -47,12 +56,27 @@ export class ProjectDetailsComponent implements OnInit {
   labor: Labor = new Labor; // had to initialize to new instance because project object is bringing null objects
 
   estimate: Estimate = new Estimate; // not needed for modeling but for calculations
-  
-  constructor(private route: ActivatedRoute) { }
+
+  constructor(private route: ActivatedRoute, private router: Router, private tokenStorageService: TokenStorageService) { }
 
   ngOnInit() {
     this.id = this.route.snapshot.paramMap.get("id");
     console.log("Id", this.id);
+    this.isLoggedIn = !!this.tokenStorageService.getToken();
+
+    if (this.isLoggedIn) {
+      const user = this.tokenStorageService.getUser();
+      this.roles = user.roles;
+
+      this.showAdminBoard = this.roles.includes('ROLE_ADMIN');
+      this.showModeratorBoard = this.roles.includes('ROLE_MODERATOR');
+
+      this.username = user.name;
+      this.userId = user.id;
+      console.log("id", this.userId);
+    } else {
+      this.router.navigate(['/login']);
+    }
     this.projectURL = this.projectURL + this.id;
     this.loadProject();
     console.log("Project Loaded");
@@ -64,13 +88,25 @@ export class ProjectDetailsComponent implements OnInit {
   // get project object from database (and any saved information from previous session if not first time)
   loadProject() {
 
-    fetch(this.projectURL).then(function (response) {
+    fetch(this.projectURL, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Credentials': 'true',
+        'Authorization': 'Barer ' + this.tokenStorageService.getToken()
+      }
+    }).then(function (response) {
       response.json().then(function (json) {
         this.project = new Project(json.name, json.roomType, json.roomLength, json.roomWidth, json.roomHeight);
         this.project.id = json.id;
         this.project.itemDetails = json.itemDetails;
-        // this.materials = json.materials; // null?
-        // this.labor = json.labor; // null?
+
+        // pull out materials and labor objects. create new ones if null
+        this.project.materials = json.materials === null ? new Materials : json.materials;
+        this.project.labor = json.labor === null ? new Labor : json.labor;
+        this.project.estimate = json.estimate === null ? new Estimate : json.estimate;
+
         // do not need to load previous estimate because a new one will be built from scratch
         this.loadItems(); // put here so things load in order
         console.log("Items loaded.");
@@ -79,7 +115,7 @@ export class ProjectDetailsComponent implements OnInit {
   }
 
 
-  // GET BASIC ITEMS AND PROPERTIES FOR DISPLAY 
+  // GET BASIC ITEMS AND PROPERTIES FOR DISPLAY
 
   // get all possible items that could be displayed and selected from JSON file
   loadItems() {
@@ -105,7 +141,7 @@ export class ProjectDetailsComponent implements OnInit {
       selection = this.selectionArray[i];
       if (selection.type === item.type) {
         return i;
-      } 
+      }
     }
     return -1; // if not found
   }
@@ -114,12 +150,12 @@ export class ProjectDetailsComponent implements OnInit {
   createSelections() {
     this.selectionArray = []; // rebuild this array if method is called again prior to form submission due to roomType change
     let selection: Selection;
-    let details: ItemDetails; 
+    let details: ItemDetails;
     let item: Item;
     if (this.project.itemDetails.length > 0) { // if project already has a saved itemDetails array, get values
       for (let i=0; i < this.project.itemDetails.length; i++) {
         details = this.project.itemDetails[i];
-        item = this.itemsArray[this.getItemByID(details.itemId)]; 
+        item = this.itemsArray[this.getItemByID(details.itemId)];
         if (item.room.includes(this.project.roomType)) { // if the room type has been changed for some reason
           selection = new Selection(item.category, item.type, true, item.name, details.quantity);
           this.selectionArray.push(selection);
@@ -135,7 +171,7 @@ export class ProjectDetailsComponent implements OnInit {
       }
     }
     this.selectionArray.sort((a, b) => (a.type > b.type) ? 1 : -1);
-  }  
+  }
 
   // for each type, build a list of available options to display for dropdown lists - string value will save upon form submission
   getOptions(itemType: string) {
@@ -151,12 +187,44 @@ export class ProjectDetailsComponent implements OnInit {
     return optionsArray;
   }
 
+  setChecked(selection) {
+    if (selection.quantity > 0) {
+      selection.checked = true;
+      let options = this.getOptions(selection.type);
+      return options[0];
+    } else if (selection.quantity < 0) {
+      selection.quantity = 1;
+      return selection.selected;
+    } else {
+      selection.checked = false;
+    }
+  }
+
+  setValue(selection) {
+
+    if (selection.checked) {
+      let options = this.getOptions(selection.type);
+      return options[0];
+    } else {
+      selection.selected = '';
+      selection.quantity = 0;
+    }
+
+	}
+
   // when item selection is checked in form, if zero, raise to 1
-  changeQuantity(selection: Selection, qty: number): number {
-    if (this.calcByQuantity.includes(selection.type) && selection.checked === true && qty === 0) {
+  changeQuantity(selection: Selection): number {
+    
+    if (this.calcByQuantity.includes(selection.type) && selection.checked === true && selection.quantity <= 0) {
       return 1;
     } else {
-      return qty;
+      return selection.quantity;
+    }
+  }
+
+  checkValue(selection: Selection) {
+    if (selection.checked && selection.quantity <= 0) {
+      selection.quantity = 1;
     }
   }
 
@@ -244,6 +312,9 @@ export class ProjectDetailsComponent implements OnInit {
 
     // create ItemDetails array and run calculations for estimate based on user input
     this.buildProject();
+    let projectDetailsPayload = new ProjectDetailsPayload(this.project.itemDetails, this.project.labor, this.project.materials, this.project.estimate);
+
+    console.log(JSON.stringify(projectDetailsPayload));
 
     // save itemDetails objects to database
     fetch("http://localhost:8080/api/project/" + this.project.id + "/details", {
@@ -251,40 +322,22 @@ export class ProjectDetailsComponent implements OnInit {
       headers: {
         'Content-Type': 'application/json',
         'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Credentials': 'true'
+        'Access-Control-Allow-Credentials': 'true',
+        'Authorization': 'Barer ' + this.tokenStorageService.getToken()
       },
-      body: JSON.stringify(this.project.itemDetails),
+      body: JSON.stringify(projectDetailsPayload),
     }).then(function (response) {
-      return response.json();
+      return response;
     }).then(function (data) {
       console.log('Success:', data);
     }).catch(function (error) {
       console.error('Error:', error);
     });
 
-    // TODO: materials
-
-    // TODO: labor
-
-    // TODO: estimate
-
-    // save entire Project object to database
-    fetch("http://localhost:8080/api/project/" + this.project.id, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Credentials': 'true'
-      },
-      body: JSON.stringify(this.project),
-    }).then(function (response) {
-      return response.json();
-    }).then(function (data) {
-      console.log('Success:', data);
-    }).catch(function (error) {
-      console.error('Error:', error);
-    });
 
   }
+
+
+  
 
 }
