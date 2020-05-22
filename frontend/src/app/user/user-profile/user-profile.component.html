@@ -32,15 +32,9 @@
 
     <div class="mt-5">
         <h4>My Projects</h4>
-        <div *ngIf="user.projects.length == 0">
-            <p>Hey there! You do not have any projects yet.<br />
-                Why not <a class="text-info" [routerLink]="'/project/create'">create</a> one?</p>
-        </div>
         <div>
             <p class="lead" *ngFor="let project of user.projects">{{project.name}}</p>
-            <div class="mt-3" *ngIf="user.projects.length > 0">
-                <h5 class="text-info">+ <a class="text-info" [routerLink]="'/project/create'">Add Project</a></h5>
-            </div>
+            <h5 class="text-info">+ <a class="text-info" [routerLink]="'/project/create'">New Project</a></h5>
         </div>
     </div>
 </div>
