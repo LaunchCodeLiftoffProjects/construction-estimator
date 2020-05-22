@@ -12,6 +12,8 @@ import { FormGroup, Validators, FormControl } from '@angular/forms';
   styleUrls: ['./create-project.component.css']
 })
 export class CreateProjectComponent implements OnInit {
+  project = new Project('', 'kitchen', 0, 0, 0);
+  form: any = {};
   id: number;
   selectedRoom: string = "kitchen";
   changedName: boolean = false;
@@ -22,6 +24,7 @@ export class CreateProjectComponent implements OnInit {
   showAdminBoard = false;
   showModeratorBoard = false;
   username: string;
+  greaterThanZero = new FormControl(0, [Validators.max(100000), Validators.min(1)]);
 
 
   constructor(private route: ActivatedRoute, private router: Router, private tokenStorageService: TokenStorageService) { }
