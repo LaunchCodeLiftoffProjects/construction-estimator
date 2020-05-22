@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { Project } from '../../project';
 
 import { Router, RouterModule, ActivatedRoute, ParamMap, NavigationExtras } from '@angular/router';
+import { TokenStorageService } from 'src/app/_services/token-storage.service';
+import { FormGroup, Validators, FormControl } from '@angular/forms';
 
 
 @Component({
@@ -15,16 +17,33 @@ export class CreateProjectComponent implements OnInit {
   changedName: boolean = false;
   projectName = "testing";
   changedDimensions: number = 0;
-  
+  private roles: string[];
+  isLoggedIn = false;
+  showAdminBoard = false;
+  showModeratorBoard = false;
+  username: string;
 
-  constructor(private route: ActivatedRoute, private router: Router) { 
 
-  }
+  constructor(private route: ActivatedRoute, private router: Router, private tokenStorageService: TokenStorageService) { }
 
   ngOnInit() {
- 
-  }
+    this.isLoggedIn = !!this.tokenStorageService.getToken();
 
+    if (this.isLoggedIn) {
+      const user = this.tokenStorageService.getUser();
+      this.roles = user.roles;
+
+      this.showAdminBoard = this.roles.includes('ROLE_ADMIN');
+      this.showModeratorBoard = this.roles.includes('ROLE_MODERATOR');
+
+      this.username = user.name;
+    } else {
+      this.router.navigate(['/login']);
+    }
+
+   
+    
+  }
 
   saveProject(name: string, roomLength: number, roomWidth: number, roomHeight: number) {
     let project = new Project(name, this.selectedRoom, roomLength, roomWidth, roomHeight);
@@ -35,7 +54,8 @@ export class CreateProjectComponent implements OnInit {
       headers: {
         'Content-Type': 'application/json',
         'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Credentials': 'true'
+        'Access-Control-Allow-Credentials': 'true',
+        'Authorization': 'Barer ' + this.tokenStorageService.getToken()
       },
       body: JSON.stringify(project),
     }).then(function(response) {

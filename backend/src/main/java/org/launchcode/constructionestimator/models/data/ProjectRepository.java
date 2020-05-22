@@ -4,6 +4,14 @@ import org.launchcode.constructionestimator.models.Project;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+import java.util.Optional;
+
 
 @Repository
-public interface ProjectRepository extends CrudRepository<Project, Integer>{ }
+public interface ProjectRepository extends CrudRepository<Project, Integer> {
+
+    // finds all projects associated with user with id userId
+    // TODO: write custom query to return only project name and id
+    Iterable<Optional<Project>> findByUserId(int userId);
+}

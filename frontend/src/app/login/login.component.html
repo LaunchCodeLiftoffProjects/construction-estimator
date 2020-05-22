@@ -1,22 +1,75 @@
-<div class = "container">
-    <br />
-    <h2 class="text-info mt-5">Welcome!</h2>
-    <form>
-    <!-- <form [formGroup]="LoginForm">   -->
-        <br />
-        <h5 class="mb-3">Log in to access your projects</h5>
-        <div class = "form-group">
-            <input #email type='email' placeholder="E-mail Address" class="form-control"/>
+<div class="container">
+    <br>
+    <h3 class="text-info mt-5">Log in to an Existing Account</h3>
+    <br>
+      <form
+       
+        name="form"
+        (ngSubmit)="f.form.valid && onSubmit()"
+        #f="ngForm"
+        novalidate
+        
+      >
+        <div class="form-group">
+          
+          <input placeholder="E-mail Address"
+            type="email"
+            class="form-control"
+            name="email"
+            [(ngModel)]="form.email"
+            required
+            pattern="^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"
+            #email="ngModel"
+          />
+          <div
+            class="alert alert-danger"
+            role="alert"
+            *ngIf="email.invalid && email.touched"
+          >
+            Email is required and must be valid email.
+          </div>
         </div>
-        <div class = "form-group">
-            <input #password type='password' placeholder="Password" class="form-control"/>
+        <div class="form-group">
+          
+          <input placeholder="Password"
+            type="password"
+            class="form-control"
+            name="password"
+            [(ngModel)]="form.password"
+            required
+            minlength="6"
+            #password="ngModel"
+          />
+          <div
+            class="alert alert-danger"
+            role="alert"
+            *ngIf="f.invalid && password.touched"
+          >
+            <div *ngIf="password.errors.required">Password is required.</div>
+            <div *ngIf="password.errors.minlength">
+              Password must be at least 6 characters
+            </div>
+          </div>
         </div>
         <div>
-            <p>Haven't created an account yet? No problem! <a  class="text-info" [routerLink]="'/register'">Register here.</a></p>
+            <p>Need to register? <a  class="text-info" [routerLink]="'/register'">Register here.</a></p>
         </div>
-        <br />
+
         <div class="form-group text-right">
-            <button class="btn btn-info" [routerLink] = "'/user/profile'">Log In</button>
+            <button class="btn btn-info" type="submit" [disabled]="!f.form.valid">Log in</button>
         </div>
-    </form>
-</div>
+        
+          <div
+            class="alert alert-danger"
+            role="alert"
+            *ngIf="f.submitted && isLoginFailed"
+          >
+            Login Failed: Email or Password is incorrect.
+          </div>
+        
+
+      </form>
+  
+
+    
+  </div>
