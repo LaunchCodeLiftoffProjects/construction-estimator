@@ -16,30 +16,37 @@
                     <h4>{{project.name}} </h4>
                     <p class="lead">{{roomTitles[rooms.indexOf(project.roomType)]}}<br />
                     {{project.roomLength}}'L x {{project.roomWidth}}'W x {{project.roomHeight}}'H</p>
-                    <span class = "badge badge-info" (click) = "editingProject = true;">Edit</span>
+                    <button class = "badge badge-info" (click) = "editingProject = true;">Edit</button>
                 </div>
 
                 <!--Visible only while editing name, type, and dimensions-->
                 <ng-template #editProjectBlock>
                     <div class="form-group">
-                        <label class="lead">Project Name <input #name="ngModel" [(ngModel)]="project.name"
+                        <label class="lead">Project Name <input required #name="ngModel" [(ngModel)]="project.name"
                                 type="text" class="form-control form-control-sm" /></label>
                         <br />
                         <span class="lead">Room Type: {{roomTitles[rooms.indexOf(project.roomType)]}} </span>
                         <div class = "form-group">
                             <div class="form-check indent-left" *ngFor="let room of rooms; let r = index">
-                                <label class="form-check-label"><input #roomType [(ngModel)]="project.roomType" (change)="createSelections()" [value]="rooms[r]" type="radio" class = "form-check-input" />{{roomTitles[r]}}</label>
+                                <label class="form-check-label"><input #roomType required minlength="6" [(ngModel)]="project.roomType" (change)="createSelections()" [value]="rooms[r]" type="radio" class = "form-check-input" />{{roomTitles[r]}}</label>
                             </div>
                         </div>
                     </div>
                     <div class="form-group">
                         <div class = "input-group"> 
-                            <label><input #roomLength="ngModel" [(ngModel)]="project.roomLength" type="number" class="form-control form-control-sm" step="0.1" min = 0 /> Length (ft.)</label>
-                            <label><input #roomWidth="ngModel" [(ngModel)]="project.roomWidth" type="number" class="form-control form-control-sm" step="0.1" min = 0 /> Width (ft.)</label>
-                            <label><input #roomHeight="ngModel" [(ngModel)]="project.roomHeight" type="number" class="form-control form-control-sm" step="0.1" min = 0 /> Ceiling Height (ft.)</label>
+
+                            <label><input #roomLength="ngModel" required [(ngModel)]="project.roomLength" type="number" class="form-control form-control-sm" required (change)="changedDimensions = changedDimensions + 1;" step="0.1" min='1' /> Length (ft.)</label>
+                            <label><input #roomWidth="ngModel" required [(ngModel)]="project.roomWidth" type="number" class="form-control form-control-sm" required (change)="changedDimensions = changedDimensions + 1;" step="0.1" min='1' /> Width (ft.)</label>
+                            <label><input #roomHeight="ngModel" required [(ngModel)]="project.roomHeight" type="number" class="form-control form-control-sm" required (change)="changedDimensions = changedDimensions + 1;" step="0.1" min='1' /> Ceiling Height (ft.)</label>
+                        </div>
+                        <!-- this is not working right now -->
+                        <div *ngIf="changedDimensions > 3 && (project.roomHeight < 1 || project.roomLength < 1 || project.roomWidth < 1 || (!isNumber(project.roomHeight) || !isNumber(project.roomLength) || !isNumber(project.roomWidth)))"
+                            class="alert alert-danger">
+                            All Room Dimensions are required and must be valid numbers greater than zero.
+
                         </div>
                     </div>
-                    <span class="badge badge-success" (click) = "editingProject = false" >Done Editing</span>
+                    <button class="badge badge-success" (click) = "editingProject = false" >Done Editing</button>
                 </ng-template>
 
             </div>
@@ -56,17 +63,17 @@
                     <div class="input-group mt-1" *ngFor="let selection of selectionArray; let i = index">
                         <ng-container *ngIf="category === selection.category">
                             <div class="col-4">
-                                <label class="lead"><input #type="ngModel" [(ngModel)]="selectionArray[i].checked" (change)="selectionArray[i].quantity = changeQuantity(selection, selectionArray[i].quantity)" type="checkbox" /> {{selection.type}}</label>
+                                <label class="lead"><input #type="ngModel" [checked]="selectionArray[i].quantity > 0 || selectionArray[i].selected != ''" [(ngModel)]="selectionArray[i].checked" (change)="selectionArray[i].quantity = changeQuantity(selectionArray[i]); selectionArray[i].selected = setValue(selection)" type="checkbox" /> {{selection.type}}</label>
                             </div>
                             <div class = "col-4">
-                                <select #selected="ngModel" [(ngModel)]="selectionArray[i].selected" class="custom-select w-100">
+                                <select #selected="ngModel" [(ngModel)]="selectionArray[i].selected" class="custom-select w-100" (change)="selectionArray[i].checked = true; selectionArray[i].quantity = changeQuantity(selectionArray[i])">
                                     <!-- <option>(Select an option)</option> -->
-                                    <option *ngFor="let options of getOptions(selection.type)">{{options.name}}</option>
+                                    <option *ngFor="let options of getOptions(selection.type)" [value]="options" [selected]="selectionArray[i].selected == options">{{options.name}}</option>
                                 </select>
                             </div>
                             <div class="col-2">
                                 <ng-container *ngIf="calcByQuantity.includes(selection.type)">
-                                    <input #quantity="ngModel" [(ngModel)]="selectionArray[i].quantity" type="number" step="1" min = 0 class="form-control form-control-sm w-75 h-100" />
+                                    <input #quantity="ngModel" [(ngModel)]="selectionArray[i].quantity" type="number" step="1" min = '0' class="form-control form-control-sm w-75 h-100" (change)="selectionArray[i].selected = setChecked(selection)"/>
                                 </ng-container>
                             </div> 
                             <div class="col-2"></div>
@@ -80,20 +87,20 @@
         <h4 class="mt-5">Materials</h4>
         <div class="form-group">
             <p class="lead">Will you be adding or replacing any of the following?</p>
-            <label class = "checkbox"><input #plumbingSystem="ngModel" [(ngModel)]="materials.needPlumbingSystem" type="checkbox" /> Plumbing System</label>
-            <label class = "checkbox"><input #electricalSystem="ngModel" [(ngModel)]="materials.needElectricalSystem"  type="checkbox" /> Electrical System</label>
-            <label class = "checkbox"><input #framing="ngModel" [(ngModel)]="materials.needFraming"  type="checkbox" /> Wall Framing</label>
-            <label class = "checkbox"><input #drywall="ngModel" [(ngModel)]="materials.needDrywall"  type="checkbox" /> Plaster/Drywall</label>
+            <label class = "checkbox"><input #plumbingSystem="ngModel" [(ngModel)]="project.materials.needPlumbingSystem" type="checkbox" /> Plumbing System</label>
+            <label class = "checkbox"><input #electricalSystem="ngModel" [(ngModel)]="project.materials.needElectricalSystem"  type="checkbox" /> Electrical System</label>
+            <label class = "checkbox"><input #framing="ngModel" [(ngModel)]="project.materials.needFraming"  type="checkbox" /> Wall Framing</label>
+            <label class = "checkbox"><input #drywall="ngModel" [(ngModel)]="project.materials.needDrywall"  type="checkbox" /> Plaster/Drywall</label>
         </div>
         <br />
 
         <h4 class="mt-5">Labor</h4>
         <div class="form-group">
             <p class="lead">Will you be hiring any subcontractors?</p>
-            <label class = "checkbox"><input #plumbing="ngModel" [(ngModel)]="labor.needPlumbingSub"  type="checkbox" /> Plumbing</label>
-            <label class = "checkbox"><input #electrical="ngModel" [(ngModel)]="labor.needElectricalSub"  type="checkbox" /> Electrical</label>
-            <label class = "checkbox"><input #roughCarpentry="ngModel" [(ngModel)]="labor.needRoughCarpentry"  type="checkbox" /> Rough Carpentry</label>
-            <label class = "checkbox"><input #finishWork="ngModel" [(ngModel)]="labor.needFinishWork"  type="checkbox" /> Finish Work</label>
+            <label class = "checkbox"><input #plumbing="ngModel" [(ngModel)]="project.labor.needPlumbingSub"  type="checkbox" /> Plumbing</label>
+            <label class = "checkbox"><input #electrical="ngModel" [(ngModel)]="project.labor.needElectricalSub"  type="checkbox" /> Electrical</label>
+            <label class = "checkbox"><input #roughCarpentry="ngModel" [(ngModel)]="project.labor.needRoughCarpentry"  type="checkbox" /> Rough Carpentry</label>
+            <label class = "checkbox"><input #finishWork="ngModel" [(ngModel)]="project.labor.needFinishWork"  type="checkbox" /> Finish Work</label>
         </div>
         <br />
 

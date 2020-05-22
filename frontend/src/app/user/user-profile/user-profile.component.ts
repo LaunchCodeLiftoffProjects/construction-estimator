@@ -13,7 +13,7 @@ import { TokenStorageService } from 'src/app/_services/token-storage.service';
 export class UserProfileComponent implements OnInit {
 
   userUrl = "http://localhost:8080/api/user/";
-  id: number;
+  userId: number;
   loadCompleted: boolean = false;
   editUser: boolean = false;
   editDetails: boolean = false;
@@ -27,13 +27,13 @@ export class UserProfileComponent implements OnInit {
   constructor(private route: ActivatedRoute, private router: Router, private tokenStorageService: TokenStorageService) { }
 
   ngOnInit() {
+    // don't need this anymore because the id is sent through the user object 
     // this.id = this.route.snapshot.paramMap.get("id");
     // this.userUrl += this.id;
     
-    console.log("test", "test");
+    
     this.isLoggedIn = !!this.tokenStorageService.getToken();
-    console.log("token", this.tokenStorageService.getToken());
-    console.log("logged in", this.isLoggedIn);
+   
 
     if (this.isLoggedIn) {
       const user = this.tokenStorageService.getUser();
@@ -43,8 +43,8 @@ export class UserProfileComponent implements OnInit {
       this.showModeratorBoard = this.roles.includes('ROLE_MODERATOR');
 
       this.username = user.email;
-      this.id = user.id;
-      console.log("id", this.id);
+      this.userId = user.id;
+
       this.loadUser();
     } else {
       this.router.navigate(['/login']);
@@ -54,7 +54,7 @@ export class UserProfileComponent implements OnInit {
  
   
   loadUser() {
-    fetch(this.userUrl + this.id, {method: 'GET',
+    fetch(this.userUrl + this.userId, {method: 'GET',
       headers: {
         'Content-Type': 'application/json',
         'Access-Control-Allow-Origin': '*',

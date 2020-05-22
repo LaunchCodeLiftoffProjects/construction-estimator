@@ -1,6 +1,7 @@
 import { ItemDetails } from './item-details';
 import { Materials } from './materials';
 import { Labor } from './labor';
+import { Estimate } from './estimate';
 
 export class Project {
 
@@ -11,12 +12,13 @@ export class Project {
     roomWidth: number;
     roomHeight: number;
     itemDetails: ItemDetails[];
-<<<<<<< HEAD
+<<<<
     materials: Materials;
     labor: Labor;
+    
 =======
-    finalCost?: number;
->>>>>>> 011063221e3b5464afcedf5fa1157053a74335e9
+    estimate: Estimate;
+>>>>>>> origin/master
 
     constructor(name: string, roomType: string, roomLength: number, roomWidth: number, roomHeight: number, itemDetails?: ItemDetails[]) {
         this.name = name;
@@ -26,8 +28,14 @@ export class Project {
         this.roomHeight = roomHeight;
         this.itemDetails = [];
 <<<<<<< HEAD
+<<<<<<< HEAD
         this.materials = new Materials;
         this.labor = new Labor;
+=======
+        // these are causing problems on backend. Can be undefined for new projects
+        // this.materials = new Materials;
+        // this.labor = new Labor;
+>>>>>>> origin/master
     }
 
 }

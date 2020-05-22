@@ -98,31 +98,6 @@ public class ProjectController {
         return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
 
-    // returns json in form { "id": "project.id" }
-    // this is probably unnecessary but left it for consistency with the post mapping
-    @PutMapping("/{projectId}")
-    @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<?> updateProject(@PathVariable("projectId") int projectId, @RequestBody Project project,
-                                           @RequestHeader HttpHeaders headers) {
-
-        String headerAuth = headers.getFirst("Authorization");
-        Optional<Project> projectOptional = projectRepository.findById(projectId);
-
-        // return 404 if project doesn't already exist
-        if (projectOptional.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        } else if (userAuthService.doesUserMatch(projectOptional.get().getUser().getId(), headerAuth)) {
-            projectRepository.save(project); // save the updated project
-
-            Map<String, String> map = Collections.singletonMap("id", Integer.toString(projectId));
-            return new ResponseEntity<>(map, HttpStatus.OK);
-        } else {
-            // returns 401 if user attempts to access wrong project
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-        }
-
-    }
-
     @DeleteMapping("/{projectId}")
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<?> deleteProject(@PathVariable("projectId") int projectId,
