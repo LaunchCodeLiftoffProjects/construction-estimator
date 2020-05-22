@@ -24,6 +24,9 @@ export class ProjectListComponent implements OnInit {
   constructor(private route: ActivatedRoute, private router: Router,private tokenStorageService: TokenStorageService) {
     
    }
+  activeProject: Project;
+
+  
 
   ngOnInit() {
     // this. = this.route.snapshot.paramMap.get("id");
@@ -45,24 +48,38 @@ export class ProjectListComponent implements OnInit {
     this.loadProject();
   }
 
-  loadProject() {
-    fetch(this.projectUrl + "?userId=" + this.userId, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Credentials': 'true',
-        'Authorization': 'Barer ' + this.tokenStorageService.getToken()
-      }
-    }).then(function(response) {
+  loadProjects() {
+    fetch(this.projectUrl).then(function(response) {
       response.json().then(function(json) {
-        let refreshProject: Project[] = [];
+        let refreshProjects: Project[] = [];
         json.forEach(obj => {
-          refreshProject.push(new Project(obj.name, obj.roomType, obj.roomLength, obj.roomWidth, obj.roomHeight));
+          refreshProjects.push(new Project(obj.name, obj.roomType, obj.roomLength, obj.roomWidth, obj.roomHeight));
         });
-        this.projects = refreshProject;
+        this.projects = refreshProjects;
       }.bind(this));
     }.bind(this));
   }
-
 }
+//     this.projects = [
+//       {
+//           name: 'Some Project',
+//           itemDetails: [
+//               {
+//                   item: 'Brackets',
+//                   quantity: 6,
+//                   finalPrice: 0.30
+//               },
+//               {
+//                 item: 'Wire' ,
+//                 quantity: 4,
+//                 finalPrice: 0.75
+//               }
+//           ]
+//       }
+//   ]
+//   }
+
+//   makeActiveProject (project: Project) {
+//     this.activeProject = project;
+// }
+// }
