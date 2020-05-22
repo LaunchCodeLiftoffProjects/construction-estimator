@@ -67,8 +67,11 @@ export class RegisterComponent implements OnInit {
         console.log(data.token);
         this.isLoginFailed = false;
         this.isLoggedIn = true;
+
+        this.tokenStorage.saveUser(data);
         this.router.navigate(['/user/profile/']);
-      
+        
+
        
       },
       err => {
