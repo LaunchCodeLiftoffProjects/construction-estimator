@@ -191,8 +191,10 @@ export class ProjectDetailsComponent implements OnInit {
 
   /***** EVENT HANDLERS FOR ITEM SELECTIONS *****/
 
-  // TODO: see if there's a way to simplify these functions once changes have been made to the way
-  // selection objects are handled
+  /** for all of these, they will not actually be overwritten unless positive changes are made;
+   * if deselected/zeroed, all three fields will blank out but the itemDetails object will retain
+   * the previous selections in case the user changes their mind
+   */
 
   changeChecked(selection: Selection) {
     console.log(selection.type, (selection.checked ? "checked" : "unchecked"));
@@ -207,16 +209,15 @@ export class ProjectDetailsComponent implements OnInit {
       if (selection.quantity <= 0) {
         selection.quantity = 1;
       }
-      this.saveItemDetails(selection); // FIXME: this doesn't seem to be working
+      this.saveItemDetails(selection); // save/update itemDetails object in project
     } else {
-      this.resetAll(selection);
-      // FIXME: but only save checked boolean to itemDetails for now
+      this.resetAll(selection); // but do not overwrite corresponding itemDetails object yet
     }  
 	}
 
   // when selection is made in middle column, force checked and quantity
   changeSelected(selection: Selection) {  
-    console.log(selection.type, "selected:", selection.selected); // FIXME: selection.selected is printing as an object instead of a string ???
+    console.log(selection.type, "selected:", selection.selected);
     if (selection.quantity === 0) {
       selection.quantity = 1;
       selection.checked = true;
@@ -225,31 +226,24 @@ export class ProjectDetailsComponent implements OnInit {
   }
 
   changeQuantity(selection: Selection) {
-    console.log("Quantity for", selection.type, "saved to", selection.quantity);
-    if (selection.quantity > 0) {
-      if (!selection.checked) {
-        selection.checked = true;
-        let lastSelected: string = this.getLastSelected(selection.type);
-        if (lastSelected != null) {
-          selection.selected = lastSelected;
-        } else {
-          let options = this.getOptions(selection.type);
-          selection.selected = options[0]; // default to first in optionsArray
-        }
-      } 
-    } else if (selection.quantity < 0) {
-      if (!selection.checked) {
-        this.resetAll(selection);
+    console.log("Quantity for", selection.type, "changed to", selection.quantity);
+    // force other fields to sync up if quantity increased (but not checked) or negative number input
+    if ((selection.quantity > 0 && !selection.checked) || (selection.quantity < 0 && selection.checked)) {
+      selection.checked = true;
+      let lastSelected: string = this.getLastSelected(selection.type);
+      if (lastSelected != null) {
+        selection.selected = lastSelected; // FIXME: not working here or in changeChecked()
       } else {
-        selection.quantity = 1;
-        selection.checked = true;
-        // FIXME: set option also?
+        let options = this.getOptions(selection.type);
+        selection.selected = options[0]; // default to first in optionsArray
       }
+      this.saveItemDetails(selection); // save/update itemDetails object in project
+    } else if (selection.quantity <= 0) {
+      this.resetAll(selection); // but do not overwrite corresponding itemDetails object yet
     } else {
-      this.resetAll(selection);
+      this.saveItemDetails(selection); // just save new quantity
     }
-    // once all three fields have been either set or reset
-    this.saveItemDetails(selection);
+
   }
 
   // reset checkbox, select dropdown, and quantity fields all at once
@@ -258,49 +252,8 @@ export class ProjectDetailsComponent implements OnInit {
     selection.selected = '';
     selection.quantity = 0;
     console.log("All input fields for", selection.type, "reset.");
-    // DO NOT save to corresponding itemDetails object at this point
+    // DO NOT save to corresponding itemDetails object inside this function
   }
-
-  // checkValue(selection: Selection) {
-  //   if (selection.checked && selection.quantity <= 0) {
-  //     selection.quantity = 1;
-  //   }
-  // }
-
-  // setChecked(selection) {
-  //   if (selection.quantity > 0) {
-  //     selection.checked = true;
-  //     let options = this.getOptions(selection.type);
-  //     return options[0];
-  //   } else if (selection.quantity < 0) {
-  //     selection.quantity = 1;
-  //     return selection.selected;
-  //   } else {
-  //     selection.checked = false;
-  //   }
-  // }
-
-  // setValue(selection) {
-
-  //   if (selection.checked) {
-  //     let options = this.getOptions(selection.type);
-  //     return options[0];
-  //   } else {
-  //     selection.selected = '';
-  //     selection.quantity = 0;
-  //   }
-
-	// }
-
-  // // when item selection is checked in form, if zero, raise to 1
-  // changeQuantity(selection: Selection): number {
-    
-  //   if (this.calcByQuantity.includes(selection.type) && selection.checked === true && selection.quantity <= 0) {
-  //     return 1;
-  //   } else {
-  //     return selection.quantity;
-  //   }
-  // }
 
  
   /***** GETTERS *****/
@@ -370,14 +323,15 @@ export class ProjectDetailsComponent implements OnInit {
     return -1;
   }
 
-  getLastSelected(type: string): string {
+  getLastSelected(type: string): any {
     let index = this.findDetailsByType(type);
-    if (index >= 0) {
+    if (index >= 0) { // an itemDetails object already exists for this type
       let details: ItemDetails = this.project.itemDetails[index];
       let item: Item = this.itemsArray[this.findItemById(details.itemId)];
+      console.log("Last saved item for", item.type, "was", item.name)
       return item.name;
     } else {
-      return null;
+      return null; // no previous itemDetails object exists for this type
     }
   }
 
@@ -470,11 +424,11 @@ export class ProjectDetailsComponent implements OnInit {
   
   }
 
-  // TODO: write separate function just for saving one itemDetails object with selection info
+  // save one itemDetails object at a time with selection info
   saveItemDetails(selection: Selection) {
     if (selection.checked) { 
-      let id = this.getItemIdByName(selection.selected);
-      let item = this.itemsArray[this.findItemById(id)]
+      let id = this.getItemIdByName(selection.selected); 
+      let item = this.itemsArray[this.findItemById(id)] // needed only for console log cross-check
       // let costs = this.calculateCosts(item, selection); // costs for item, rough materials, and labor
 
       // check to see if itemDetails object already exists
@@ -483,19 +437,20 @@ export class ProjectDetailsComponent implements OnInit {
         this.project.itemDetails[index].itemId = id; // overwrite itemId
         this.project.itemDetails[index].quantity = selection.quantity; // overwrite quantity
         // overwrite finalPrice if calculating each time
-        console.log("ItemDetails object for", selection.type, "updated.");
+        console.log("ItemDetails object for", item.type, "updated to", item.name, "quantity", selection.quantity);
       } else {
         let details = new ItemDetails(id); // create object and set itemId property
         details.quantity = selection.quantity; // set quantity
         // details.finalPrice = costs[0]; // set finalPrice
         this.project.itemDetails.push(details);
-        console.log("ItemDetails object for", selection.type, "added to project.")
+        console.log("ItemDetails object for", selection.type, "added to project.");
       }
 
       // update per-item costs in estimate
       // this.buildEstimate(item, selection, costs);
     } else {
-      // if unchecked... FIXME: make sure last itemId is saved until time to save entire project to database
+      // if unchecked...
+      // TODO: this function should only be called for unchecked items at the point of saving the entire project 
     }
   }
 
@@ -511,8 +466,9 @@ export class ProjectDetailsComponent implements OnInit {
     let details: ItemDetails;
     let costs: number[];
 
-    // FIXME: update to match itemDetails and Selection objects by id and update instead of deleting
-    // if no longer selected by user in form, zero/blank out data in existing object in database
+    // FIXME: update to match itemDetails and Selection objects by id
+    // if selected in form, itemDetails object will already be updated
+    // if no longer selected by user in form, reset data in existing object in database
 
     for (let i=0; i < this.selectionArray.length; i++) {
       selection = this.selectionArray[i];

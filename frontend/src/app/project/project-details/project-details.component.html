@@ -65,9 +65,9 @@
                                 <label class="lead"><input #type="ngModel" [checked]="selectionArray[i].quantity > 0 || selectionArray[i].selected != ''" [(ngModel)]="selectionArray[i].checked" (change)="changeChecked(selectionArray[i])" type="checkbox" /> {{selection.type}}</label>
                             </div>
                             <div class = "col-4">
-                                <select #selected="ngModel" [(ngModel)]="selectionArray[i].selected" class="custom-select w-100" (change)="changeSelected(selectionArray[i])">
+                                <select #options="ngModel" [(ngModel)]="selectionArray[i].selected" class="custom-select w-100" (change)="changeSelected(selectionArray[i])">
                                     <!-- <option>(Select an option)</option> -->
-                                    <option *ngFor="let options of getOptions(selection.type)" [value]="options" [selected]="selectionArray[i].selected == options">{{options.name}}</option>
+                                    <option *ngFor="let option of getOptions(selection.type)" [value]="option.name" [selected]="selectionArray[i].selected === option">{{option.name}}</option>
                                 </select>
                             </div>
                             <div class="col-2">
