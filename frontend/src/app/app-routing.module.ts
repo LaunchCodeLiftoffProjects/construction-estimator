@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import { Routes, RouterModule, Router } from '@angular/router';
 
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
@@ -15,6 +15,7 @@ import { BoardModeratorComponent } from './board-moderator/board-moderator.compo
 import { BoardAdminComponent } from './board-admin/board-admin.component';
 // import {ProjectEstimateComponent} from 'C:/Liftoff/construction-estimator/frontend/src/app/project-list/project-estimate/project-estimate.component'
   import { from } from 'rxjs'; 
+import { AppComponent } from './app.component';
 
 const routes: Routes = [
   {path: 'login' , component: LoginComponent},
@@ -44,7 +45,8 @@ const routes: Routes = [
   { path: 'user', component: BoardUserComponent },
   { path: 'mod', component: BoardModeratorComponent },
   { path: 'admin', component: BoardAdminComponent },
-  { path: '', redirectTo: 'login', pathMatch: 'full' }
+  { path: '', redirectTo: 'login', pathMatch: 'full' },
+  {path: '**', component: PageNotFoundComponent}
 ];
 
 @NgModule({

@@ -31,7 +31,7 @@ export class UserProfileComponent implements OnInit {
     // this.id = this.route.snapshot.paramMap.get("id");
     // this.userUrl += this.id;
     
-    
+
     this.isLoggedIn = !!this.tokenStorageService.getToken();
    
 

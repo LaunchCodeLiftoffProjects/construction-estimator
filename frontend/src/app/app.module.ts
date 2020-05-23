@@ -22,6 +22,7 @@ import { BoardUserComponent } from './board-user/board-user.component';
 import { HttpClientModule } from '@angular/common/http';
 import { authInterceptorProviders } from './_helpers/auth.interceptor';
 // import { ProjectEstimateComponent } from './project-list/project-estimate/project-estimate.component';
+import { MinValDirective } from './min-val.directive';
 
 
 
@@ -41,8 +42,10 @@ import { authInterceptorProviders } from './_helpers/auth.interceptor';
     EditUserDetailsComponent,
     BoardAdminComponent,
     BoardModeratorComponent,
-    BoardUserComponent],
+    BoardUserComponent,
     // ProjectEstimateComponent],
+    BoardUserComponent,
+    MinValDirective],
   imports: [
     FormsModule,
     BrowserModule,
