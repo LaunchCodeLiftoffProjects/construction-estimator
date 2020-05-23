@@ -11,7 +11,7 @@ import { Materials } from 'src/app/materials';
 import { Labor } from 'src/app/labor';
 import { Estimate } from 'src/app/estimate';
 
-// service
+// services
 import { TokenStorageService } from 'src/app/_services/token-storage.service';
 
 
@@ -91,7 +91,7 @@ export class ProjectDetailsComponent implements OnInit {
   }
 
 
-  // LOAD PROJECT FROM DATABASE
+  /***** LOAD PROJECT FROM DATABASE *****/
 
   // includes saved information from previous session if revising an existing estimate
   loadProject() {
@@ -125,7 +125,7 @@ export class ProjectDetailsComponent implements OnInit {
   }
 
 
-  // LOAD BASIC ITEMS AND PROPERTIES FROM JSON
+  /***** LOAD BASIC ITEMS AND PROPERTIES FROM JSON *****/
 
   loadItems() {
     fetch("http://localhost:8080/api/item/").then(function (response) {
@@ -144,7 +144,7 @@ export class ProjectDetailsComponent implements OnInit {
   }
 
 
-  // CREATE SELECTION OBJECTS FOR TWO-WAY DATA BINDING
+  /***** CREATE SELECTION OBJECTS FOR TWO-WAY DATA BINDING *****/
 
   createSelections() {
     this.selectionArray = []; // rebuild this array if method is called again prior to form submission due to roomType change
@@ -155,7 +155,7 @@ export class ProjectDetailsComponent implements OnInit {
     if (this.project.itemDetails.length > 0) {
       for (let i=0; i < this.project.itemDetails.length; i++) {
         details = this.project.itemDetails[i];
-        item = this.itemsArray[this.findItemByID(details.itemId)];
+        item = this.itemsArray[this.findItemById(details.itemId)];
         if (item.room.includes(this.project.roomType)) { // if the room type has been changed for some reason
           selection = new Selection(item.category, item.type, true, item.name, details.quantity);
           selection.id = this.project.itemDetails[i].id; // so that when saving to project, existing itemDetails objects can be overwritten
@@ -189,7 +189,7 @@ export class ProjectDetailsComponent implements OnInit {
   }
 
 
-  // EVENT HANDLERS FOR ITEM SELECTIONS
+  /***** EVENT HANDLERS FOR ITEM SELECTIONS *****/
 
   // TODO: see if there's a way to simplify these functions once changes have been made to the way
   // selection objects are handled
@@ -197,15 +197,21 @@ export class ProjectDetailsComponent implements OnInit {
   changeChecked(selection: Selection) {
     console.log(selection.type, (selection.checked ? "checked" : "unchecked"));
     if (selection.checked) {
-      let options = this.getOptions(selection.type);
-      selection.selected = options[0];
+      let lastSelected: string = this.getLastSelected(selection.type);
+      if (lastSelected != null) {
+        selection.selected = lastSelected;
+      } else {
+        let options = this.getOptions(selection.type);
+        selection.selected = options[0]; // default to first in optionsArray
+      }
       if (selection.quantity <= 0) {
         selection.quantity = 1;
       }
+      this.saveItemDetails(selection); // FIXME: this doesn't seem to be working
     } else {
       this.resetAll(selection);
-    }
-    // TODO: save current selection values to itemDetails in project
+      // FIXME: but only save checked boolean to itemDetails for now
+    }  
 	}
 
   // when selection is made in middle column, force checked and quantity
@@ -215,17 +221,21 @@ export class ProjectDetailsComponent implements OnInit {
       selection.quantity = 1;
       selection.checked = true;
     }    
-    // TODO: save current selection values to itemDetails in project
+    this.saveItemDetails(selection);
   }
 
   changeQuantity(selection: Selection) {
     console.log("Quantity for", selection.type, "saved to", selection.quantity);
     if (selection.quantity > 0) {
       if (!selection.checked) {
-      selection.checked = true;
-      // TODO: before automatically selecting options[0], check for last value in itemDetails
-      let options = this.getOptions(selection.type);
-      selection.selected = options[0];
+        selection.checked = true;
+        let lastSelected: string = this.getLastSelected(selection.type);
+        if (lastSelected != null) {
+          selection.selected = lastSelected;
+        } else {
+          let options = this.getOptions(selection.type);
+          selection.selected = options[0]; // default to first in optionsArray
+        }
       } 
     } else if (selection.quantity < 0) {
       if (!selection.checked) {
@@ -233,11 +243,13 @@ export class ProjectDetailsComponent implements OnInit {
       } else {
         selection.quantity = 1;
         selection.checked = true;
+        // FIXME: set option also?
       }
     } else {
       this.resetAll(selection);
     }
-    // TODO: save current selection values to itemDetails in project
+    // once all three fields have been either set or reset
+    this.saveItemDetails(selection);
   }
 
   // reset checkbox, select dropdown, and quantity fields all at once
@@ -291,13 +303,13 @@ export class ProjectDetailsComponent implements OnInit {
   // }
 
  
-  // GETTERS
+  /***** GETTERS *****/
 
-  findItemByID(itemID: number): number {
+  findItemById(itemId: number): number {
     let item: Item;
     for (let i=0; i < this.itemsArray.length; i++) {
       item = this.itemsArray[i];
-      if (item.id === itemID) {
+      if (item.id === itemId) {
         return i;
       }
     }
@@ -327,6 +339,18 @@ export class ProjectDetailsComponent implements OnInit {
     return -1; // if not found
   }
 
+  // find itemDetails object using id assigned to selection object upon loading
+  findDetailsById(id: number): number {
+    let details: ItemDetails;
+    for (let i=0; i < this.project.itemDetails.length; i++) {
+      details = this.project.itemDetails[i];
+      if (details.id === id) {
+        return i;
+      }
+    }
+    return -1;
+  }  
+
   // finds index of itemDetails object saved in project which matches a given type
   findDetailsByType(type: string): number {
     let details: ItemDetails;
@@ -346,15 +370,26 @@ export class ProjectDetailsComponent implements OnInit {
     return -1;
   }
 
-  // calculate from dimensions whenever project info loaded or updated
+  getLastSelected(type: string): string {
+    let index = this.findDetailsByType(type);
+    if (index >= 0) {
+      let details: ItemDetails = this.project.itemDetails[index];
+      let item: Item = this.itemsArray[this.findItemById(details.itemId)];
+      return item.name;
+    } else {
+      return null;
+    }
+  }
+
+  /***** RUN CALCULATIONS *****/
+
+  // calculate these from dimensions whenever project info is loaded or changed
   calcMeasurements() {
     this.perimeter = 2 * this.project.roomLength + 2 * this.project.roomWidth;
     this.wallArea = this.perimeter * this.project.roomHeight;
     this.floorArea = this.project.roomLength * this.project.roomWidth;
     console.log("Project measurements set from room dimensions.");
   }
-
-  // CALCULATE ESTIMATE
 
   // calculate for each selected item based on quantity or measurements
   calculateCosts(item: Item, selection: Selection): number[] {
@@ -396,6 +431,9 @@ export class ProjectDetailsComponent implements OnInit {
     return costs;
   }
 
+
+  /***** BUILD ESTIMATE *****/
+
   // build estimate object as each item is calculated
   buildEstimate(item: Item, selection: Selection, costs: number[]) {
 
@@ -432,6 +470,34 @@ export class ProjectDetailsComponent implements OnInit {
   
   }
 
+  // TODO: write separate function just for saving one itemDetails object with selection info
+  saveItemDetails(selection: Selection) {
+    if (selection.checked) { 
+      let id = this.getItemIdByName(selection.selected);
+      let item = this.itemsArray[this.findItemById(id)]
+      // let costs = this.calculateCosts(item, selection); // costs for item, rough materials, and labor
+
+      // check to see if itemDetails object already exists
+      let index = this.findDetailsById(selection.id);
+      if (index >= 0) {
+        this.project.itemDetails[index].itemId = id; // overwrite itemId
+        this.project.itemDetails[index].quantity = selection.quantity; // overwrite quantity
+        // overwrite finalPrice if calculating each time
+        console.log("ItemDetails object for", selection.type, "updated.");
+      } else {
+        let details = new ItemDetails(id); // create object and set itemId property
+        details.quantity = selection.quantity; // set quantity
+        // details.finalPrice = costs[0]; // set finalPrice
+        this.project.itemDetails.push(details);
+        console.log("ItemDetails object for", selection.type, "added to project.")
+      }
+
+      // update per-item costs in estimate
+      // this.buildEstimate(item, selection, costs);
+    } else {
+      // if unchecked... FIXME: make sure last itemId is saved until time to save entire project to database
+    }
+  }
 
   // BUILD PROJECT AND SAVE ALL OBJECTS TO DATABASE
 
@@ -452,7 +518,7 @@ export class ProjectDetailsComponent implements OnInit {
       selection = this.selectionArray[i];
       if (selection.checked) { 
         id = this.getItemIdByName(selection.selected);
-        item = this.itemsArray[this.findItemByID(id)]
+        item = this.itemsArray[this.findItemById(id)]
         costs = this.calculateCosts(item, selection); // costs for item, rough materials, and labor
 
         // create itemDetails object and add to project
