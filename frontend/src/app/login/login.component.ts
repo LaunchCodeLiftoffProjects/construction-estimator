@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../_services/auth.service';
 import { TokenStorageService } from '../_services/token-storage.service';
 import { EmailValidator } from '@angular/forms';
-import { Router, RouterModule, ActivatedRoute, ParamMap, NavigationExtras, NavigationEnd } from '@angular/router';
+import { Router, RouterModule, ActivatedRoute, ParamMap, NavigationExtras, NavigationEnd, Route, Data } from '@angular/router';
 import { HeaderComponent } from '../header/header.component';
 
 @Component({
@@ -27,12 +27,14 @@ export class LoginComponent implements OnInit {
    }
 
   ngOnInit() {
+
+    
     
     if (this.tokenStorage.getToken()) {
       this.isLoggedIn = true;
       this.roles = this.tokenStorage.getUser().roles;
-      this.router.navigate(['/user/profile/']);
-    }
+      this.router.navigate(['/user/profile']);
+    } 
 
     
   }

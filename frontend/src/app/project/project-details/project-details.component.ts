@@ -195,39 +195,58 @@ export class ProjectDetailsComponent implements OnInit {
     return optionsArray;
   }
 
-  setChecked(selection) {
+
+  changeQuantity(selection) {
     if (selection.quantity > 0) {
+      if (!selection.checked) {
       selection.checked = true;
       let options = this.getOptions(selection.type);
-      return options[0];
+      selection.selected = options[0];
+      } else {
+        return;
+      }
     } else if (selection.quantity < 0) {
-      selection.quantity = 1;
-      return selection.selected;
+      if (!selection.checked) {
+        selection.checked = false;
+        selection.selected = '';
+        selection.quantity = 0;
+      } else {
+        selection.quantity = 1;
+        selection.checked = true;
+      }
     } else {
       selection.checked = false;
+      selection.selected = '';
+      selection.quantity = 0;
     }
+    return selection;
   }
 
-  setValue(selection) {
+  changeChecked(selection: Selection) {
 
     if (selection.checked) {
       let options = this.getOptions(selection.type);
-      return options[0];
+      selection.selected = options[0];
+      if (selection.quantity <= 0) {
+        selection.quantity = 1;
+      }
     } else {
       selection.selected = '';
       selection.quantity = 0;
     }
+    return selection;
 
 	}
 
-  // when item selection is checked in form, if zero, raise to 1
-  changeQuantity(selection: Selection): number {
+  // when selection is made in middle column, force checked and quantity
+  changeSelected(selection: Selection) {
     
-    if (this.calcByQuantity.includes(selection.type) && selection.checked === true && selection.quantity <= 0) {
-      return 1;
-    } else {
-      return selection.quantity;
+    if (selection.quantity == 0) {
+      selection.quantity = 1;
+      selection.checked = true;
     }
+    return selection;
+    
   }
 
   checkValue(selection: Selection) {
@@ -237,6 +256,42 @@ export class ProjectDetailsComponent implements OnInit {
   }
 
 
+  // setChecked(selection) {
+  //   if (selection.quantity > 0) {
+  //     selection.checked = true;
+  //     let options = this.getOptions(selection.type);
+  //     return options[0];
+  //   } else if (selection.quantity < 0) {
+  //     selection.quantity = 1;
+  //     return selection.selected;
+  //   } else {
+  //     selection.checked = false;
+  //   }
+  // }
+
+  // setValue(selection) {
+
+  //   if (selection.checked) {
+  //     let options = this.getOptions(selection.type);
+  //     return options[0];
+  //   } else {
+  //     selection.selected = '';
+  //     selection.quantity = 0;
+  //   }
+
+	// }
+
+  // // when item selection is checked in form, if zero, raise to 1
+  // changeQuantity(selection: Selection): number {
+    
+  //   if (this.calcByQuantity.includes(selection.type) && selection.checked === true && selection.quantity <= 0) {
+  //     return 1;
+  //   } else {
+  //     return selection.quantity;
+  //   }
+  // }
+
+ 
   // GETTERS
 
   getItemByID(itemID: number): number {
