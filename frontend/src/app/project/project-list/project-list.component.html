@@ -1,25 +1,60 @@
- 
- <div class="container">
+<div class="container">
 
-        <div class="mt-5">
-            <h2 class="text-info">All Projects</h2>
-        </div>
-
-        <div *ngIf="! projects">
-            <p class="lead">Hey there! You do not have any projects yet.<br /> 
-                Why not <a class="text-info" [routerLink]="'/project/create'">create</a> one?</p>
-        </div>
-
-        <div>
-            <ul>
-                <li class="lead" *ngFor="let project of projects">{{project.name}}</li>
-            </ul>
-        </div>
-
+    <div class="mt-5">
+        <h2 class="text-info">All Projects</h2>
     </div>
 
-    <div class="container">
-
-        <router-outlet></router-outlet>
-    
+    <div *ngIf="! projects">
+        <p class="lead">Hey there! You do not have any projects yet.<br />
+            Why not <a class="text-info" [routerLink]="'/project/create'">create</a> one?</p>
     </div>
+
+    <div class="col-15">
+        <div >
+            <div>
+                <div *ngFor="let project of projects; let index = p">
+                    <div class="btn" (click)="setSelectedProject(project)">
+                        <h4 class="text">
+                            
+                            <u [class.text-info]="selectedProject === project">{{project.name}}</u>
+                        </h4>
+                    </div>
+                    <br>
+                </div>
+            </div>
+        
+        <br>
+        <h4 class="text-info"> &nbsp; &nbsp; + <a class="text-info" [routerLink]="'/project/create'">New Project</a></h4>
+        </div>
+    </div>
+
+    <!-- //FIXME: Right now the column won't display next to the project list column
+    AND
+    The ngIf is having trouble displaying the correct estimate. It will display multiple estimates depending on when you click them
+    Using index for the if statement doesn't fix it -->
+    <div class="col-10 align-middle" *ngFor="let project of projects">
+        
+        <div class="text-right" *ngIf="selectedProject === project">
+            <h4 class="text-info mt-4"> Appliances Cost: {{project.estimate.appliancesCost}}</h4>
+            <h4 class="text-info mt-4"> Fixtures Cost: {{project.estimate.fixturesCost}} </h4>
+            <h4 class="text-info mt-4"> Finishes Cost: {{project.estimate.finishesCost}} </h4>
+            <h4 class="text-info mt-4"> Materials Cost: {{project.estimate.materialsCost}} </h4>
+            <h4 class="text-info mt-4"> Labor Cost: {{project.estimate.laborCost}} </h4>
+            <h4 class="text-info mt-4"> TOTAL ESTIMATE: {{project.estimate.totalCost}} </h4>
+            <br>
+            <button class="btn btn-info" [routerLink]="'/project/add-details/' + project.id">Update My
+                Project</button>
+        </div>
+        
+    </div>
+
+</div>
+
+
+
+
+<!-- <div class="container">
+
+    <router-outlet></router-outlet>
+
+</div> -->

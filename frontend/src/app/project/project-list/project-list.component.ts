@@ -19,6 +19,7 @@ export class ProjectListComponent implements OnInit {
   showAdminBoard = false;
   showModeratorBoard = false;
   username: string;
+  selectedProject: Project;
 
   constructor(private tokenStorageService: TokenStorageService, private router: Router) {
     
@@ -56,11 +57,40 @@ export class ProjectListComponent implements OnInit {
       response.json().then(function(json) {
         let refreshProject: Project[] = [];
         json.forEach(obj => {
-          refreshProject.push(new Project(obj.name, obj.roomType, obj.roomLength, obj.roomWidth, obj.roomHeight));
+          let project = new Project(obj.name, obj.roomType, obj.roomLength, obj.roomWidth, obj.roomHeight);
+          project.id = obj.id;
+          project.itemDetails = obj.itemDetails;
+          project.materials = obj.materials;
+          project.labor = obj.labor;
+          project.estimate = obj.estimate;
+          refreshProject.push(project);
         });
         this.projects = refreshProject;
+        //TODO:
+        //Decide how to grab the project id from the details page
+        // this.selectedProject =
       }.bind(this));
     }.bind(this));
   }
+
+
+  setSelectedProject(project) {
+    if (this.selectedProject !== project) {
+      this.selectedProject = project;
+    } else {
+      this.selectedProject = null;
+    }
+    
+  }
+
+  checkSelection(project) {
+    if (project === this.selectedProject) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+
 
 }
