@@ -9,6 +9,7 @@ export class ItemDetails {
     finalPrice: number;
 
     constructor(itemId: number) {
+        this.id = null;
         this.itemId = itemId;
         this.quantity = 0;
         this.finalPrice = 0;

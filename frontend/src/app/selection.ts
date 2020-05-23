@@ -12,6 +12,7 @@ export class Selection {
     quantity: number;
 
     constructor(category: string, type: string, checked?: boolean, selected: string = "", quantity: number = 0) {
+        this.id = null;
         this.category = category;
         this.type = type;
         this.checked = checked ? checked : false;

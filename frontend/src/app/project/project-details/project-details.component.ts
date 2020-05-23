@@ -156,9 +156,8 @@ export class ProjectDetailsComponent implements OnInit {
     return -1; // if not found
   }
 
-  // check to see if details have been saved to this project before or not, and create Selection objects accordingly
-  createSelections() { // FIXME: Rework this so current selections aren't lost if room type is changed
-    // TODO: assign selection id number to any types previously saved with project itemDetails
+  // check to see if details have been saved to this project yet or not, and create Selection objects accordingly
+  createSelections() {
     this.selectionArray = []; // rebuild this array if method is called again prior to form submission due to roomType change
     let selection: Selection;
     let details: ItemDetails;
@@ -166,9 +165,10 @@ export class ProjectDetailsComponent implements OnInit {
     if (this.project.itemDetails.length > 0) { // if project already has a saved itemDetails array, get values
       for (let i=0; i < this.project.itemDetails.length; i++) {
         details = this.project.itemDetails[i];
-        item = this.itemsArray[this.getItemByID(details.itemId)];
+        item = this.itemsArray[this.findItemByID(details.itemId)];
         if (item.room.includes(this.project.roomType)) { // if the room type has been changed for some reason
           selection = new Selection(item.category, item.type, true, item.name, details.quantity);
+          selection.id = this.project.itemDetails[i].id; // so that when saving to project, existing itemDetails objects can be overwritten
           this.selectionArray.push(selection);
         }
       }
@@ -177,15 +177,15 @@ export class ProjectDetailsComponent implements OnInit {
     for (let j=0; j < this.itemsArray.length; j++) {
       item = this.itemsArray[j];
       if (item.room.includes(this.project.roomType) && this.locateSelection(item.type) === -1) {
-        selection = new Selection(item.category, item.type, false); // default to initialized values for 'selected' & 'quantity'
+        selection = new Selection(item.category, item.type, false); // default to initialized values for 'id', 'selected' & 'quantity'
         this.selectionArray.push(selection);
       }
     }
     this.selectionArray.sort((a, b) => (a.type > b.type) ? 1 : -1);
   }
 
-  // for each type, build a list of available options to display for dropdown lists - string value will save upon form submission
-  getOptions(itemType: string) {
+  // for each type, build a list of available options to display for dropdown lists
+  getOptions(itemType: string): string[] {
     let optionsArray = [];
     let item: Item;
     for (let i=0; i < this.itemsArray.length; i++) {
@@ -198,34 +198,10 @@ export class ProjectDetailsComponent implements OnInit {
     return optionsArray;
   }
 
-  changeQuantity(selection: Selection) {
-    if (selection.quantity > 0) {
-      if (!selection.checked) {
-      selection.checked = true;
-      let options = this.getOptions(selection.type);
-      selection.selected = options[0];
-      } else {
-        return;
-      }
-    } else if (selection.quantity < 0) {
-      if (!selection.checked) {
-        selection.checked = false;
-        selection.selected = '';
-        selection.quantity = 0;
-      } else {
-        selection.quantity = 1;
-        selection.checked = true;
-      }
-    } else {
-      selection.checked = false;
-      selection.selected = '';
-      selection.quantity = 0;
-    }
-    return selection;
-  }
+  // TODO: see if there's a way to simplify these functions once changes have been made to the way
+  // selection objects are handled
 
   changeChecked(selection: Selection) {
-
     if (selection.checked) {
       let options = this.getOptions(selection.type);
       selection.selected = options[0];
@@ -233,30 +209,53 @@ export class ProjectDetailsComponent implements OnInit {
         selection.quantity = 1;
       }
     } else {
-      selection.selected = '';
-      selection.quantity = 0;
+      this.resetAll(selection);
     }
-    return selection;
-
+    // TODO: save current selection values to itemDetails in project
 	}
 
   // when selection is made in middle column, force checked and quantity
-  changeSelected(selection: Selection) {
-    
+  changeSelected(selection: Selection) {  
     if (selection.quantity == 0) {
       selection.quantity = 1;
       selection.checked = true;
-    }
-    return selection;
-    
+    }    
+    // TODO: save current selection values to itemDetails in project
   }
 
-  checkValue(selection: Selection) {
-    if (selection.checked && selection.quantity <= 0) {
-      selection.quantity = 1;
+  changeQuantity(selection: Selection) {
+    if (selection.quantity > 0) {
+      if (!selection.checked) {
+      selection.checked = true;
+      let options = this.getOptions(selection.type);
+      selection.selected = options[0];
+      } 
+    } else if (selection.quantity < 0) {
+      if (!selection.checked) {
+        this.resetAll(selection);
+      } else {
+        selection.quantity = 1;
+        selection.checked = true;
+      }
+    } else {
+      this.resetAll(selection);
     }
+    // TODO: save current selection values to itemDetails in project
   }
 
+  // reset checkbox, select dropdown, and quantity field
+  resetAll(selection: Selection) {
+    selection.checked = false;
+    selection.selected = '';
+    selection.quantity = 0;
+    // DO NOT save to corresponding itemDetails object at this point
+  }
+
+  // checkValue(selection: Selection) {
+  //   if (selection.checked && selection.quantity <= 0) {
+  //     selection.quantity = 1;
+  //   }
+  // }
 
   // setChecked(selection) {
   //   if (selection.quantity > 0) {
@@ -296,7 +295,7 @@ export class ProjectDetailsComponent implements OnInit {
  
   // GETTERS
 
-  getItemByID(itemID: number): number {
+  findItemByID(itemID: number): number {
     let item: Item;
     for (let i=0; i < this.itemsArray.length; i++) {
       item = this.itemsArray[i];
@@ -307,6 +306,19 @@ export class ProjectDetailsComponent implements OnInit {
     return -1;
   }
 
+  // not sure what this is for - TODO: maybe delete if not needed
+  // findItemByType(type: string): number {
+  //   let item: Item;
+  //   for (let i=0; i < this.itemsArray.length; i++) {
+  //     item = this.itemsArray[i];
+  //     if (item.type === type) {
+  //       return i;
+  //     }
+  //   }
+  //   return -1;
+  // }
+
+  // finds the specific itemId for an Item object using name
   getItemIdByName(name: string): number {
     let item: Item;
     for (let i=0; i < this.itemsArray.length; i++) {
@@ -315,6 +327,25 @@ export class ProjectDetailsComponent implements OnInit {
         return item.id;
       }
     }
+  }
+
+  // finds index of itemDetails object saved in project which matches a given type
+  findDetailsByType(type: string): number {
+    let details: ItemDetails;
+    let item: Item;
+    for (let i=0; i < this.project.itemDetails.length; i++) {
+      details = this.project.itemDetails[i];
+      for (let j=0; j < this.itemsArray.length; j++) {
+        item = this.itemsArray[j];
+        if (item.type = type) {
+          break;
+        }
+      }
+      if (details.itemId === item.id) {
+        return i;
+      }
+    }
+    return -1;
   }
 
   // calculate from dimensions whenever project info loaded or updated
@@ -423,7 +454,7 @@ export class ProjectDetailsComponent implements OnInit {
       selection = this.selectionArray[i];
       if (selection.checked) { 
         id = this.getItemIdByName(selection.selected);
-        item = this.itemsArray[this.getItemByID(id)]
+        item = this.itemsArray[this.findItemByID(id)]
         costs = this.calculateCosts(item, selection); // costs for item, rough materials, and labor
 
         // create itemDetails object and add to project
@@ -489,8 +520,5 @@ export class ProjectDetailsComponent implements OnInit {
     });
 
   }
-
-
-  
 
 }
