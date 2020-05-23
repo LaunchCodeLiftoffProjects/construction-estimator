@@ -12,7 +12,7 @@ import { FormGroup, Validators, FormControl } from '@angular/forms';
   styleUrls: ['./create-project.component.css']
 })
 export class CreateProjectComponent implements OnInit {
-  project = new Project('', 'kitchen', 0, 0, 0);
+  project = new Project('', 'kitchen', null, null, null);
   form: any = {};
   id: number;
   selectedRoom: string = "kitchen";
