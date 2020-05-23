@@ -35,9 +35,7 @@ export class RegisterComponent implements OnInit {
       window.location.reload();
     }
 
-    if (this.isLoggedIn) {
-      this.router.navigate(['/user/profile/']);
-    }
+    
   }
 
 
