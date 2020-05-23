@@ -43,6 +43,10 @@ export class ProjectDetailsComponent implements OnInit {
   categories: string[] = [ "appliance", "fixture", "finish" ];
   categoryTitles = [ "Appliances", "Fixtures", "Finishes" ];
 
+  perimeter: number;
+  wallArea: number;
+  floorArea: number;
+
   calcByQuantity: string[] = ['Dishwasher', 'Disposal', 'Range Hood', 'Oven/Range', 'Refrigerator',
               'Bath & Shower', 'Ceiling Light/Fan', 'Electrical Outlets', 'Electrical Switches', 
               'Lighting', 'Shelving', 'Sink', 'Faucet', 'Toilet', 'Doors', 'Cabinets, Lower', 
@@ -57,9 +61,6 @@ export class ProjectDetailsComponent implements OnInit {
   factorIntoFinishWork: string[] = ['Shelving', 'Doors', 'Cabinets, Lower', 'Cabinets, Upper', 'Windows',
               'Baseboards', 'Trim', 'Flooring', 'Walls', 'Backsplash', 'Countertop'];
 
-  perimeter: number = 2 * this.project.roomLength + 2 * this.project.roomWidth;
-  wallArea: number = this.perimeter * this.project.roomHeight;
-  floorArea: number = this.project.roomLength * this.project.roomWidth;
 
   constructor(private route: ActivatedRoute, private router: Router, private tokenStorageService: TokenStorageService) { }
 
@@ -110,6 +111,8 @@ export class ProjectDetailsComponent implements OnInit {
         this.project.materials = json.materials === null ? new Materials : json.materials;
         this.project.labor = json.labor === null ? new Labor : json.labor;
         this.project.estimate = json.estimate === null ? new Estimate : json.estimate;
+
+        this.setMeasurements(); // calculate perimeter, wall area, and floor area
 
         this.loadItems(); // put here so things load in order
         console.log("Items loaded.");
@@ -260,6 +263,14 @@ export class ProjectDetailsComponent implements OnInit {
 
   // CALCULATE ESTIMATE
 
+  // calculate from dimensions whenever project info loaded or updated
+  setMeasurements() {
+    this.perimeter = 2 * this.project.roomLength + 2 * this.project.roomWidth;
+    this.wallArea = this.perimeter * this.project.roomHeight;
+    this.floorArea = this.project.roomLength * this.project.roomWidth;
+    console.log("Project measurements set from room dimensions.");
+  }
+
   // calculate for each selected item based on quantity or measurements
   calculateCosts(item: Item, selection: Selection): number[] {
     let itemCost: number = 0;
@@ -270,24 +281,31 @@ export class ProjectDetailsComponent implements OnInit {
       itemCost = selection.quantity * item.price;
       materialCost = selection.quantity * item.roughMaterials;
       laborCost = selection.quantity * item.labor;
+      console.log(item.type, "calculated by quantity.");
     } else if (this.calcByLF.includes(item.type)) {
       itemCost = this.perimeter * item.price;
       materialCost = this.perimeter * item.roughMaterials;
       laborCost = this.perimeter * item.labor;
+      console.log(item.type, "calculated by linear feet.");
     } else if (this.calcByCabinet.includes(item.type)) {
       let index: number = this.locateSelection("Cabinets, Lower");
       let cabinet: Selection = this.selectionArray[index];
       itemCost = cabinet.quantity * 2 * item.price; // if no lower cabinets have beens selected, this will result in 0
       materialCost = cabinet.quantity * item.roughMaterials;
       laborCost = cabinet.quantity * item.labor;
+      console.log(item.type, "calculated by number of cabinets.");
     } else if (item.type === "Wall") {
       itemCost = this.wallArea * item.price;
       materialCost = this.wallArea * item.roughMaterials;
       laborCost = this.wallArea * item.labor;
+      console.log(item.type, "calculated by wall area.");
     } else if (item.type === "Flooring") { 
       itemCost = this.floorArea * item.price;
       materialCost = this.floorArea * item.roughMaterials;
       laborCost = this.floorArea * item.labor;
+      console.log(item.type, "calculated by floor area.");
+    } else {
+      console.log(item.type, "not categorized for calculation."); // debug
     }
     costs = [itemCost, materialCost, laborCost];
     return costs;
@@ -304,6 +322,8 @@ export class ProjectDetailsComponent implements OnInit {
     } else if (selection.category === 'finish') {
       this.project.estimate.finishesCost += costs[0];
     }
+    console.log("Cost for", item.type, "item added to estimate:", costs[0]);
+
     // add any related materials cost - will add in only once if appliance involveds both plumbing & electrical
     if (this.project.materials.needPlumbingSystem === true && this.factorIntoPlumbing.includes(selection.type)) {
       this.project.estimate.materialsCost += costs[1];
@@ -311,6 +331,7 @@ export class ProjectDetailsComponent implements OnInit {
       this.project.estimate.materialsCost += costs[1];
     }
     // Note: framing and drywall costs added separately since not tied to specific items, just dimensions of room
+    console.log("Cost for", item.type, "rough materials added to estimate:", costs[1]);
 
     // add any related labor cost - will add in only once if appliance involves both plumbing & electrical
     if (this.project.labor.needPlumbingSub === true && this.factorIntoPlumbing.includes(selection.type)) {
@@ -322,6 +343,7 @@ export class ProjectDetailsComponent implements OnInit {
     if (this.project.labor.needFinishWork === true && this.factorIntoFinishWork.includes(selection.type)) {
       this.project.estimate.laborCost += costs[2];
     }
+    console.log("Cost for", item.type, "labor added to estimate:", costs[2]);
   
   }
 
@@ -353,6 +375,7 @@ export class ProjectDetailsComponent implements OnInit {
         details.quantity = selection.quantity; // set quantity
         details.finalPrice = costs[0]; // set finalPrice
         this.project.itemDetails.push(details);
+        console.log("ItemDetails object for", selection.type, "added to project.")
 
         // add per-item costs into estimate
         this.buildEstimate(item, selection, costs);
@@ -369,6 +392,7 @@ export class ProjectDetailsComponent implements OnInit {
     if (this.project.labor.needRoughCarpentry === true) {
       this.project.estimate.laborCost += 10 * this.wallArea; // $10/SF of wall area
     }
+    console.log("Remaining material and labor costs added to estimate.");
 
     // calculate total cost and save to estimate
     this.project.estimate.totalCost = this.project.estimate.appliancesCost +
@@ -387,6 +411,8 @@ export class ProjectDetailsComponent implements OnInit {
 
     // create ItemDetails array and run calculations for estimate based on user input
     this.buildProject();
+
+    // FIXME: make sure other project properties are saving to back end
 
     let projectDetailsPayload = new ProjectDetailsPayload(this.project.itemDetails, this.project.labor, this.project.materials, this.project.estimate);
 

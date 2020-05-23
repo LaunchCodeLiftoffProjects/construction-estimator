@@ -15,7 +15,7 @@
                     <h4>{{project.name}} </h4>
                     <p class="lead">{{roomTitles[rooms.indexOf(project.roomType)]}}<br />
                     {{project.roomLength}}'L x {{project.roomWidth}}'W x {{project.roomHeight}}'H</p>
-                    <button class = "badge badge-info" (click) = "editingProject = true;">Edit</button>
+                    <button class = "badge badge-info" (click) = "editingProject = true; getMeasurements()">Edit</button>
                 </div>
 
                 <!--Visible only while editing name, type, and dimensions-->
@@ -45,7 +45,7 @@
 
                         </div>
                     </div>
-                    <button class="badge badge-success" (click) = "editingProject = false" >Done Editing</button>
+                    <button class="badge badge-success" (click) = "editingProject = false; setMeasurements()" >Done Editing</button>
                 </ng-template>
 
             </div>
