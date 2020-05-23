@@ -260,9 +260,6 @@ export class ProjectDetailsComponent implements OnInit {
     }
   }
 
-
-  // CALCULATE ESTIMATE
-
   // calculate from dimensions whenever project info loaded or updated
   setMeasurements() {
     this.perimeter = 2 * this.project.roomLength + 2 * this.project.roomWidth;
@@ -270,6 +267,8 @@ export class ProjectDetailsComponent implements OnInit {
     this.floorArea = this.project.roomLength * this.project.roomWidth;
     console.log("Project measurements set from room dimensions.");
   }
+
+  // CALCULATE ESTIMATE
 
   // calculate for each selected item based on quantity or measurements
   calculateCosts(item: Item, selection: Selection): number[] {
