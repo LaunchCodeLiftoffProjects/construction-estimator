@@ -1,14 +1,17 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { Router, ActivatedRoute, ParamMap } from '@angular/router';
+import { FormsModule } from '@angular/forms';
+
+// classes
 import { Project } from 'src/app/project';
 import { Item } from 'src/app/item';
 import { Selection } from 'src/app/selection';
 import { ItemDetails } from 'src/app/item-details';
-import { Router, ActivatedRoute, ParamMap } from '@angular/router';
-import { FormsModule } from '@angular/forms';
 import { Materials } from 'src/app/materials';
 import { Labor } from 'src/app/labor';
 import { Estimate } from 'src/app/estimate';
-import { ProjectDetailsPayload } from 'src/app/project-details-payload'
+
+// service
 import { TokenStorageService } from 'src/app/_services/token-storage.service';
 
 
@@ -112,7 +115,7 @@ export class ProjectDetailsComponent implements OnInit {
         this.project.labor = json.labor === null ? new Labor : json.labor;
         this.project.estimate = json.estimate === null ? new Estimate : json.estimate;
 
-        this.setMeasurements(); // calculate perimeter, wall area, and floor area
+        this.calcMeasurements(); // calculate perimeter, wall area, and floor area
 
         this.loadItems(); // put here so things load in order
         console.log("Items loaded.");
@@ -195,8 +198,7 @@ export class ProjectDetailsComponent implements OnInit {
     return optionsArray;
   }
 
-
-  changeQuantity(selection) {
+  changeQuantity(selection: Selection) {
     if (selection.quantity > 0) {
       if (!selection.checked) {
       selection.checked = true;
@@ -316,7 +318,7 @@ export class ProjectDetailsComponent implements OnInit {
   }
 
   // calculate from dimensions whenever project info loaded or updated
-  setMeasurements() {
+  calcMeasurements() {
     this.perimeter = 2 * this.project.roomLength + 2 * this.project.roomWidth;
     this.wallArea = this.perimeter * this.project.roomHeight;
     this.floorArea = this.project.roomLength * this.project.roomWidth;
@@ -463,17 +465,13 @@ export class ProjectDetailsComponent implements OnInit {
   // called only when submit button is clicked - processes input and sends everything to database
   saveProject() {
 
-    // create ItemDetails array and run calculations for estimate based on user input
+    // create ItemDetails array and Estimate object based on user input
     this.buildProject();
 
-    // FIXME: make sure other project properties are saving to back end
+    // FIXME: make sure all project properties are saving to back end
 
-    let projectDetailsPayload = new ProjectDetailsPayload(this.project.itemDetails, this.project.labor, this.project.materials, this.project.estimate);
-
-    console.log(JSON.stringify(projectDetailsPayload));
-
-    // save itemDetails objects to database
-    fetch("http://localhost:8080/api/project/" + this.project.id + "/details", {
+    // save project to database
+    fetch("http://localhost:8080/api/project/" + this.project.id, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -481,7 +479,7 @@ export class ProjectDetailsComponent implements OnInit {
         'Access-Control-Allow-Credentials': 'true',
         'Authorization': 'Barer ' + this.tokenStorageService.getToken()
       },
-      body: JSON.stringify(projectDetailsPayload),
+      body: JSON.stringify(this.project),
     }).then(function (response) {
       return response;
     }).then(function (data) {
