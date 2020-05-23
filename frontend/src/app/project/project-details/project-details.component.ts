@@ -91,9 +91,9 @@ export class ProjectDetailsComponent implements OnInit {
   }
 
 
-  // GET PROJECT
+  // LOAD PROJECT FROM DATABASE
 
-  // get project object from database (and any saved information from previous session if revising estimate)
+  // includes saved information from previous session if revising an existing estimate
   loadProject() {
 
     fetch(this.projectURL, {
@@ -125,9 +125,8 @@ export class ProjectDetailsComponent implements OnInit {
   }
 
 
-  // GET BASIC ITEMS AND PROPERTIES FOR DISPLAY
+  // LOAD BASIC ITEMS AND PROPERTIES FROM JSON
 
-  // get all possible items that could be displayed and selected from JSON file
   loadItems() {
     fetch("http://localhost:8080/api/item/").then(function (response) {
       response.json().then(function (json) {
@@ -144,25 +143,16 @@ export class ProjectDetailsComponent implements OnInit {
     }.bind(this));
   }
 
-  // locate item types already included in selectionArray as it is being filled
-  locateSelection(type: string): number {
-    let selection: Selection;
-    for (let i=0; i<this.selectionArray.length; i++) {
-      selection = this.selectionArray[i];
-      if (selection.type === type) {
-        return i;
-      }
-    }
-    return -1; // if not found
-  }
 
-  // check to see if details have been saved to this project yet or not, and create Selection objects accordingly
+  // CREATE SELECTION OBJECTS FOR TWO-WAY DATA BINDING
+
   createSelections() {
     this.selectionArray = []; // rebuild this array if method is called again prior to form submission due to roomType change
     let selection: Selection;
     let details: ItemDetails;
     let item: Item;
-    if (this.project.itemDetails.length > 0) { // if project already has a saved itemDetails array, get values
+    // start with any existing ItemDetails objects saved to project
+    if (this.project.itemDetails.length > 0) {
       for (let i=0; i < this.project.itemDetails.length; i++) {
         details = this.project.itemDetails[i];
         item = this.itemsArray[this.findItemByID(details.itemId)];
@@ -173,10 +163,10 @@ export class ProjectDetailsComponent implements OnInit {
         }
       }
     }
-    // create Selection objects for any types not previously saved to project
+    // create Selection objects for any types not previously saved to project through itemDetails array
     for (let j=0; j < this.itemsArray.length; j++) {
       item = this.itemsArray[j];
-      if (item.room.includes(this.project.roomType) && this.locateSelection(item.type) === -1) {
+      if (item.room.includes(this.project.roomType) && this.findSelectionByType(item.type) === -1) {
         selection = new Selection(item.category, item.type, false); // default to initialized values for 'id', 'selected' & 'quantity'
         this.selectionArray.push(selection);
       }
@@ -198,10 +188,14 @@ export class ProjectDetailsComponent implements OnInit {
     return optionsArray;
   }
 
+
+  // EVENT HANDLERS FOR ITEM SELECTIONS
+
   // TODO: see if there's a way to simplify these functions once changes have been made to the way
   // selection objects are handled
 
   changeChecked(selection: Selection) {
+    console.log(selection.type, (selection.checked ? "checked" : "unchecked"));
     if (selection.checked) {
       let options = this.getOptions(selection.type);
       selection.selected = options[0];
@@ -216,7 +210,8 @@ export class ProjectDetailsComponent implements OnInit {
 
   // when selection is made in middle column, force checked and quantity
   changeSelected(selection: Selection) {  
-    if (selection.quantity == 0) {
+    console.log(selection.type, "selected:", selection.selected); // FIXME: selection.selected is printing as an object instead of a string ???
+    if (selection.quantity === 0) {
       selection.quantity = 1;
       selection.checked = true;
     }    
@@ -224,9 +219,11 @@ export class ProjectDetailsComponent implements OnInit {
   }
 
   changeQuantity(selection: Selection) {
+    console.log("Quantity for", selection.type, "saved to", selection.quantity);
     if (selection.quantity > 0) {
       if (!selection.checked) {
       selection.checked = true;
+      // TODO: before automatically selecting options[0], check for last value in itemDetails
       let options = this.getOptions(selection.type);
       selection.selected = options[0];
       } 
@@ -243,11 +240,12 @@ export class ProjectDetailsComponent implements OnInit {
     // TODO: save current selection values to itemDetails in project
   }
 
-  // reset checkbox, select dropdown, and quantity field
+  // reset checkbox, select dropdown, and quantity fields all at once
   resetAll(selection: Selection) {
     selection.checked = false;
     selection.selected = '';
     selection.quantity = 0;
+    console.log("All input fields for", selection.type, "reset.");
     // DO NOT save to corresponding itemDetails object at this point
   }
 
@@ -306,18 +304,6 @@ export class ProjectDetailsComponent implements OnInit {
     return -1;
   }
 
-  // not sure what this is for - TODO: maybe delete if not needed
-  // findItemByType(type: string): number {
-  //   let item: Item;
-  //   for (let i=0; i < this.itemsArray.length; i++) {
-  //     item = this.itemsArray[i];
-  //     if (item.type === type) {
-  //       return i;
-  //     }
-  //   }
-  //   return -1;
-  // }
-
   // finds the specific itemId for an Item object using name
   getItemIdByName(name: string): number {
     let item: Item;
@@ -327,6 +313,18 @@ export class ProjectDetailsComponent implements OnInit {
         return item.id;
       }
     }
+  }
+
+  // locate item type within selectionArray
+  findSelectionByType(type: string): number {
+    let selection: Selection;
+    for (let i=0; i<this.selectionArray.length; i++) {
+      selection = this.selectionArray[i];
+      if (selection.type === type) {
+        return i;
+      }
+    }
+    return -1; // if not found
   }
 
   // finds index of itemDetails object saved in project which matches a given type
@@ -375,9 +373,9 @@ export class ProjectDetailsComponent implements OnInit {
       laborCost = this.perimeter * item.labor;
       console.log(item.type, "calculated by linear feet.");
     } else if (this.calcByCabinet.includes(item.type)) {
-      let index: number = this.locateSelection("Cabinets, Lower");
+      let index: number = this.findSelectionByType("Cabinets, Lower");
       let cabinet: Selection = this.selectionArray[index];
-      itemCost = cabinet.quantity * 2 * item.price; // if no lower cabinets have beens selected, this will result in 0
+      itemCost = cabinet.quantity * 2 * item.price; // FIXME: if no lower cabinets have beens selected, this will result in 0 (for now)
       materialCost = cabinet.quantity * item.roughMaterials;
       laborCost = cabinet.quantity * item.labor;
       console.log(item.type, "calculated by number of cabinets.");
