@@ -1,5 +1,11 @@
 <div class="container">
   <h2 class="text-info">All Projects</h2>
+  <h2 class="text-info mt-5">Hi {{user.name}}</h2>
+
+         
+        
+           
+    
   <p *ngIf="!projects || projects.length === 0"></p>
   <p class="lead">
     Hey there! You do not have any projects yet.<br />
@@ -8,7 +14,7 @@
     one?
   </p>
   <div class="row">
-    <div class="col">
+    <div class="col-6">
       1 of 2
       <li class="lead" *ngFor="let project of projects">
         <a (click)="makeActiveProject(project)">{{ project.name }}</a>
@@ -18,19 +24,30 @@
       </li>
     </div>
 
-    <div class="col">
+    <div class="form-group col-6">
       2 of 2
       <table>
         <tbody>
-            <tr>
-                <td>{{Estimate.appliancecost}}</td>
-                <td>{{ itemDetail.quantity }}</td>
-                <td>{{ itemDetail.finalPrice }}</td>
-                <td>{{(itemDetail.finalPrice * itemDetail.quantity) | number:'1.2-2' }}</td>
-            </tr> 
-
- </tbody>
-    </table>
+          <tr>
+            <td>Appliances {{ Estimate.appliancecost }}</td>
+          </tr>
+          <tr>
+            <td>Fixtures {{ Estimate.fixtureCost }}</td>
+          </tr>
+          <tr>
+            <td>Finishes {{ Estimate.finishesCost }}</td>
+          </tr>
+          <tr>
+            <td>Materials {{ Estimate.materialsCost }}</td>
+          </tr>
+          <tr>
+            <td>Labor {{ Estimate.laborCost }}</td>
+          </tr>
+          <tr>
+            <td>Total Cost {{ Estimate.totalCost }}</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </div>
 </div>

@@ -29,7 +29,7 @@ export class ProjectListComponent implements OnInit {
   
 
   ngOnInit() {
-    // this. = this.route.snapshot.paramMap.get("id");
+    // this. = this.route.snapshot.paramMap.get();
     this.isLoggedIn = !!this.tokenStorageService.getToken();
 
     if (this.isLoggedIn) {
