@@ -36,13 +36,13 @@
         <div class="form-group">
             <h5>What are the room's general dimensions?</h5>
             <div class="input-group">
-                <label><input [(ngModel)]="project.roomLength" #roomLength="ngModel" type="number" class="form-control" step="0.1" min="1" [appMinVal]="1"
+                <label><input [(ngModel)]="project.roomLength" #roomLength="ngModel" type="number" class="form-control" step="0.1" min="1" [appMinVal]="0.1"
                         placeholder="0.0" name="roomLength" required />Length
                     (ft.)</label>
-                <label><input [(ngModel)]="project.roomWidth" #roomWidth="ngModel" type="number" class="form-control" step="0.1" min="1" [appMinVal]="1"
+                <label><input [(ngModel)]="project.roomWidth" #roomWidth="ngModel" type="number" class="form-control" step="0.1" min="1" [appMinVal]="0.1"
                         placeholder="0.0" name="roomWidth" required />Width
                     (ft.)</label>
-                <label><input [(ngModel)]="project.roomHeight" #roomHeight="ngModel" type="number" class="form-control" step="0.1" min="1" [appMinVal]="1"
+                <label><input [(ngModel)]="project.roomHeight" #roomHeight="ngModel" type="number" class="form-control" step="0.1" min="1" [appMinVal]="0.1"
                         placeholder="0.0" name="roomHeight" required />Ceiling
                     Height (ft.)</label>
             </div>
