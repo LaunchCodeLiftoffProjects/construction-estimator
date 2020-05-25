@@ -8,46 +8,45 @@
         <p class="lead">Hey there! You do not have any projects yet.<br />
             Why not <a class="text-info" [routerLink]="'/project/create'">create</a> one?</p>
     </div>
-
-    <div class="col-15">
-        <div >
-            <div>
-                <div *ngFor="let project of projects; let index = p">
-                    <div class="btn" (click)="setSelectedProject(project)">
-                        <h4 class="text">
-                            
-                            <u [class.text-info]="selectedProject === project">{{project.name}}</u>
-                        </h4>
+    <div class="row justify-content-between">
+        <div>
+            <div class="col-lg">
+                <div>
+                    <div *ngFor="let project of projects; let index = p">
+                        <div class="btn" (click)="setSelectedProject(project)">
+                            <h4 class="text"> 
+                                <!-- FIXME: RIGHT NOW, this section of the template is not able to display 
+                                    any data other than the basic project properties -->
+                                <u [class.text-info]="project === selectedProject">{{project.name}}</u>
+                            </h4>
+                        </div>
+                        <br>
                     </div>
-                    <br>
                 </div>
+                <br>
+                <h4 class="text-info"> &nbsp; &nbsp; + <a class="text-info" [routerLink]="'/project/create'">New Project</a></h4>
             </div>
-        
-        <br>
-        <h4 class="text-info"> &nbsp; &nbsp; + <a class="text-info" [routerLink]="'/project/create'">New Project</a></h4>
+        </div>
+
+        <!-- //FIXME: Right now nothing is binding to the page in this section. 
+            Even fake data won't display, even when the ngIf runs and the html content displays -->
+        <div class="col-4 align-middle">
+            
+            
+                <div class="text-right" *ngIf="selectedProject !== null" >
+                    <h4 class="text-info mt-4"> Appliances Cost: {{fake}}</h4>
+                    <h4 class="text-info mt-4"> Fixtures Cost: {{selectedProject.estimate.fixturesCost}} </h4>
+                    <h4 class="text-info mt-4"> Finishes Cost: {{selectedProject.estimate.finishesCost}} </h4>
+                    <h4 class="text-info mt-4"> Materials Cost: {{selectedProject.estimate.materialsCost}} </h4>
+                    <h4 class="text-info mt-4"> Labor Cost: {{selectedProject.estimate.laborCost}} </h4>
+                    <h4 class="text-info mt-4"> TOTAL ESTIMATE: {{selectedProject.estimate.totalCost}} </h4>
+                    <br>
+                    <button class="btn btn-info" [routerLink]="'/project/add-details/' + project.id">Update My
+                        Project</button>
+                </div>
+           
         </div>
     </div>
-
-    <!-- //FIXME: Right now the column won't display next to the project list column
-    AND
-    The ngIf is having trouble displaying the correct estimate. It will display multiple estimates depending on when you click them
-    Using index for the if statement doesn't fix it -->
-    <div class="col-10 align-middle" *ngFor="let project of projects">
-        
-        <div class="text-right" *ngIf="selectedProject === project">
-            <h4 class="text-info mt-4"> Appliances Cost: {{project.estimate.appliancesCost}}</h4>
-            <h4 class="text-info mt-4"> Fixtures Cost: {{project.estimate.fixturesCost}} </h4>
-            <h4 class="text-info mt-4"> Finishes Cost: {{project.estimate.finishesCost}} </h4>
-            <h4 class="text-info mt-4"> Materials Cost: {{project.estimate.materialsCost}} </h4>
-            <h4 class="text-info mt-4"> Labor Cost: {{project.estimate.laborCost}} </h4>
-            <h4 class="text-info mt-4"> TOTAL ESTIMATE: {{project.estimate.totalCost}} </h4>
-            <br>
-            <button class="btn btn-info" [routerLink]="'/project/add-details/' + project.id">Update My
-                Project</button>
-        </div>
-        
-    </div>
-
 </div>
 
 

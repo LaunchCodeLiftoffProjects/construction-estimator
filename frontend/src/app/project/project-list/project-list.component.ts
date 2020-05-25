@@ -3,6 +3,7 @@ import { User } from 'src/app/user';
 import { Project } from 'src/app/project';
 import { TokenStorageService } from 'src/app/_services/token-storage.service';
 import { Router } from '@angular/router';
+import { Estimate } from 'src/app/estimate';
 
 @Component({
   selector: 'app-project-list',
@@ -19,7 +20,9 @@ export class ProjectListComponent implements OnInit {
   showAdminBoard = false;
   showModeratorBoard = false;
   username: string;
-  selectedProject: Project;
+  selectedProject: Project = null;
+  selectedEstimate: Estimate;
+  fake = 1;
 
   constructor(private tokenStorageService: TokenStorageService, private router: Router) {
     
@@ -57,6 +60,8 @@ export class ProjectListComponent implements OnInit {
       response.json().then(function(json) {
         let refreshProject: Project[] = [];
         json.forEach(obj => {
+          //FIXME:Right now this loop is not correctly storing the itemDetails, materials, labor, or estimate.
+          //The backend is sending the date properly. Even using project.estimate = new Estimate() to get 0s is not working. Data binding is failing.
           let project = new Project(obj.name, obj.roomType, obj.roomLength, obj.roomWidth, obj.roomHeight);
           project.id = obj.id;
           project.itemDetails = obj.itemDetails;
@@ -76,9 +81,16 @@ export class ProjectListComponent implements OnInit {
 
   setSelectedProject(project) {
     if (this.selectedProject !== project) {
-      this.selectedProject = project;
+      if (project.estimate == null) {
+        this.selectedProject.estimate = new Estimate();
+        return;
+      } else {
+        this.selectedProject = project;
+        return;
+      }
     } else {
       this.selectedProject = null;
+      return;
     }
     
   }
