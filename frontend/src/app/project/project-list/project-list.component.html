@@ -19,7 +19,7 @@
       <li class="lead" *ngFor="let project of projects">
         <a (click)="makeActiveProject(project)">{{ project.name }}</a>
         <div *ngIf="project === activeProject">
-          <div *ngFor="let itemDetail of project.itemDetails"></div>
+          
         </div>
       </li>
     </div>
@@ -49,5 +49,10 @@
         </tbody>
       </table>
     </div>
+  </div>
+  <div class="form-group text-right">
+    <button class="btn btn-info" [routerLink]="'project/add-details/:id'">
+      Edit Project
+    </button>
   </div>
 </div>
