@@ -27,6 +27,7 @@
                         <span class="lead">Room Type: {{roomTitles[rooms.indexOf(project.roomType)]}} </span>
                         <div class = "form-group">
                             <div class="form-check indent-left" *ngFor="let room of rooms; let r = index">
+                                <!-- TODO: make sure if the user enters this edit space any reset items are saved as such-->
                                 <label class="form-check-label"><input #roomType required minlength="6" [(ngModel)]="project.roomType" (change)="createSelections()" [value]="rooms[r]" type="radio" class = "form-check-input" />{{roomTitles[r]}}</label>
                             </div>
                         </div>
@@ -67,7 +68,7 @@
                             <div class = "col-4">
                                 <select #options="ngModel" [(ngModel)]="selectionArray[i].selected" class="custom-select w-100" (change)="changeSelected(selectionArray[i])">
                                     <!-- <option>(Select an option)</option> -->
-                                    <option *ngFor="let option of getOptions(selection.type)" [value]="option.name" [selected]="selectionArray[i].selected === option">{{option.name}}</option>
+                                    <option *ngFor="let option of getOptions(selection.type)" [value]="option" [selected]="selectionArray[i].selected === option">{{option.name}}</option>
                                 </select>
                             </div>
                             <div class="col-2">
