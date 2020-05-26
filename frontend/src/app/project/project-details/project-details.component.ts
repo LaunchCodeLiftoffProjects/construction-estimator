@@ -137,7 +137,7 @@ export class ProjectDetailsComponent implements OnInit {
       response.json().then(function (json) {
         this.itemsArray = [];
         json.forEach(obj => {
-          let item = new Item(obj.id, obj.name, obj.room, obj.category, obj.type, obj.price, obj.roughMaterials, obj.labor);
+          let item = new Item(obj.id, obj.name, obj.room, obj.category, obj.type, obj.price, obj.roughMaterial, obj.labor);
           this.itemsArray.push(item);
         });
         this.itemsArray.sort((a, b) => (a.type > b.type) ? 1 : -1);
@@ -372,35 +372,37 @@ export class ProjectDetailsComponent implements OnInit {
     let costs: number[] = [];
     if (this.calcByQuantity.includes(item.type)) {
       itemCost = selection.quantity * item.price;
-      materialCost = selection.quantity * item.roughMaterials;
+      materialCost = selection.quantity * item.roughMaterial;
       laborCost = selection.quantity * item.labor;
       console.log(item.type + " calculated by quantity");
     } else if (this.calcByLF.includes(item.type)) {
       itemCost = this.perimeter * item.price;
-      materialCost = this.perimeter * item.roughMaterials;
+      materialCost = this.perimeter * item.roughMaterial;
       laborCost = this.perimeter * item.labor;
       console.log(item.type + " calculated by linear feet");
     } else if (this.calcByCabinet.includes(item.type)) {
       let index: number = this.findSelectionByType("Cabinets, Lower", 2);
       let cabinet: Selection = this.selectionArray[2][index];
       itemCost = cabinet.quantity * 2 * item.price; // FIXME: if no lower cabinets have beens selected, this will result in 0 (for now)
-      materialCost = cabinet.quantity * item.roughMaterials;
+      materialCost = cabinet.quantity * item.roughMaterial;
       laborCost = cabinet.quantity * item.labor;
       console.log(item.type + " calculated by number of cabinets");
     } else if (item.type === "Wall") {
       itemCost = this.wallArea * item.price;
-      materialCost = this.wallArea * item.roughMaterials;
+      materialCost = this.wallArea * item.roughMaterial;
       laborCost = this.wallArea * item.labor;
       console.log(item.type + " calculated by wall area");
     } else if (item.type === "Flooring") { 
       itemCost = this.floorArea * item.price;
-      materialCost = this.floorArea * item.roughMaterials;
+      materialCost = this.floorArea * item.roughMaterial;
       laborCost = this.floorArea * item.labor;
       console.log(item.type + " calculated by floor area");
     } else {
       console.log(item.type + " not categorized for calculation"); // debug
     }
-    costs = [itemCost, materialCost, laborCost];
+    costs.push(itemCost);
+    costs.push(materialCost);
+    costs.push(laborCost);
     return costs;
   }
 
@@ -452,23 +454,23 @@ export class ProjectDetailsComponent implements OnInit {
     this.project.itemDetails = []; // reset project's itemDetails array to remove any prior saved objects and values
     let selection: Selection;
     let index: number;
-    let details: ItemDetails;
     let costs: number[];
 
     // if selected in form, itemDetails object should already be updated
     for (let c=0; c < 3; c++) { // once for each category subarray of selectionArray
-      for (let i=0; i < this.selectionArray.length; i++) {
+      for (let i=0; i < this.selectionArray[c].length; i++) {
         selection = this.selectionArray[c][i];
         index = this.lookUpDetailsByType(selection.type); // look for this type in the project itemDetails array
         if (selection.checked) { 
-          details = this.project.itemDetails[index];
           // itemDetails object will already have been updated - just need associated costs
           costs = this.calculateCosts(selection); // costs for item, rough materials, and labor
-          details.finalPrice = costs[0]; // set finalPrice
+          console.log("Costs for " + selection.type + " are " + costs);
+          this.project.itemDetails[index].finalPrice = costs[0]; // set finalPrice
           console.log("ItemDetails object for " + selection.type + " updated with final price")   
           this.buildEstimate(selection, costs); // add per-item additional costs into estimate
           console.log("Estimate updated with costs associated with " + selection.type);
-        } else if (index >= 0) { // if unchecked and itemDetails object for this type exists from prior selection, reset data
+        } else if (index >= 0) { 
+            // if unchecked and itemDetails object for this type exists from prior selection, reset data
             this.project.itemDetails[index].itemId = null;
             this.project.itemDetails[index].quantity = 0;
             this.project.itemDetails[index].finalPrice = 0;
