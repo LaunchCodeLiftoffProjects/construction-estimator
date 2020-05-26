@@ -28,7 +28,7 @@
                         <div class = "form-group">
                             <div class="form-check indent-left" *ngFor="let room of rooms; let r = index">
                                 <!-- TODO: make sure if the user enters this edit space any reset items are saved as such-->
-                                <label class="form-check-label"><input #roomType required minlength="6" [(ngModel)]="project.roomType" (change)="createSelections()" [value]="rooms[r]" type="radio" class = "form-check-input" />{{roomTitles[r]}}</label>
+                                <label class="form-check-label"><input #roomType required minlength="6" [(ngModel)]="project.roomType" (change)="changedRoom = true" [value]="rooms[r]" type="radio" class = "form-check-input" />{{roomTitles[r]}}</label>
                             </div>
                         </div>
                     </div>
@@ -40,13 +40,13 @@
                             <label><input #roomHeight="ngModel" required [(ngModel)]="project.roomHeight" type="number" class="form-control form-control-sm" required (change)="changedDimensions = changedDimensions + 1;" step="0.1" min='1' /> Ceiling Height (ft.)</label>
                         </div>
                         <!-- this is not working right now -->
+                        <!-- Note from Carrie: what does the changedDimensions > 3 do? You have to change dimension field(s) at least 4 times before it warns you? -->
                         <div *ngIf="changedDimensions > 3 && (project.roomHeight < 1 || project.roomLength < 1 || project.roomWidth < 1 || (!isNumber(project.roomHeight) || !isNumber(project.roomLength) || !isNumber(project.roomWidth)))"
                             class="alert alert-danger">
                             All Room Dimensions are required and must be valid numbers greater than zero.
-
                         </div>
                     </div>
-                    <button class="badge badge-success" (click) = "editingProject = false; calcMeasurements()" >Done Editing</button>
+                    <button class="badge badge-success" (click) = "editingProject = false; changedDimensions = 0; calcMeasurements(); createSelections();" >Done Editing</button>
                 </ng-template>
 
             </div>
@@ -63,17 +63,17 @@
                     <div class="input-group mt-1" *ngFor="let selection of selectionArray; let i = index">
                         <ng-container *ngIf="category === selection.category">
                             <div class="col-4">
-                                <label class="lead"><input #type="ngModel" [checked]="selectionArray[i].quantity > 0 || selectionArray[i].selected != ''" [(ngModel)]="selectionArray[i].checked" (change)="changeChecked(selectionArray[i])" type="checkbox" /> {{selection.type}}</label>
+                                <label class="lead"><input #type="ngModel" [checked]="selectionArray[i].quantity > 0 || selectionArray[i].selected != ''" [(ngModel)]="selectionArray[i].checked" (change)="changeChecked(selectionArray[i], i)" type="checkbox" /> {{selection.type}}</label>
                             </div>
                             <div class = "col-4">
-                                <select #options="ngModel" [(ngModel)]="selectionArray[i].selected" class="custom-select w-100" (change)="changeSelected(selectionArray[i])">
+                                <select #options="ngModel" [(ngModel)]="selectionArray[i].selected" class="custom-select w-100" (change)="changeSelected(selectionArray[i], i)">
                                     <!-- <option>(Select an option)</option> -->
                                     <option *ngFor="let option of getOptions(selection.type)" [value]="option" [selected]="selectionArray[i].selected === option">{{option.name}}</option>
                                 </select>
                             </div>
                             <div class="col-2">
                                 <ng-container *ngIf="calcByQuantity.includes(selection.type)">
-                                    <input #quantity="ngModel" [(ngModel)]="selectionArray[i].quantity" type="number" step="1" min = '0' class="form-control form-control-sm w-75 h-100" (change)="changeQuantity(selectionArray[i])"/>
+                                    <input #quantity="ngModel" [(ngModel)]="selectionArray[i].quantity" type="number" step="1" min = '0' class="form-control form-control-sm w-75 h-100" (change)="changeQuantity(selectionArray[i], i)"/>
                                 </ng-container>
                             </div> 
                             <div class="col-2"></div>
