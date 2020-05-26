@@ -43,7 +43,7 @@ export class ProjectDetailsComponent implements OnInit {
 
   itemsArray: Item[]; // to get all possible items (serves dual purpose - info for display and data for calculations)
 
-  selectionArray: Selection[] = []; // for facilitating data binding with item selections in form
+  selectionArray: Selection[][] = [[],[],[]]; // for facilitating data binding with item selections in form
 
   rooms: string[] = [ "kitchen", "bath", "living" ];
   roomTitles: string[] = [ "Kitchen", "Bathroom", "Bedroom/Living/Other" ];
@@ -152,16 +152,23 @@ export class ProjectDetailsComponent implements OnInit {
 
   createSelections() { 
     if (this.firstLoad === true || this.changedRoom === true) {
-      this.selectionArray = [];
+      this.selectionArray = [[],[],[]];
       let item: Item;
+      let c: number;
+      // put type in one of three subarrays depending on category
       for (let j=0; j < this.itemsArray.length; j++) {
         item = this.itemsArray[j];
-        if (item.room.includes(this.project.roomType) && this.findSelectionByType(item.type) === -1) {
-          let selection = this.createNewSelection(item);
-          this.selectionArray.push(selection);
+        c = this.categories.indexOf(item.category);
+        if (item.room.includes(this.project.roomType) && this.findSelectionByType(item.type, c) === -1) {
+          let selection = this.createNewSelection(item.type);
+          this.selectionArray[c].push(selection);
         }
       }
-      this.selectionArray.sort((a, b) => (a.type > b.type) ? 1 : -1);
+      // alpha sort each subarray (category)
+      this.selectionArray[0].sort((a, b) => (a.type > b.type) ? 1 : -1);
+      this.selectionArray[1].sort((a, b) => (a.type > b.type) ? 1 : -1);
+      this.selectionArray[2].sort((a, b) => (a.type > b.type) ? 1 : -1);
+
       this.changedRoom = false;
       this.firstLoad = false;
       this.dataLoaded = true; // allow page to render - FIXME: not 100% sure this fixed the issue
@@ -182,43 +189,23 @@ export class ProjectDetailsComponent implements OnInit {
     return optionsArray;
   }
 
-  // FOR RENDERING FORM - returns either last saved info or a blank Selection object
-  createNewSelection(item: Item): Selection {
-    let index = this.lookUpDetailsByType(item.type);
+  // FOR RENDERING FORM - returns either last saved info or a default Selection object
+  createNewSelection(type: string): Selection {
+    let index = this.lookUpDetailsByType(type);
     if (index >= 0) { // an itemDetails object already exists for this type
       let details: ItemDetails = this.project.itemDetails[index];
-      console.log("Value for", item.type,"was last saved as", item.name);
-      return new Selection(item.category, item.type, true, item, details.quantity); 
-    } else { // project does not have an ItemDetails object for this type
-      console.log("Created new Selection object for type", item.type);
-      return new Selection(item.category, item.type, false); // default to initialized values for 'id', 'selected' & 'quantity'
-    }
-  }
-
-  // UPON ACTIVE SELECTION - returns either last saved info or a new Selection object with defaults
-  getSavedDetails(selection: Selection): Selection {
-    let item: Item;
-    let quantity: number;
-    let index = this.lookUpDetailsByType(selection.type);
-    if (index >= 0) { // an itemDetails object already exists for this type
-      let details: ItemDetails = this.project.itemDetails[index];
-      item = this.itemsArray[this.findItemById(details.itemId)];
-      console.log("Value for", item.type,"was last saved as", item.name);
-      return new Selection(item.category, item.type, true, item, details.quantity); 
-    } else { // no previous itemDetails object exists for this type
-      // default to first possible option for selected item
-      item = this.getOptions(selection.type)[0];      
-      // if this type needs a quantity, set it to 1 the first time
-      if (this.calcByQuantity.includes(selection.type)) {
-        quantity = 1;
-      } else {
-        quantity = 0;
+      if (details.itemId !== null) { // user had it selected at last project save
+        let item: Item = this.itemsArray[this.findItemById(details.itemId)];
+        console.log("Created Selection object for " + type + " from last saved itemDetails");
+        return new Selection(item.category, type, true, item, details.quantity); 
       }
-      console.log("Value for", selection.type, "has defaulted to", item.name, "with a quantity of ", quantity);
-      return new Selection(selection.category, selection.type, true, item, quantity); 
+    } else { // project does not have an ItemDetails object for this type or it had been rendered null
+      let optionOne: Item = this.getOptions(type)[0];  
+      // let quantity = (this.calcByQuantity.includes(type) ? 1 : 0);
+      console.log("Created new Selection object for " + type + " in " + optionOne.category + " subarray");
+      return new Selection(optionOne.category, type, false, optionOne, 0);
     }
   }
-
 
 
   /***** EVENT HANDLERS FOR ITEM SELECTIONS *****/
@@ -228,44 +215,53 @@ export class ProjectDetailsComponent implements OnInit {
    * the previous selections in case the user changes their mind prior to submitting the form.
    */
 
-  changeChecked(selection: Selection, i: number) {
-    console.log(selection.type, (selection.checked ? "checked" : "unchecked"));
+  changeChecked(selection: Selection, i: number, c: number) {
+    console.log(selection.type + (selection.checked ? " checked" : " unchecked"));
     if (selection.checked) {
       // get either last info saved in itemDetails or defaults
-      let lastSaved: Selection = this.getSavedDetails(selection); 
-      // update other two fields with this info
-      this.selectionArray[i].selected = lastSaved.selected;
-      this.selectionArray[i].quantity = lastSaved.quantity;
-      this.saveItemDetails(this.selectionArray[i]); // save/update itemDetails object in project
+      let lastSaved: Selection = this.createNewSelection(selection.type); 
+      this.selectionArray[c][i].checked = true; // because lastSaved.checked may have returned false
+      // update other two fields with last saved info
+      this.selectionArray[c][i].selected = lastSaved.selected;
+      if (this.calcByQuantity.includes(selection.type) && lastSaved.quantity === 0) {
+        this.selectionArray[c][i].quantity = 1;
+      } else {
+        this.selectionArray[c][i].quantity = lastSaved.quantity;
+      }
+      this.saveItemDetails(this.selectionArray[c][i]); // save/update itemDetails object in project
     } else {
       this.resetAll(selection); // but do not overwrite corresponding itemDetails object yet
     }  
 	}
 
   // when selection is made in middle column, force checked and quantity
-  changeSelected(selection: Selection, i: number) {  // FIXME: not bringing in .selected value for selection
-    console.log(selection.type, "selected:", selection.selected.name); 
+  changeSelected(selection: Selection, i: number, c: number) {
+    console.log(selection.type + " selected: " + selection.selected.name); 
     if (selection.checked === false) {
-      this.selectionArray[i].checked = true;
-    }    
-    if (this.calcByQuantity.includes(selection.type) && selection.quantity === 0) {
-      this.selectionArray[i].quantity = 1;
+      this.selectionArray[c][i].checked = true;
+    }  
+    let lastSaved: Selection = this.createNewSelection(selection.type); // just to check quantity
+    if (this.calcByQuantity.includes(selection.type) && lastSaved.quantity === 0) {
+      this.selectionArray[c][i].quantity = 1;
+    } else {
+      this.selectionArray[c][i].quantity = lastSaved.quantity;
     }
-    this.saveItemDetails(this.selectionArray[i]); // save/update itemDetails object in project
+    this.saveItemDetails(this.selectionArray[c][i]); // save/update itemDetails object in project
   }
 
-  changeQuantity(selection: Selection, i: number) {
-    console.log("Quantity for", selection.type, "changed to", selection.quantity);
+  changeQuantity(selection: Selection, i: number, c: number) {
+    console.log("Quantity for " + selection.type + " changed to " + selection.quantity);
     // force other fields to sync up if quantity increased (but not checked) or negative number input
     if ((selection.quantity > 0 && !selection.checked) || (selection.quantity < 0 && selection.checked)) {
-      this.selectionArray[i].checked = true;
-      let lastSaved: any = this.getSavedDetails(selection);
-      this.selectionArray[i].selected = lastSaved.selected;
-      this.saveItemDetails(this.selectionArray[i]); // save/update itemDetails object in project
+      let lastSaved: Selection = this.createNewSelection(selection.type);
+      // update other two fields
+      this.selectionArray[c][i].checked = true;
+      this.selectionArray[c][i].selected = lastSaved.selected;
+      this.saveItemDetails(this.selectionArray[c][i]); // save/update itemDetails object in project
     } else if (selection.quantity <= 0) {
       this.resetAll(selection); // but do not overwrite corresponding itemDetails object yet
     } else { // if quantity is being raised from 1 or more
-      this.saveItemDetails(this.selectionArray[i]); // save/update itemDetails object in project
+      this.saveItemDetails(this.selectionArray[c][i]); // update itemDetails object in project
     }
 
   }
@@ -286,14 +282,14 @@ export class ProjectDetailsComponent implements OnInit {
         this.project.itemDetails[index].quantity = selection.quantity; // overwrite quantity
         // TODO: (maybe) un-comment if adding functionality to display line item cost dynamically
         // this.project.itemDetails[index].finalPrice = costs[0];
-        console.log("ItemDetails object for", selection.type, "updated to", selection.selected.name, "and quantity", selection.quantity);
+        console.log("ItemDetails object for " + selection.type + " updated to " + selection.selected.name + " and quantity " + selection.quantity);
       } else {
         let details = new ItemDetails(selection.selected.id); // create object and set itemId property
         details.quantity = selection.quantity; // set quantity
         // TODO: (maybe) un-comment if adding functionality to display line item cost dynamically
         // details.finalPrice = costs[0]; // set finalPrice
         this.project.itemDetails.push(details);
-        console.log("ItemDetails object for", selection.type, "added to project.");
+        console.log("ItemDetails object for " + selection.type + " added to project");
       }
       // TODO: (maybe) un-comment if adding functionality to display line item cost dynamically
       // this.buildEstimate(item, selection, costs);
@@ -306,9 +302,9 @@ export class ProjectDetailsComponent implements OnInit {
   // reset checkbox, select dropdown, and quantity fields all at once
   resetAll(selection: Selection) {
     selection.checked = false;
-    selection.selected = null;
+    selection.selected = this.getOptions(selection.type)[0];
     selection.quantity = 0;
-    console.log("All input fields for", selection.type, "reset.");
+    console.log("All input fields for " + selection.type + " reset");
     // DO NOT save to corresponding itemDetails object inside this function
   }
 
@@ -328,10 +324,11 @@ export class ProjectDetailsComponent implements OnInit {
   }
 
   // get index of Selection object within selectionArray using item type
-  findSelectionByType(type: string): number {
+  findSelectionByType(type: string, c: number): number {
     let selection: Selection;
-    for (let i=0; i<this.selectionArray.length; i++) {
-      selection = this.selectionArray[i];
+    // check subarray where this type would reside
+    for (let i=0; i<this.selectionArray[c].length; i++) {
+      selection = this.selectionArray[c][i];
       if (selection.type === type) {
         return i;
       }
@@ -363,7 +360,7 @@ export class ProjectDetailsComponent implements OnInit {
     this.perimeter = 2 * this.project.roomLength + 2 * this.project.roomWidth;
     this.wallArea = this.perimeter * this.project.roomHeight;
     this.floorArea = this.project.roomLength * this.project.roomWidth;
-    console.log("Project measurements set from room dimensions.");
+    console.log("Project measurements set from room dimensions");
   }
 
   // calculate for each selected item based on quantity or measurements
@@ -377,31 +374,31 @@ export class ProjectDetailsComponent implements OnInit {
       itemCost = selection.quantity * item.price;
       materialCost = selection.quantity * item.roughMaterials;
       laborCost = selection.quantity * item.labor;
-      console.log(item.type, "calculated by quantity.");
+      console.log(item.type + " calculated by quantity");
     } else if (this.calcByLF.includes(item.type)) {
       itemCost = this.perimeter * item.price;
       materialCost = this.perimeter * item.roughMaterials;
       laborCost = this.perimeter * item.labor;
-      console.log(item.type, "calculated by linear feet.");
+      console.log(item.type + " calculated by linear feet");
     } else if (this.calcByCabinet.includes(item.type)) {
-      let index: number = this.findSelectionByType("Cabinets, Lower");
-      let cabinet: Selection = this.selectionArray[index];
+      let index: number = this.findSelectionByType("Cabinets, Lower", 2);
+      let cabinet: Selection = this.selectionArray[2][index];
       itemCost = cabinet.quantity * 2 * item.price; // FIXME: if no lower cabinets have beens selected, this will result in 0 (for now)
       materialCost = cabinet.quantity * item.roughMaterials;
       laborCost = cabinet.quantity * item.labor;
-      console.log(item.type, "calculated by number of cabinets.");
+      console.log(item.type + " calculated by number of cabinets");
     } else if (item.type === "Wall") {
       itemCost = this.wallArea * item.price;
       materialCost = this.wallArea * item.roughMaterials;
       laborCost = this.wallArea * item.labor;
-      console.log(item.type, "calculated by wall area.");
+      console.log(item.type + " calculated by wall area");
     } else if (item.type === "Flooring") { 
       itemCost = this.floorArea * item.price;
       materialCost = this.floorArea * item.roughMaterials;
       laborCost = this.floorArea * item.labor;
-      console.log(item.type, "calculated by floor area.");
+      console.log(item.type + " calculated by floor area");
     } else {
-      console.log(item.type, "not categorized for calculation."); // debug
+      console.log(item.type + " not categorized for calculation"); // debug
     }
     costs = [itemCost, materialCost, laborCost];
     return costs;
@@ -421,7 +418,7 @@ export class ProjectDetailsComponent implements OnInit {
     } else if (selection.category === 'finish') {
       this.project.estimate.finishesCost += costs[0];
     }
-    console.log("Cost for", selection.type, "item added to estimate:", costs[0]);
+    console.log("Cost for " + selection.type + " item added to estimate: " + costs[0]);
 
     // add any related materials cost - will add in only once if appliance involveds both plumbing & electrical
     if (this.project.materials.needPlumbingSystem === true && this.factorIntoPlumbing.includes(selection.type)) {
@@ -430,7 +427,7 @@ export class ProjectDetailsComponent implements OnInit {
       this.project.estimate.materialsCost += costs[1];
     }
     // Note: framing and drywall costs added separately since not tied to specific items, just dimensions of room
-    console.log("Cost for", selection.type, "rough materials added to estimate:", costs[1]);
+    console.log("Cost for " + selection.type + " rough materials added to estimate: " + costs[1]);
 
     // add any related labor cost - will add in only once if appliance involves both plumbing & electrical
     if (this.project.labor.needPlumbingSub === true && this.factorIntoPlumbing.includes(selection.type)) {
@@ -442,7 +439,7 @@ export class ProjectDetailsComponent implements OnInit {
     if (this.project.labor.needFinishWork === true && this.factorIntoFinishWork.includes(selection.type)) {
       this.project.estimate.laborCost += costs[2];
     }
-    console.log("Cost for", selection.type, "labor added to estimate:", costs[2]);
+    console.log("Cost for " + selection.type + " labor added to estimate: " + costs[2]);
   
   }
 
@@ -459,23 +456,24 @@ export class ProjectDetailsComponent implements OnInit {
     let costs: number[];
 
     // if selected in form, itemDetails object should already be updated
-
-    for (let i=0; i < this.selectionArray.length; i++) {
-      selection = this.selectionArray[i];
-      index = this.lookUpDetailsByType(selection.type); // look for this type in the project itemDetails array
-      if (selection.checked) { 
-        details = this.project.itemDetails[index];
-        // itemDetails object will already have been updated - just need associated costs
-        costs = this.calculateCosts(selection); // costs for item, rough materials, and labor
-        details.finalPrice = costs[0]; // set finalPrice
-        console.log("ItemDetails object for", selection.type, "updated with cost.")   
-        this.buildEstimate(selection, costs); // add per-item additional costs into estimate
-        console.log("Estimate updated with costs associated with selection for", selection.type);
-      } else if (index >= 0) { // if unchecked and itemDetails object for this type exists from prior selection, reset data
-          this.project.itemDetails[index].itemId = null;
-          this.project.itemDetails[index].quantity = 0;
-          this.project.itemDetails[index].finalPrice = 0;
-      } // otherwise skip type
+    for (let c=0; c < 3; c++) { // once for each category subarray of selectionArray
+      for (let i=0; i < this.selectionArray.length; i++) {
+        selection = this.selectionArray[c][i];
+        index = this.lookUpDetailsByType(selection.type); // look for this type in the project itemDetails array
+        if (selection.checked) { 
+          details = this.project.itemDetails[index];
+          // itemDetails object will already have been updated - just need associated costs
+          costs = this.calculateCosts(selection); // costs for item, rough materials, and labor
+          details.finalPrice = costs[0]; // set finalPrice
+          console.log("ItemDetails object for " + selection.type + " updated with final price")   
+          this.buildEstimate(selection, costs); // add per-item additional costs into estimate
+          console.log("Estimate updated with costs associated with " + selection.type);
+        } else if (index >= 0) { // if unchecked and itemDetails object for this type exists from prior selection, reset data
+            this.project.itemDetails[index].itemId = null;
+            this.project.itemDetails[index].quantity = 0;
+            this.project.itemDetails[index].finalPrice = 0;
+        } // otherwise skip type
+      }
     }
 
     // COMPLETE ESTIMATE - add remaining material & labor costs based on room dimensions, not items
@@ -488,7 +486,7 @@ export class ProjectDetailsComponent implements OnInit {
     if (this.project.labor.needRoughCarpentry === true) {
       this.project.estimate.laborCost += 10 * this.wallArea; // $10/SF of wall area
     }
-    console.log("Remaining material and labor costs added to estimate.");
+    console.log("Remaining material and labor costs added to estimate");
 
     // calculate total cost and save to estimate
     this.project.estimate.totalCost = this.project.estimate.appliancesCost +

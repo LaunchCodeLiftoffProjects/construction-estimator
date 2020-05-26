@@ -9,7 +9,7 @@ export class ItemDetails {
     finalPrice: number;
 
     constructor(itemId: number) {
-        this.id = null;
+        this.id = null; // assigned by hibernate on back end
         this.itemId = itemId;
         this.quantity = 0;
         this.finalPrice = 0;

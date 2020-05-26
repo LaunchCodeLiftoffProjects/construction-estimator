@@ -59,20 +59,19 @@
                 <ng-container *ngIf=" project.roomType === 'kitchen' || (project.roomType !== 'kitchen' && category !== 'appliance') ">
                     <div class="form-group" >
                         <h4 class="mt-4">{{categoryTitles[c]}}</h4>
-                        <div class="input-group mt-1" *ngFor="let selection of selectionArray; let i = index">
+                        <div class="input-group mt-1" *ngFor="let selection of selectionArray[c]; let i = index">
                             <ng-container *ngIf="category === selection.category">
                                 <div class="col-4">
-                                    <label class="lead"><input #type="ngModel" [checked]="selectionArray[i].quantity > 0 || selectionArray[i].selected != ''" [(ngModel)]="selectionArray[i].checked" (change)="changeChecked(selectionArray[i], i)" type="checkbox" /> {{selection.type}}</label>
+                                    <label class="lead"><input #type="ngModel" [(ngModel)]="selectionArray[c][i].checked" (change)="changeChecked(selectionArray[c][i], i, c)" type="checkbox" /> {{selection.type}}</label>
                                 </div>
                                 <div class = "col-4">
-                                    <select #options="ngModel" [(ngModel)]="selectionArray[i].selected" class="custom-select w-100" (change)="changeSelected(selectionArray[i], i)">
-                                        <!-- <option>(Select an option)</option> -->
-                                        <option *ngFor="let option of getOptions(selection.type)" [value]="option" [selected]="selectionArray[i].selected === option">{{option.name}}</option>
+                                    <select #options="ngModel" [(ngModel)]="selectionArray[c][i].selected" class="custom-select w-100" (change)="changeSelected(selectionArray[c][i], i, c)">
+                                        <option *ngFor="let option of getOptions(selection.type)" [ngValue]="option" [selected]="option.id === selectionArray[c][i].selected.id ">{{option.name}}</option>
                                     </select>
                                 </div>
                                 <div class="col-2">
                                     <ng-container *ngIf="calcByQuantity.includes(selection.type)">
-                                        <input #quantity="ngModel" [(ngModel)]="selectionArray[i].quantity" type="number" step="1" min = '0' class="form-control form-control-sm w-75 h-100" (change)="changeQuantity(selectionArray[i], i)"/>
+                                        <input #quantity="ngModel" [(ngModel)]="selectionArray[c][i].quantity" type="number" step="1" min = '0' class="form-control form-control-sm w-75 h-100" (change)="changeQuantity(selectionArray[c][i], i, c)"/>
                                     </ng-container>
                                 </div> 
                                 <div class="col-2"></div>
@@ -83,7 +82,7 @@
             </ng-container>
             <br />
 
-            <!-- <h4 class="mt-4">Materials</h4>
+            <h4 class="mt-4">Materials</h4>
             <div class="form-group">
                 <p class="lead">Will you be adding or replacing any of the following?</p>
                 <label class = "checkbox"><input #plumbingSystem="ngModel" [(ngModel)]="project.materials.needPlumbingSystem" type="checkbox" /> Plumbing System</label>
@@ -101,7 +100,7 @@
                 <label class = "checkbox"><input #roughCarpentry="ngModel" [(ngModel)]="project.labor.needRoughCarpentry"  type="checkbox" /> Rough Carpentry</label>
                 <label class = "checkbox"><input #finishWork="ngModel" [(ngModel)]="project.labor.needFinishWork"  type="checkbox" /> Finish Work</label>
             </div>
-            <br /> -->
+            <br />
 
             <div class="form-group text-right">
                 <button (click)='saveProject()' class="btn btn-info" [routerLink]="'/project/list'">Get Estimate</button>
