@@ -22,13 +22,9 @@ export class LoginComponent implements OnInit {
   mySubscription: any;
 
   imagePaths: string[] = ["/assets/examples/bath_coastal.jpg", "/assets/examples/bath_grey.jpg",
-            "/assets/examples/bath_tan.jpg", "/assets/examples/bedroom_chevron.jpg",
-            "/assets/examples/bedroom_luxe.jpg", "/assets/examples/bedroom_teal_yellow.jpg",
-            "/assets/examples/kitchen_green.jpg", "/assets/examples/kitchen_grey.jpg",
-            "/assets/examples/kitchen_white.jpg", "/assets/examples/living_farmhouse.jpg",
-            "/assets/examples/living_green.jpg", "/assets/examples/living_industrial.jpg", 
-            "/assets/examples/living_white.jpg", "/assets/examples/living_cobalt.jpg"];
-  selectedImage: string = this.getRandom(this.imagePaths);
+                          "/assets/examples/bedroom_teal_yellow.jpg", "/assets/examples/kitchen_green.jpg", 
+                          "/assets/examples/living_farmhouse.jpg", "/assets/examples/living_green.jpg", 
+                          "/assets/examples/living_white.jpg"];
   
   constructor(private authService: AuthService, private tokenStorage: TokenStorageService, private router: Router) {
    
@@ -41,6 +37,7 @@ export class LoginComponent implements OnInit {
       this.roles = this.tokenStorage.getUser().roles;
       this.router.navigate(['/user/profile/']);
     }
+
     this.shuffle(this.imagePaths);
   }
 
@@ -88,11 +85,6 @@ export class LoginComponent implements OnInit {
       array[randomIndex] = temporaryValue;
     }
     return array;
-  }
-
-  getRandom(array: string[]): string {
-    let randomIndex: number = Math.floor(Math.random()*array.length);
-    return array[randomIndex];
   }
 
 }

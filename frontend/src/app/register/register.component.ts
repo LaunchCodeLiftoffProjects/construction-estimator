@@ -25,7 +25,12 @@ export class RegisterComponent implements OnInit {
   id: number;
   passwordMismatch: boolean = false;
 
- constructor(private route: ActivatedRoute, private router: Router, private authService: AuthService, private tokenStorage: TokenStorageService) { }
+  imagePaths: string[] = ["/assets/examples/bath_tan.jpg", "/assets/examples/bedroom_chevron.jpg",
+                          "/assets/examples/bedroom_luxe.jpg", "/assets/examples/kitchen_grey.jpg",
+                          "/assets/examples/kitchen_white.jpg", "/assets/examples/living_industrial.jpg", 
+                          "/assets/examples/living_cobalt.jpg"];
+
+  constructor(private route: ActivatedRoute, private router: Router, private authService: AuthService, private tokenStorage: TokenStorageService) { }
 
   ngOnInit() {
 
@@ -38,6 +43,8 @@ export class RegisterComponent implements OnInit {
     if (this.isLoggedIn) {
       this.router.navigate(['/user/profile/']);
     }
+
+    this.shuffle(this.imagePaths);
   }
 
 
@@ -71,14 +78,14 @@ export class RegisterComponent implements OnInit {
         this.tokenStorage.saveUser(data);
         this.router.navigate(['/user/profile/']);
         
-
-       
       },
       err => {
         this.errorMessage = err.error.message;
         this.isSignUpFailed = true;
       }
     );
+
+
     
     // OLD FETCH POST TO SERVER
     // fetch('http://localhost:8080/api/user', {
@@ -102,10 +109,22 @@ export class RegisterComponent implements OnInit {
     // }).catch(function(error) {
     //   console.error('Error:', error);
     // });
-
-
   }
 
-
+  shuffle(array: string[]): string[] {
+    let currentIndex = array.length, temporaryValue, randomIndex;
+  
+    // While there remain elements to shuffle...
+    while (0 !== currentIndex) { 
+      // Pick a remaining element...
+      randomIndex = Math.floor(Math.random() * currentIndex);
+      currentIndex -= 1;
+      // And swap it with the current element.
+      temporaryValue = array[currentIndex];
+      array[currentIndex] = array[randomIndex];
+      array[randomIndex] = temporaryValue;
+    }
+    return array;
+  }
 
 }

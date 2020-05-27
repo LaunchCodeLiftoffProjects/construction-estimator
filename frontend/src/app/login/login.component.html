@@ -4,73 +4,42 @@
 
       <!--Login block-->
       <div class="container col-6">
-        <br>
         <h4 class="text-info mt-5">Log in to your account</h4>
-        <br>
-        <form
-        
-          name="form"
-          (ngSubmit)="f.form.valid && onSubmit()"
-          #f="ngForm"
-          novalidate
-          
-        >
-          <div class="form-group">
-            
-            <input placeholder="E-mail Address"
-              type="email"
-              class="form-control form-control-sm w-100"
-              name="email"
-              [(ngModel)]="form.email"
-              required
-              pattern="^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"
-              #email="ngModel"
-            />
-            <div
-              class="alert alert-danger"
-              role="alert"
-              *ngIf="email.invalid && email.touched"
-            >
+
+        <form name="form" (ngSubmit)="f.form.valid && onSubmit()" #f="ngForm" novalidate>
+
+          <div class="form-group">            
+            <input #email="ngModel" placeholder="E-mail Address" type="email" class="form-control form-control-sm w-100" name="email" 
+              [(ngModel)]="form.email" required pattern="^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$" />
+            <div class="alert alert-danger" role="alert" *ngIf="email.invalid && email.touched">
               Email is required and must be valid email.
             </div>
           </div>
+
           <div class="form-group">
-            
-            <input placeholder="Password"
-              type="password"
-              class="form-control form-control-sm w-100"
-              name="password"
-              [(ngModel)]="form.password"
-              required
-              minlength="6"
-              #password="ngModel"
-            />
-            <div
-              class="alert alert-danger"
-              role="alert"
-              *ngIf="f.invalid && password.touched"
-            >
-              <div *ngIf="password.errors.required">Password is required.</div>
+            <input #password="ngModel" placeholder="Password" type="password" class="form-control form-control-sm w-100"
+              name="password" [(ngModel)]="form.password" required minlength="6" />
+            <div class="alert alert-danger" role="alert" *ngIf="f.invalid && password.touched">
+              <div *ngIf="password.errors.required">
+                Password is required.
+              </div>
               <div *ngIf="password.errors.minlength">
                 Password must be at least 6 characters long.
               </div>
             </div>
           </div>
+
           <div>
               <p>Don't have an account yet? <a  class="text-info" [routerLink]="'/register'">Register here.</a></p>
           </div>
 
-          <div class="form-group">
+          <div class="form-group text-right">
               <button class="btn btn-info btn-sm" type="submit" [disabled]="!f.form.valid">Log in</button>
           </div>
           
-            <div
-              class="alert alert-danger"
-              role="alert"
-              *ngIf="f.submitted && isLoginFailed"
-            >
-              Sorry! That e-mail and password combination is invalid.
-            </div>
+          <div class="alert alert-danger" role="alert" *ngIf="f.submitted && isLoginFailed">
+            Sorry! That e-mail and password combination is invalid.
+          </div>
           
         </form>
           
@@ -84,11 +53,11 @@
       <div class="container col-5">
 
         <!--Carousel-->
-        <div class="mt-5" id="photos" class="carousel slide" data-ride="carousel" data-interval=3500>
+        <div class="mt-5" id="photos" class="carousel slide" data-ride="carousel" data-interval=4000>
           <div class="carousel-inner">
             <!--activate with first slide then loop after that-->
             <div class="carousel-item active">
-              <img class="d-block w-100" [src]=imagePaths[10] />
+              <img class="d-block w-100" [src]=imagePaths[6] />
             </div>
             <div class="carousel-item" *ngFor="let imagePath of imagePaths; let i=index">
               <img class="d-block w-100" [src]=imagePaths[i] />
