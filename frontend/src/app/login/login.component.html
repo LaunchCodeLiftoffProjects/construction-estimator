@@ -1,10 +1,17 @@
-<div class="container">
+<body class="container QE-bkg">
+
+<div>
   <div class="container mt-5 w-100">
     <div class="row justify-content-between">
 
       <!--Login block-->
       <div class="container col-6">
-        <h4 class="text-info mt-5">Log in to your account</h4>
+
+        <p><span class="lead">Welcome to QuickEst - where homeowners create custom projects and get realistic estimates 
+          for every potential cost. Whatever you can dream up, we can estimate it!</span> 
+          &nbsp;<a [routerLink]="'/about'" class="text-info"> LEARN MORE >>></a></p>
+
+        <h4 class="text-info mt-5">Log in to create a project</h4>
 
         <form name="form" (ngSubmit)="f.form.valid && onSubmit()" #f="ngForm" novalidate>
 
@@ -57,7 +64,7 @@
           <div class="carousel-inner">
             <!--activate with first slide then loop after that-->
             <div class="carousel-item active">
-              <img class="d-block w-100" [src]=imagePaths[6] />
+              <img class="d-block w-100" [src]=imagePaths[3] />
             </div>
             <div class="carousel-item" *ngFor="let imagePath of imagePaths; let i=index">
               <img class="d-block w-100" [src]=imagePaths[i] />
@@ -71,3 +78,5 @@
     </div>
   </div>
 </div>
+
+</body>

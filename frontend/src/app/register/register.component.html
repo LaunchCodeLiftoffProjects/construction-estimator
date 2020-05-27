@@ -10,7 +10,7 @@
                     <div class="carousel-inner">
                         <!--activate with first slide then loop after that-->
                         <div class="carousel-item active">
-                            <img class="d-block w-100" [src]=imagePaths[6] />
+                            <img class="d-block w-100" [src]=imagePaths[3] />
                         </div>
                         <div class="carousel-item" *ngFor="let imagePath of imagePaths; let i=index">
                             <img class="d-block w-100" [src]=imagePaths[i] />
@@ -25,7 +25,7 @@
 
             <!--Register form block-->
             <div class="container col-6">
-                <h2 class="text-info mt-5">Create an Account</h2>
+                <h3 class="text-info mt-5">Create an Account</h3>
                 <br />
                 <form name="userForm" (ngSubmit)='userForm.form.valid && saveUser(firstName, lastName, email.value, password, verifyPassword)' #userForm="ngForm">
                     <br />

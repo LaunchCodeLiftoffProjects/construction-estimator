@@ -1,16 +1,24 @@
 /* You can add global styles to this file, and also import other style files */
 
-.indent-left {
-    margin-left: 30px;
-}
-
 .checkbox label, .checkbox input[type=checkbox]{
     margin-left: 30px;
 }
 
+html, body, app-root {
+    height: 100%;
+    margin: 0;
+}
+
+
+
+
+
+
+/* TODO: adjust these colors to complement custom scheme */
+
 .ng-valid[required], .ng-valid.required  {
     border-left: 5px solid #42A948; /* green */
-}
+} 
   
 .ng-invalid:not(form)  {
     border-left: 5px solid #a94442; /* red */
