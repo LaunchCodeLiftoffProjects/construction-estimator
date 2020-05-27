@@ -16,7 +16,7 @@
                         <div class="btn" (click)="setSelectedProject(project)">
                             <h4 class="text"> 
                                 <!-- FIXME: RIGHT NOW, this section of the template is not able to display 
-                                    any data other than the basic project properties -->
+                                    any data other than the basic project properties. Won't display project.estimate stuff -->
                                 <u [class.text-info]="project === selectedProject">{{project.name}}</u>
                             </h4>
                         </div>
@@ -34,7 +34,7 @@
             
             
                 <div class="text-right" *ngIf="selectedProject !== null" >
-                    <h4 class="text-info mt-4"> Appliances Cost: {{fake}}</h4>
+                    <h4 class="text-info mt-4"> Appliances Cost: {{selectedProject.estimate.appliancesCost}}</h4>
                     <h4 class="text-info mt-4"> Fixtures Cost: {{selectedProject.estimate.fixturesCost}} </h4>
                     <h4 class="text-info mt-4"> Finishes Cost: {{selectedProject.estimate.finishesCost}} </h4>
                     <h4 class="text-info mt-4"> Materials Cost: {{selectedProject.estimate.materialsCost}} </h4>

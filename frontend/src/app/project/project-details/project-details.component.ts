@@ -389,11 +389,10 @@ export class ProjectDetailsComponent implements OnInit {
       console.error('Error:', error);
     });
 
-    //FIXME:
-    //Need to either set up routing for list page to accept an id 
-    // OR 
-    //set up User Service to hold onto the projectid and then set up project list to grab it
-    this.router.navigate(['/project/list/' + this.project.id]);
+    if (this.project.id !== Number(this.tokenStorageService.getProject())) {
+      this.tokenStorageService.saveProject(this.project.id);
+    }
+    this.router.navigate(['/project/list/']);
 
 
   }

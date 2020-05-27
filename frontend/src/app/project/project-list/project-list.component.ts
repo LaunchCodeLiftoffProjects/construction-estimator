@@ -22,7 +22,7 @@ export class ProjectListComponent implements OnInit {
   username: string;
   selectedProject: Project = null;
   selectedEstimate: Estimate;
-  fake = 1;
+  projectId: number = null;
 
   constructor(private tokenStorageService: TokenStorageService, private router: Router) {
     
@@ -35,6 +35,9 @@ export class ProjectListComponent implements OnInit {
       const user = this.tokenStorageService.getUser();
       this.roles = user.roles;
       this.userId = user.id;
+      
+      this.projectId = Number(this.tokenStorageService.getProject());
+  
 
       this.showAdminBoard = this.roles.includes('ROLE_ADMIN');
       this.showModeratorBoard = this.roles.includes('ROLE_MODERATOR');
@@ -69,11 +72,11 @@ export class ProjectListComponent implements OnInit {
           project.labor = obj.labor;
           project.estimate = obj.estimate;
           refreshProject.push(project);
+          if (project.id === this.projectId) {
+            this.selectedProject = project;
+          }
         });
         this.projects = refreshProject;
-        //TODO:
-        //Decide how to grab the project id from the details page
-        // this.selectedProject =
       }.bind(this));
     }.bind(this));
   }
@@ -81,13 +84,7 @@ export class ProjectListComponent implements OnInit {
 
   setSelectedProject(project) {
     if (this.selectedProject !== project) {
-      if (project.estimate == null) {
-        this.selectedProject.estimate = new Estimate();
-        return;
-      } else {
-        this.selectedProject = project;
-        return;
-      }
+      this.selectedProject = project;
     } else {
       this.selectedProject = null;
       return;
@@ -102,7 +99,5 @@ export class ProjectListComponent implements OnInit {
       return false;
     }
   }
-
-
 
 }
