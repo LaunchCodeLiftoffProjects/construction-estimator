@@ -19,7 +19,7 @@
             
             <input placeholder="E-mail Address"
               type="email"
-              class="form-control w-100"
+              class="form-control form-control-sm w-100"
               name="email"
               [(ngModel)]="form.email"
               required
@@ -38,7 +38,7 @@
             
             <input placeholder="Password"
               type="password"
-              class="form-control w-100"
+              class="form-control form-control-sm w-100"
               name="password"
               [(ngModel)]="form.password"
               required
@@ -61,7 +61,7 @@
           </div>
 
           <div class="form-group">
-              <button class="btn btn-info" type="submit" [disabled]="!f.form.valid">Log in</button>
+              <button class="btn btn-info btn-sm" type="submit" [disabled]="!f.form.valid">Log in</button>
           </div>
           
             <div
@@ -76,27 +76,24 @@
           
       </div>
 
-      <!--Spacer-->
+      <!--Spacer column-->
       <div class="container col-1">
       </div>
 
-      <!--Image & teaser block-->
+      <!--Image block-->
       <div class="container col-5">
 
-        <!--Randomized image since carousel doesn't work yet-->
-        <img class="mt-5" [src]=selectedImage style="width:100%;max-width:400" />
-
         <!--Carousel-->
-        <!-- <div id="photos" class="carousel slide" data-ride="carousel">
+        <div class="mt-5" id="photos" class="carousel slide" data-ride="carousel" data-interval=3500>
           <div class="carousel-inner">
-            <div class="carousel-item active" *ngFor="let imagePath of shuffle(imagePaths); let i=index">
+            <!--activate with first slide then loop after that-->
+            <div class="carousel-item active">
+              <img class="d-block w-100" [src]=imagePaths[10] />
+            </div>
+            <div class="carousel-item" *ngFor="let imagePath of imagePaths; let i=index">
               <img class="d-block w-100" [src]=imagePaths[i] />
             </div>
           </div>
-        </div> -->
-
-        <div class="mt-4">
-          <p>This is some random text.</p>
         </div>
 
       </div>

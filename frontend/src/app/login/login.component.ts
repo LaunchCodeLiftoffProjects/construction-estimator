@@ -26,8 +26,8 @@ export class LoginComponent implements OnInit {
             "/assets/examples/bedroom_luxe.jpg", "/assets/examples/bedroom_teal_yellow.jpg",
             "/assets/examples/kitchen_green.jpg", "/assets/examples/kitchen_grey.jpg",
             "/assets/examples/kitchen_white.jpg", "/assets/examples/living_farmhouse.jpg",
-            "/assets/examples/living_green.jpg", "/assets/examples/living_industrial", 
-            "/assets/examples/living_white.jpg", "/assets/examples/living_cobalt"];
+            "/assets/examples/living_green.jpg", "/assets/examples/living_industrial.jpg", 
+            "/assets/examples/living_white.jpg", "/assets/examples/living_cobalt.jpg"];
   selectedImage: string = this.getRandom(this.imagePaths);
   
   constructor(private authService: AuthService, private tokenStorage: TokenStorageService, private router: Router) {
@@ -41,7 +41,7 @@ export class LoginComponent implements OnInit {
       this.roles = this.tokenStorage.getUser().roles;
       this.router.navigate(['/user/profile/']);
     }
-
+    this.shuffle(this.imagePaths);
   }
 
   ngOnDestroy() {
