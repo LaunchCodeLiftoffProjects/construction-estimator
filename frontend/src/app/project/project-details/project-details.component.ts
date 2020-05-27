@@ -171,18 +171,18 @@ export class ProjectDetailsComponent implements OnInit {
 
       this.changedRoom = false;
       this.firstLoad = false;
-      this.dataLoaded = true; // allow page to render - FIXME: not 100% sure this fixed the issue
+      this.dataLoaded = true; // allow page to render now that all data is available
     }
   }
   
-  // for each type, build a list of available options to display for dropdown lists
+  // for each type, build a list of room-specific options to display for dropdown lists
   getOptions(itemType: string): Item[] {
     let optionsArray = [];
     let item: Item;
     for (let i=0; i < this.itemsArray.length; i++) {
       item = this.itemsArray[i];
       if (item.type === itemType && item.room.includes(this.project.roomType)) {
-        optionsArray.push(item); // IMPORTANT: the array is now built of items, not just their names
+        optionsArray.push(item);
       }
     }
     optionsArray.sort((a, b) => (a.name > b.name) ? 1 : -1);
@@ -343,9 +343,11 @@ export class ProjectDetailsComponent implements OnInit {
       let item: Item;
       for (let i=0; i < this.project.itemDetails.length; i++) {
         details = this.project.itemDetails[i];
-        item = this.itemsArray[this.findItemById(details.itemId)];
-        if (item.type === type) {
-          return i;
+        if (details.itemId !== null) {
+          item = this.itemsArray[this.findItemById(details.itemId)];
+          if (item.type === type) {
+            return i;
+          }
         }
       }
     }
@@ -372,7 +374,7 @@ export class ProjectDetailsComponent implements OnInit {
     let costs: number[] = [];
     if (this.calcByQuantity.includes(item.type)) {
       itemCost = selection.quantity * item.price;
-      materialCost = selection.quantity * item.roughMaterial;
+      materialCost = selection.quantity * item.roughMaterial; // FIXME: need to add in rough materials costs for dishwasher etc
       laborCost = selection.quantity * item.labor;
       console.log(item.type + " calculated by quantity");
     } else if (this.calcByLF.includes(item.type)) {
@@ -387,7 +389,7 @@ export class ProjectDetailsComponent implements OnInit {
       materialCost = cabinet.quantity * item.roughMaterial;
       laborCost = cabinet.quantity * item.labor;
       console.log(item.type + " calculated by number of cabinets");
-    } else if (item.type === "Wall") {
+    } else if (item.type === "Walls") {
       itemCost = this.wallArea * item.price;
       materialCost = this.wallArea * item.roughMaterial;
       laborCost = this.wallArea * item.labor;
@@ -423,45 +425,38 @@ export class ProjectDetailsComponent implements OnInit {
     console.log("Cost for " + selection.type + " item added to estimate: " + costs[0]);
 
     // add any related materials cost - will add in only once if appliance involveds both plumbing & electrical
-    if (this.project.materials.needPlumbingSystem === true && this.factorIntoPlumbing.includes(selection.type)) {
-      this.project.estimate.materialsCost += costs[1];
-    } else if (this.project.materials.needElectricalSystem === true && this.factorIntoElectrical.includes(selection.type)) {
-      this.project.estimate.materialsCost += costs[1];
+    if ((this.project.materials.needPlumbingSystem === true && this.factorIntoPlumbing.includes(selection.type)) 
+      || (this.project.materials.needElectricalSystem === true && this.factorIntoElectrical.includes(selection.type))) {
+        // Note: framing and drywall costs added separately since not tied to specific items, just dimensions of room
+        this.project.estimate.materialsCost += costs[1];
+      console.log("Cost for " + selection.type + " rough materials added to estimate: " + costs[1]);
     }
-    // Note: framing and drywall costs added separately since not tied to specific items, just dimensions of room
-    console.log("Cost for " + selection.type + " rough materials added to estimate: " + costs[1]);
 
     // add any related labor cost - will add in only once if appliance involves both plumbing & electrical
-    if (this.project.labor.needPlumbingSub === true && this.factorIntoPlumbing.includes(selection.type)) {
+    if ((this.project.labor.needPlumbingSub === true && this.factorIntoPlumbing.includes(selection.type)) 
+      || (this.project.labor.needElectricalSub === true && this.factorIntoElectrical.includes(selection.type))
+      || (this.project.labor.needFinishWork === true && this.factorIntoFinishWork.includes(selection.type))) {
+      // Note: rough carpentry labor costs added separately since not tied to specific items, just dimensions of room
       this.project.estimate.laborCost += costs[2];
-    } else if (this.project.labor.needElectricalSub === true && this.factorIntoElectrical.includes(selection.type)) {
-      this.project.estimate.laborCost += costs[2];
+      console.log("Cost for " + selection.type + " labor added to estimate: " + costs[2]);
     }
-    // Note: rough carpentry labor costs added separately since not tied to specific items, just dimensions of room
-    if (this.project.labor.needFinishWork === true && this.factorIntoFinishWork.includes(selection.type)) {
-      this.project.estimate.laborCost += costs[2];
-    }
-    console.log("Cost for " + selection.type + " labor added to estimate: " + costs[2]);
-  
+    
   }
-
-
 
   // BUILD PROJECT
 
   buildProject() {
 
-    this.project.itemDetails = []; // reset project's itemDetails array to remove any prior saved objects and values
     let selection: Selection;
     let index: number;
     let costs: number[];
 
-    // if selected in form, itemDetails object should already be updated
+    // if selected in form, itemDetails objects should already be updated with itemId (and quantity if required)
     for (let c=0; c < 3; c++) { // once for each category subarray of selectionArray
       for (let i=0; i < this.selectionArray[c].length; i++) {
         selection = this.selectionArray[c][i];
         index = this.lookUpDetailsByType(selection.type); // look for this type in the project itemDetails array
-        if (selection.checked) { 
+        if (index >= 0 && selection.checked) { 
           // itemDetails object will already have been updated - just need associated costs
           costs = this.calculateCosts(selection); // costs for item, rough materials, and labor
           console.log("Costs for " + selection.type + " are " + costs);
@@ -474,7 +469,7 @@ export class ProjectDetailsComponent implements OnInit {
             this.project.itemDetails[index].itemId = null;
             this.project.itemDetails[index].quantity = 0;
             this.project.itemDetails[index].finalPrice = 0;
-        } // otherwise skip type
+        } // otherwise skip type; no need to add itemDetails object
       }
     }
 
