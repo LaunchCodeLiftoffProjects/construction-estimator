@@ -201,7 +201,6 @@ export class ProjectDetailsComponent implements OnInit {
       }
     } else { // project does not have an ItemDetails object for this type or it had been rendered null
       let optionOne: Item = this.getOptions(type)[0];  
-      // let quantity = (this.calcByQuantity.includes(type) ? 1 : 0);
       console.log("Created new Selection object for " + type + " in " + optionOne.category + " subarray");
       return new Selection(optionOne.category, type, false, optionOne, 0);
     }
@@ -211,8 +210,8 @@ export class ProjectDetailsComponent implements OnInit {
   /***** EVENT HANDLERS FOR ITEM SELECTIONS *****/
 
   /** The corresponding itemDetails object will not actually be updated unless positive changes are made;
-   * if deselected/zeroed, all three fields will blank out but the itemDetails object will retain
-   * the previous selections in case the user changes their mind prior to submitting the form.
+   * if deselected/zeroed, all three fields will blank out but the in-session project.itemDetails object will retain
+   * their previous selections in case the user changes their mind prior to submitting the form.
    */
 
   changeChecked(selection: Selection, i: number, c: number) {
@@ -305,7 +304,7 @@ export class ProjectDetailsComponent implements OnInit {
     selection.selected = this.getOptions(selection.type)[0];
     selection.quantity = 0;
     console.log("All input fields for " + selection.type + " reset");
-    // DO NOT save to corresponding itemDetails object inside this function
+    // DO NOT save to corresponding itemDetails object
   }
 
 
@@ -469,6 +468,7 @@ export class ProjectDetailsComponent implements OnInit {
             this.project.itemDetails[index].itemId = null;
             this.project.itemDetails[index].quantity = 0;
             this.project.itemDetails[index].finalPrice = 0;
+            console.log(selection.type + " was deselected and all its values nullified in itemDetails array");
         } // otherwise skip type; no need to add itemDetails object
       }
     }

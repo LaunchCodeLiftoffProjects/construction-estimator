@@ -56,7 +56,7 @@
             <!--iterate through appliance, fixture, and finish sections-->
             <ng-container *ngFor="let category of categories; let c = index">
                 <!--do not show appliance section unless the room is kitchen-->
-                <ng-container *ngIf=" project.roomType === 'kitchen' || (project.roomType !== 'kitchen' && category !== 'appliance') ">
+                <ng-container *ngIf="editingProject === false && (project.roomType === 'kitchen' || (project.roomType !== 'kitchen' && category !== 'appliance'))">
                     <div class="form-group" >
                         <h4 class="mt-4">{{categoryTitles[c]}}</h4>
                         <div class="input-group mt-1" *ngFor="let selection of selectionArray[c]; let i = index">
