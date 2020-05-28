@@ -84,10 +84,10 @@ export class ProjectListComponent implements OnInit {
 
   setSelectedProject(project) {
     if (this.selectedProject !== project) {
-      this.selectedProject = project;
+      console.log('selected project', project);
+      return project;
     } else {
-      this.selectedProject = null;
-      return;
+      return null;
     }
     
   }
