@@ -14,7 +14,7 @@ export class ProjectListComponent implements OnInit {
 
   projectUrl = "http://localhost:8080/api/project";
   userId: number;
-  projects: Project[]
+  projects: Project[];
   private roles: string[];
   isLoggedIn = false;
   showAdminBoard = false;
