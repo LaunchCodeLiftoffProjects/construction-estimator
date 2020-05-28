@@ -1,17 +1,14 @@
-/* You can add global styles to this file, and also import other style files */
 
-.checkbox label, .checkbox input[type=checkbox]{
-    margin-left: 30px;
-}
-
+/* make sure bkg image doesn't get cut off at bottom */
 html, body, app-root {
     height: 100%;
     margin: 0;
 }
 
-
-
-
+/* adjust spacing between checkboxes and their labels */
+.checkbox label, .checkbox input[type=checkbox]{
+    margin-left: 30px;
+}
 
 
 /* TODO: adjust these colors to complement custom scheme */
@@ -21,5 +18,7 @@ html, body, app-root {
 } 
   
 .ng-invalid:not(form)  {
-    border-left: 5px solid #a94442; /* red */
+    border-left: 5px solid #444444; /* red */
 }
+
+/* TODO: add red back for when error occurs */
