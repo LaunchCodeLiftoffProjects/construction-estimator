@@ -67,17 +67,16 @@ export class CreateProjectComponent implements OnInit {
         this.id = Number(json.id);
         //this project.id gets changed, as it should. I tried using an id field on the component class itself, but I encountered the same issue (see below)
         console.log("json ids", this.id);
+        this.tokenStorageService.saveProject(this.id);
         this.router.navigate(['/project/add-details/', this.id]);
-
+       
       }.bind(this));
     }.bind(this)).then(function(data) {
       console.log('Success:', data);
     }).catch(function(error) {
       console.error('Error:', error);
     });
-    //This project.id gets set back to its initial value of undefined. The this.id field did the same thing - it changed and then got reset to 12 on this line.
-    // console.log('id assigned', this.project.id);
-    //this router link works when the id is given a value before running the fetch, but occassionally it will send you back to the project/create?roomType=whatever which is weird...
+    
   }
 
   //event handler for the radio button's change event
