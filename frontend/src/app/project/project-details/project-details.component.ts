@@ -508,7 +508,7 @@ export class ProjectDetailsComponent implements OnInit {
     // TODO: verify all project properties are saving to back end
 
     // save project to database
-    fetch("http://localhost:8080/api/project/" + this.project.id, {
+    fetch("http://localhost:8080/api/project/", {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
