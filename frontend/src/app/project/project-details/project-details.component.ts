@@ -111,6 +111,7 @@ export class ProjectDetailsComponent implements OnInit {
       }
     }).then(function (response) {
       response.json().then(function (json) {
+        console.log(JSON.stringify(json));
         this.project = new Project(json.name, json.roomType, json.roomLength, json.roomWidth, json.roomHeight);
         this.project.id = json.id;
         this.project.itemDetails = json.itemDetails;
@@ -342,12 +343,12 @@ export class ProjectDetailsComponent implements OnInit {
       let item: Item;
       for (let i=0; i < this.project.itemDetails.length; i++) {
         details = this.project.itemDetails[i];
-        if (details.itemId !== null) {
+        if (details.itemId > 0) {
           item = this.itemsArray[this.findItemById(details.itemId)];
           if (item.type === type) {
             return i;
           }
-        }
+        } 
       }
     }
     return -1;
@@ -462,12 +463,12 @@ export class ProjectDetailsComponent implements OnInit {
           costs = this.calculateCosts(selection); // costs for item, rough materials, and labor
           console.log("Costs for " + selection.type + " are " + costs);
           this.project.itemDetails[index].finalPrice = costs[0]; // set finalPrice
-          console.log("ItemDetails object for " + selection.type + " updated with final price")   
+          console.log("ItemDetails object for " + selection.type + " updated with final price of " + this.project.itemDetails[index].finalPrice + " (" + costs[0] + ")");   
           this.buildEstimate(selection, costs); // add per-item additional costs into estimate
           console.log("Estimate updated with costs associated with " + selection.type);
         } else if (index >= 0) { 
             // if unchecked and itemDetails object for this type exists from prior selection, reset data
-            this.project.itemDetails[index].itemId = null;
+            this.project.itemDetails[index].itemId = 0;
             this.project.itemDetails[index].quantity = 0;
             this.project.itemDetails[index].finalPrice = 0;
             console.log(selection.type + " was deselected and all its values nullified in itemDetails array");
