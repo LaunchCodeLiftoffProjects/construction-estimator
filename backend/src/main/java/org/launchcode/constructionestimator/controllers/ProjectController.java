@@ -98,6 +98,26 @@ public class ProjectController {
         return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
 
+    @PostMapping("{/projectId}")
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<?> postProjectToId(@RequestBody Project project, @PathVariable("projectId") int projectId,
+                                             @RequestHeader HttpHeaders headers) {
+
+        String headerAuth = headers.getFirst("Authorization");
+        Optional<Project> projectOptional = projectRepository.findById(projectId);
+
+        if (projectOptional.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } else if (userAuthService.doesUserMatch(projectOptional.get().getUser().getId(), headerAuth)
+                && projectOptional.get().getId() == project.getId()) {
+
+            projectRepository.save(project);
+
+            return new ResponseEntity<>(HttpStatus.CREATED);
+        }
+        return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+    }
+
     @DeleteMapping("/{projectId}")
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<?> deleteProject(@PathVariable("projectId") int projectId,
