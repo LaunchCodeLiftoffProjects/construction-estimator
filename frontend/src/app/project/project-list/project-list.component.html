@@ -10,7 +10,7 @@
     </div>
     <div class="row justify-content-between">
         <div>
-            <div class="col-lg">
+            <div class="col-14">
                 <div>
                     <div *ngFor="let project of projects; let index = p">
                         <div class="btn" (click)="selectedProject = setSelectedProject(project)">
@@ -26,16 +26,16 @@
             </div>
         </div>
 
-        <div class="col-4 align-middle">
+        <div class="col-8">
             
             
                 <div class="text-right" *ngIf="selectedProject !== null" >
-                    <h4 class="text-info mt-4"> Appliances Cost: {{selectedProject.estimate.appliancesCost}}</h4>
-                    <h4 class="text-info mt-4"> Fixtures Cost: {{selectedProject.estimate.fixturesCost}} </h4>
-                    <h4 class="text-info mt-4"> Finishes Cost: {{selectedProject.estimate.finishesCost}} </h4>
-                    <h4 class="text-info mt-4"> Materials Cost: {{selectedProject.estimate.materialsCost}} </h4>
-                    <h4 class="text-info mt-4"> Labor Cost: {{selectedProject.estimate.laborCost}} </h4>
-                    <h4 class="text-info mt-4"> TOTAL ESTIMATE: {{selectedProject.estimate.totalCost}} </h4>
+                    <h4 class="text-info mt-4"> Appliances Cost: ${{selectedProject.estimate.appliancesCost}} USD</h4>
+                    <h4 class="text-info mt-4"> Fixtures Cost: ${{selectedProject.estimate.fixturesCost}} USD</h4>
+                    <h4 class="text-info mt-4"> Finishes Cost: ${{selectedProject.estimate.finishesCost}} USD</h4>
+                    <h4 class="text-info mt-4"> Materials Cost: ${{selectedProject.estimate.materialsCost}} USD</h4>
+                    <h4 class="text-info mt-4"> Labor Cost: ${{selectedProject.estimate.laborCost}} USD</h4>
+                    <h4 class="text-info mt-4"> TOTAL ESTIMATE: ${{selectedProject.estimate.totalCost}} USD</h4>
                     <br>
                     <button class="btn btn-info" [routerLink]="'/project/add-details/' + selectedProject.id">Update My
                         Project</button>
