@@ -450,6 +450,8 @@ export class ProjectDetailsComponent implements OnInit {
     let index: number;
     let costs: number[];
 
+    // TODO: check to make sure itemDetails objects that may exist but no longer part of roomType, reset
+
     // if selected in form, itemDetails objects should already be updated with itemId (and quantity if required)
     for (let c=0; c < 3; c++) { // once for each category subarray of selectionArray
       for (let i=0; i < this.selectionArray[c].length; i++) {
