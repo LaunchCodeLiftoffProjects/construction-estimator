@@ -15,8 +15,6 @@
                     <div *ngFor="let project of projects; let index = p">
                         <div class="btn" (click)="selectedProject = setSelectedProject(project)">
                             <h4 class="text"> 
-                                <!-- FIXME: RIGHT NOW, this section of the template is not able to display 
-                                    any data other than the basic project properties. Won't display project.estimate stuff -->
                                 <u [class.text-info]="project === selectedProject">{{project.name}}</u>
                             </h4>
                         </div>
@@ -28,8 +26,6 @@
             </div>
         </div>
 
-        <!-- //FIXME: Right now nothing is binding to the page in this section. 
-            Even fake data won't display, even when the ngIf runs and the html content displays -->
         <div class="col-4 align-middle">
             
             

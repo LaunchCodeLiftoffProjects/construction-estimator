@@ -63,8 +63,7 @@ export class ProjectListComponent implements OnInit {
       response.json().then(function(json) {
         let refreshProject: Project[] = [];
         json.forEach(obj => {
-          //FIXME:Right now this loop is not correctly storing the itemDetails, materials, labor, or estimate.
-          //The backend is sending the date properly. Even using project.estimate = new Estimate() to get 0s is not working. Data binding is failing.
+          
           let project = new Project(obj.name, obj.roomType, obj.roomLength, obj.roomWidth, obj.roomHeight);
           project.id = obj.id;
           project.itemDetails = obj.itemDetails;
