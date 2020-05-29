@@ -547,6 +547,11 @@ export class ProjectDetailsComponent implements OnInit {
       console.error('Error:', error);
     });
 
+    if (this.project.id !== Number(this.tokenStorageService.getProject())) {
+      this.tokenStorageService.saveProject(this.project.id);
+    }
+    this.router.navigate(['/project/list/']);
+
   }
 
 }

@@ -3,6 +3,7 @@ import { User } from 'src/app/user';
 import { Project } from 'src/app/project';
 import { TokenStorageService } from 'src/app/_services/token-storage.service';
 import { Router } from '@angular/router';
+import { Estimate } from 'src/app/estimate';
 
 @Component({
   selector: 'app-project-list',
@@ -13,12 +14,15 @@ export class ProjectListComponent implements OnInit {
 
   projectUrl = "http://localhost:8080/api/project";
   userId: number;
-  projects: Project[]
+  projects: Project[];
   private roles: string[];
   isLoggedIn = false;
   showAdminBoard = false;
   showModeratorBoard = false;
   username: string;
+  selectedProject: Project = null;
+  selectedEstimate: Estimate;
+  projectId: number = null;
 
   constructor(private tokenStorageService: TokenStorageService, private router: Router) {
     
@@ -31,6 +35,9 @@ export class ProjectListComponent implements OnInit {
       const user = this.tokenStorageService.getUser();
       this.roles = user.roles;
       this.userId = user.id;
+      
+      this.projectId = Number(this.tokenStorageService.getProject());
+  
 
       this.showAdminBoard = this.roles.includes('ROLE_ADMIN');
       this.showModeratorBoard = this.roles.includes('ROLE_MODERATOR');
@@ -56,11 +63,40 @@ export class ProjectListComponent implements OnInit {
       response.json().then(function(json) {
         let refreshProject: Project[] = [];
         json.forEach(obj => {
-          refreshProject.push(new Project(obj.name, obj.roomType, obj.roomLength, obj.roomWidth, obj.roomHeight));
+          
+          let project = new Project(obj.name, obj.roomType, obj.roomLength, obj.roomWidth, obj.roomHeight);
+          project.id = obj.id;
+          project.itemDetails = obj.itemDetails;
+          project.materials = obj.materials;
+          project.labor = obj.labor;
+          project.estimate = obj.estimate;
+          refreshProject.push(project);
+          if (project.id === this.projectId) {
+            this.selectedProject = project;
+          }
         });
         this.projects = refreshProject;
       }.bind(this));
     }.bind(this));
+  }
+
+
+  setSelectedProject(project) {
+    if (this.selectedProject !== project) {
+      console.log('selected project', project);
+      return project;
+    } else {
+      return null;
+    }
+    
+  }
+
+  checkSelection(project) {
+    if (project === this.selectedProject) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
 }
