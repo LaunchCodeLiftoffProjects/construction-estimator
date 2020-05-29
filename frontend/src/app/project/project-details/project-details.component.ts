@@ -1,6 +1,5 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { Router, ActivatedRoute, ParamMap } from '@angular/router';
-import { FormsModule } from '@angular/forms';
+import { Component, OnInit } from '@angular/core';
+import { Router, ActivatedRoute } from '@angular/router';
 
 // classes
 import { Project } from 'src/app/project';
@@ -468,13 +467,12 @@ export class ProjectDetailsComponent implements OnInit {
   }
 
 
-  // BUILD PROJECT
+  /***** BUILD & SAVE PROJECT *****/
 
   buildProject() {
 
     let selection: Selection;
     let index: number;
-    let details: ItemDetails;
     let costs: number[];
 
     // if selected in form, itemDetails objects should already be updated with itemId (and quantity if required)
@@ -484,8 +482,6 @@ export class ProjectDetailsComponent implements OnInit {
         index = this.lookUpDetailsByType(selection.type); // look for this type in the project itemDetails array
         
         if (index >= 0 && selection.checked) { 
-          // itemDetails object will already have been updated - just need associated costs
-          details = this.project.itemDetails[index];
           costs = this.calculateCosts(selection); // costs for item, rough materials, and labor
           console.log("Costs for " + selection.type + " are " + costs);
           this.project.itemDetails[index].finalPrice = costs[0]; // set finalPrice
@@ -499,9 +495,9 @@ export class ProjectDetailsComponent implements OnInit {
       }
     }
 
-    // if an itemDetails exists in the project with an item type that is no longer relevant to the roomType,
-    // it will be left intact because it will not impact the estimate now or in the future unless the roomType
-    // is changed again and it becomes relevant
+    // if an itemDetails object exists in the project with an item type that is no longer relevant to the roomType,
+    // it will be left intact because it will not be calculated into the estimate now or in the future unless 
+    // the roomType is changed again and it becomes relevant
 
     // complete estimate - add remaining material & labor costs based on room dimensions, not items
     if (this.project.materials.needFraming === true) {
