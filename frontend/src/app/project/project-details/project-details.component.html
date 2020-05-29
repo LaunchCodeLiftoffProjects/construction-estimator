@@ -14,7 +14,7 @@
                         <h4>{{project.name}} </h4>
                         <p class="lead">{{roomTitles[rooms.indexOf(project.roomType)]}}<br />
                         {{project.roomLength}}'L x {{project.roomWidth}}'W x {{project.roomHeight}}'H</p>
-                        <button class = "badge badge-info" (click) = "editingProject = true; getMeasurements()">Edit</button>
+                        <button class = "badge badge-info" (click) = "editingProject = true">Edit</button>
                     </div>
 
                     <!--Visible only while editing name, type, and dimensions-->
@@ -27,7 +27,7 @@
                             <div class = "form-group">
                                 <div class="form-check indent-left" *ngFor="let room of rooms; let r = index">
                                     <!-- TODO: make sure if the user enters this edit space any reset items are saved as such-->
-                                    <label class="form-check-label"><input #roomType required minlength="6" [(ngModel)]="project.roomType" (change)="changedRoom = true" [value]="rooms[r]" type="radio" class = "form-check-input" />{{roomTitles[r]}}</label>
+                                    <label class="form-check-label"><input #roomType required minlength="6" [(ngModel)]="project.roomType" (change)="changedRoom = true; saveUncheckedItems();" [value]="rooms[r]" type="radio" class = "form-check-input" />{{roomTitles[r]}}</label>
                                 </div>
                             </div>
                         </div>

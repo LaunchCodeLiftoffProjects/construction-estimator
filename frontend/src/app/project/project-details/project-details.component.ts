@@ -172,7 +172,7 @@ export class ProjectDetailsComponent implements OnInit {
 
       this.changedRoom = false;
       this.firstLoad = false;
-      this.dataLoaded = true; // allow page to render now that all data is available
+      this.dataLoaded = true; // allow page to render the first time now that all data is available
     }
   }
   
@@ -211,7 +211,7 @@ export class ProjectDetailsComponent implements OnInit {
   /***** EVENT HANDLERS FOR ITEM SELECTIONS *****/
 
   /** The corresponding itemDetails object will not actually be updated unless positive changes are made;
-   * if deselected/zeroed, all three fields will blank out but the in-session project.itemDetails object will retain
+   * if deselected/zeroed, all fields will blank out in the view but the in-session project.itemDetails object will retain
    * their previous selections in case the user changes their mind prior to submitting the form.
    */
 
@@ -230,7 +230,7 @@ export class ProjectDetailsComponent implements OnInit {
       }
       this.saveItemDetails(this.selectionArray[c][i]); // save/update itemDetails object in project
     } else {
-      this.resetAll(selection); // but do not overwrite corresponding itemDetails object yet
+      this.resetSelection(selection); // but do not overwrite corresponding itemDetails object yet
     }  
 	}
 
@@ -259,7 +259,7 @@ export class ProjectDetailsComponent implements OnInit {
       this.selectionArray[c][i].selected = lastSaved.selected;
       this.saveItemDetails(this.selectionArray[c][i]); // save/update itemDetails object in project
     } else if (selection.quantity <= 0) {
-      this.resetAll(selection); // but do not overwrite corresponding itemDetails object yet
+      this.resetSelection(selection); // but do not overwrite corresponding itemDetails object yet
     } else { // if quantity is being raised from 1 or more
       this.saveItemDetails(this.selectionArray[c][i]); // update itemDetails object in project
     }
@@ -270,13 +270,13 @@ export class ProjectDetailsComponent implements OnInit {
 
   // save one itemDetails object at a time with selection info
   saveItemDetails(selection: Selection) {
+
     if (selection.checked) { 
+      // check to see if itemDetails object already exists
+      let index = this.lookUpDetailsByType(selection.type);
 
       // TODO: (maybe) un-comment if adding functionality to display line item cost dynamically
       // let costs = this.calculateCosts(selection); // costs for item, rough materials, and labor
-
-      // check to see if itemDetails object already exists
-      let index = this.lookUpDetailsByType(selection.type);
       if (index >= 0) {
         this.project.itemDetails[index].itemId = selection.selected.id; // overwrite itemId
         this.project.itemDetails[index].quantity = selection.quantity; // overwrite quantity
@@ -293,14 +293,12 @@ export class ProjectDetailsComponent implements OnInit {
       }
       // TODO: (maybe) un-comment if adding functionality to display line item cost dynamically
       // this.buildEstimate(item, selection, costs);
-    } else {
-      // if unchecked...
-      // TODO: this function should only be called for unchecked items at the point of entering the edit project block or when submitting form and saving the entire project 
     }
-  }
+    // unchecked items will be handled in buildProject() at form submission
+  } 
 
   // reset checkbox, select dropdown, and quantity fields all at once
-  resetAll(selection: Selection) {
+  resetSelection(selection: Selection) {
     selection.checked = false;
     selection.selected = this.getOptions(selection.type)[0];
     selection.quantity = 0;
@@ -308,6 +306,32 @@ export class ProjectDetailsComponent implements OnInit {
     // DO NOT save to corresponding itemDetails object
   }
 
+  // when changing roomType in the project edit block, reset the itemDetails objects for any selections that the user
+  // unchecked prior to entering the project edit block - so that when the user exits the block and a new selectionArray
+  // is created based on the new roomType, they will remain unchecked (as the user would expect)
+  saveUncheckedItems() {
+    let selection: Selection;
+    let index: number;
+    for (let c=0; c < 3; c++) { // once for each category subarray of selectionArray
+      for (let i=0; i < this.selectionArray[c].length; i++) {
+        selection = this.selectionArray[c][i];
+        index = this.lookUpDetailsByType(selection.type); // look for this type in the project itemDetails array
+        
+        if (index >= 0 && ! selection.checked) { 
+            this.resetItemDetails(index, selection.type);
+        } 
+        // otherwise skip type; no need to change itemDetails object at this point
+      }
+    }
+  }
+
+  // this will not be called until either project edit block is entered or entire form is submitted
+  resetItemDetails(index: number, type: string) { 
+    this.project.itemDetails[index].itemId = 0;
+    this.project.itemDetails[index].quantity = 0;
+    this.project.itemDetails[index].finalPrice = 0;
+    console.log(type + " was deselected and all its values zeroed in project.itemDetails array");
+  }
 
   /***** BASIC GETTERS *****/
 
@@ -443,40 +467,43 @@ export class ProjectDetailsComponent implements OnInit {
     
   }
 
+
   // BUILD PROJECT
 
   buildProject() {
 
     let selection: Selection;
     let index: number;
+    let details: ItemDetails;
     let costs: number[];
-
-    // TODO: check to make sure itemDetails objects that may exist but no longer part of roomType, reset
 
     // if selected in form, itemDetails objects should already be updated with itemId (and quantity if required)
     for (let c=0; c < 3; c++) { // once for each category subarray of selectionArray
       for (let i=0; i < this.selectionArray[c].length; i++) {
         selection = this.selectionArray[c][i];
         index = this.lookUpDetailsByType(selection.type); // look for this type in the project itemDetails array
+        
         if (index >= 0 && selection.checked) { 
           // itemDetails object will already have been updated - just need associated costs
+          details = this.project.itemDetails[index];
           costs = this.calculateCosts(selection); // costs for item, rough materials, and labor
           console.log("Costs for " + selection.type + " are " + costs);
           this.project.itemDetails[index].finalPrice = costs[0]; // set finalPrice
           console.log("ItemDetails object for " + selection.type + " updated with final price of " + this.project.itemDetails[index].finalPrice + " (" + costs[0] + ")");   
           this.buildEstimate(selection, costs); // add per-item additional costs into estimate
           console.log("Estimate updated with costs associated with " + selection.type);
-        } else if (index >= 0) { 
-            // if unchecked and itemDetails object for this type exists from prior selection, reset data
-            this.project.itemDetails[index].itemId = 0;
-            this.project.itemDetails[index].quantity = 0;
-            this.project.itemDetails[index].finalPrice = 0;
-            console.log(selection.type + " was deselected and all its values nullified in itemDetails array");
-        } // otherwise skip type; no need to add itemDetails object
+        } else if (index >= 0) { // exists but was unchecked at form submission
+            this.resetItemDetails(index, selection.type);
+        } 
+        // otherwise skip type; no need to add itemDetails object at this point
       }
     }
 
-    // COMPLETE ESTIMATE - add remaining material & labor costs based on room dimensions, not items
+    // if an itemDetails exists in the project with an item type that is no longer relevant to the roomType,
+    // it will be left intact because it will not impact the estimate now or in the future unless the roomType
+    // is changed again and it becomes relevant
+
+    // complete estimate - add remaining material & labor costs based on room dimensions, not items
     if (this.project.materials.needFraming === true) {
       this.project.estimate.materialsCost += 10 * this.wallArea; // $10/SF of wall area
     }
@@ -505,8 +532,6 @@ export class ProjectDetailsComponent implements OnInit {
 
     // create ItemDetails array and Estimate object based on user input
     this.buildProject();
-
-    // TODO: verify all project properties are saving to back end
 
     // save project to database
     fetch("http://localhost:8080/api/project/", {
