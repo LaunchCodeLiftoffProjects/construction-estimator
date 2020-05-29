@@ -1,6 +1,4 @@
-<div class="container">
-    <!--TODO: use ngIf to display only after data loading-->
-
+<div class="container" *ngIf="dataLoaded === true">
     <!--Nested container with divs side-by-side to move project name, type, and dimensions to top right-->
     <div class="container mt-5">
         <div class="row justify-content-between">
@@ -10,13 +8,13 @@
             </div>
 
             <div class="col-6">
-                
+
                 <!--Name, type, and dimensions with edit button-->
                 <div *ngIf="!editingProject; else editProjectBlock" class="text-right">
                     <h4>{{project.name}} </h4>
                     <p class="lead">{{roomTitles[rooms.indexOf(project.roomType)]}}<br />
                     {{project.roomLength}}'L x {{project.roomWidth}}'W x {{project.roomHeight}}'H</p>
-                    <button class = "badge badge-info" (click) = "editingProject = true;">Edit</button>
+                    <button class = "badge badge-info" (click) = "editingProject = true">Edit</button>
                 </div>
 
                 <!--Visible only while editing name, type, and dimensions-->
@@ -28,7 +26,7 @@
                         <span class="lead">Room Type: {{roomTitles[rooms.indexOf(project.roomType)]}} </span>
                         <div class = "form-group">
                             <div class="form-check indent-left" *ngFor="let room of rooms; let r = index">
-                                <label class="form-check-label"><input #roomType required minlength="6" [(ngModel)]="project.roomType" (change)="createSelections()" [value]="rooms[r]" type="radio" class = "form-check-input" />{{roomTitles[r]}}</label>
+                                <label class="form-check-label"><input #roomType required minlength="6" [(ngModel)]="project.roomType" (change)="changedRoom = true; saveUncheckedItems();" [value]="rooms[r]" type="radio" class = "form-check-input" />{{roomTitles[r]}}</label>
                             </div>
                         </div>
                     </div>
@@ -40,13 +38,13 @@
                             <label><input #roomHeight="ngModel" required [(ngModel)]="project.roomHeight" type="number" class="form-control form-control-sm" required (change)="changedDimensions = changedDimensions + 1;" step="0.1" min='1' /> Ceiling Height (ft.)</label>
                         </div>
                         <!-- this is not working right now -->
+                        <!-- Note from Carrie: what does the changedDimensions > 3 do? You have to change dimension field(s) at least 4 times before it warns you? -->
                         <div *ngIf="changedDimensions > 3 && (project.roomHeight < 1 || project.roomLength < 1 || project.roomWidth < 1 || (!isNumber(project.roomHeight) || !isNumber(project.roomLength) || !isNumber(project.roomWidth)))"
                             class="alert alert-danger">
                             All Room Dimensions are required and must be valid numbers greater than zero.
-
                         </div>
                     </div>
-                    <button class="badge badge-success" (click) = "editingProject = false" >Done Editing</button>
+                    <button class="badge badge-success" (click) = "editingProject = false; changedDimensions = 0; calcMeasurements(); createSelections();" >Done Editing</button>
                 </ng-template>
 
             </div>
@@ -57,23 +55,23 @@
         <!--iterate through appliance, fixture, and finish sections-->
         <ng-container *ngFor="let category of categories; let c = index">
             <!--do not show appliance section unless the room is kitchen-->
-            <ng-container *ngIf=" project.roomType === 'kitchen' || (project.roomType !== 'kitchen' && category !== 'appliance') ">
+            <ng-container *ngIf="editingProject === false && (project.roomType === 'kitchen' || (project.roomType !== 'kitchen' && category !== 'appliance'))">
                 <div class="form-group" >
                     <h4 class="mt-4">{{categoryTitles[c]}}</h4>
-                    <div class="input-group mt-1" *ngFor="let selection of selectionArray; let i = index">
+                    <div class="input-group mt-1" *ngFor="let selection of selectionArray[c]; let i = index">
                         <ng-container *ngIf="category === selection.category">
                             <div class="col-4">
-                                <label class="lead"><input #type="ngModel" [checked]="selectionArray[i].quantity > 0 || selectionArray[i].selected != ''" [(ngModel)]="selectionArray[i].checked" (change)="changeChecked(selectionArray[i])" type="checkbox" /> {{selection.type}}</label>
+                                <label class="lead"><input #type="ngModel" [(ngModel)]="selectionArray[c][i].checked" (change)="changeChecked(selectionArray[c][i], i, c)" type="checkbox" /> {{selection.type}}</label>
                             </div>
                             <div class = "col-4">
-                                <select #selected="ngModel" [(ngModel)]="selectionArray[i].selected" class="custom-select w-100" (change)="changeSelected(selectionArray[i])">
-                                    <!-- <option>(Select an option)</option> -->
-                                    <option *ngFor="let options of getOptions(selection.type)" [value]="options" [selected]="selectionArray[i].selected == options">{{options.name}}</option>
+                                <!-- TODO: find a different way to have dropdown menu show blank if user has not selected the type -->
+                                <select #options="ngModel" [(ngModel)]="selectionArray[c][i].selected" class="custom-select w-100" (change)="changeSelected(selectionArray[c][i], i, c)">
+                                    <option *ngFor="let option of getOptions(selection.type)" [ngValue]="option" [selected]="option.id === selectionArray[c][i].selected.id ">{{option.name}}</option>
                                 </select>
                             </div>
                             <div class="col-2">
                                 <ng-container *ngIf="calcByQuantity.includes(selection.type)">
-                                    <input #quantity="ngModel" [(ngModel)]="selectionArray[i].quantity" type="number" step="1" min = '0' class="form-control form-control-sm w-75 h-100" (change)="changeQuantity(selectionArray[i])"/>
+                                    <input #quantity="ngModel" [(ngModel)]="selectionArray[c][i].quantity" type="number" step="1" min = '0' class="form-control form-control-sm w-75 h-100" (change)="changeQuantity(selectionArray[c][i], i, c)"/>
                                 </ng-container>
                             </div> 
                             <div class="col-2"></div>
@@ -84,7 +82,7 @@
         </ng-container>
         <br />
 
-        <h4 class="mt-5">Materials</h4>
+        <h4 class="mt-3">Materials</h4>
         <div class="form-group">
             <p class="lead">Will you be adding or replacing any of the following?</p>
             <label class = "checkbox"><input #plumbingSystem="ngModel" [(ngModel)]="project.materials.needPlumbingSystem" type="checkbox" /> Plumbing System</label>
@@ -94,7 +92,7 @@
         </div>
         <br />
 
-        <h4 class="mt-5">Labor</h4>
+        <h4 class="mt-3">Labor</h4>
         <div class="form-group">
             <p class="lead">Will you be hiring any subcontractors?</p>
             <label class = "checkbox"><input #plumbing="ngModel" [(ngModel)]="project.labor.needPlumbingSub"  type="checkbox" /> Plumbing</label>
@@ -105,9 +103,9 @@
         <br />
 
         <div class="form-group text-right">
-            <button (click)='saveProject()' class="btn btn-info" >Get Estimate</button>
+            <button (click)='saveProject()' class="btn btn-info">Get Estimate</button>
         </div>
 
     </div>
-
+        
 </div>

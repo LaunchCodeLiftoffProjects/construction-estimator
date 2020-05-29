@@ -23,9 +23,6 @@ export class Project {
         this.roomWidth = roomWidth;
         this.roomHeight = roomHeight;
         this.itemDetails = [];
-        // these are causing problems on backend. Can be undefined for new projects
-        // this.materials = new Materials;
-        // this.labor = new Labor;
     }
 
 }

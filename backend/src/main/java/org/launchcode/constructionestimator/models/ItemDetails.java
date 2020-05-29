@@ -54,11 +54,11 @@ public class ItemDetails extends AbstractEntity {
         this.quantity = quantity;
     }
 
-    public int getPriceEstimate() {
+    public int getFinalPrice() {
         return finalPrice;
     }
 
-    public void setPriceEstimate(int priceEstimate) {
-        this.finalPrice = priceEstimate;
+    public void setFinalPrice(int finalPrice) {
+        this.finalPrice = finalPrice;
     }
 }
