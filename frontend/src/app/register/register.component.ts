@@ -40,11 +40,8 @@ export class RegisterComponent implements OnInit {
       window.location.reload();
     }
 
-    if (this.isLoggedIn) {
-      this.router.navigate(['/user/profile/']);
-    }
-
     this.shuffle(this.imagePaths);
+
   }
 
 
@@ -85,30 +82,6 @@ export class RegisterComponent implements OnInit {
       }
     );
 
-
-    
-    // OLD FETCH POST TO SERVER
-    // fetch('http://localhost:8080/api/user', {
-    //   method: 'POST',
-    //   headers: {
-    //     'Content-Type': 'application/json',
-    //     'Access-Control-Allow-Origin': '*',
-    //     'Access-Control-Allow-Credentials': 'true'
-    //   },
-    //   body: JSON.stringify(user),
-    // }).then(function(response) {
-    //   response.json().then(function(json) {
-    //     this.id = Number(json.id);
-
-    //     console.log(this.id);
-
-    //     this.router.navigate(['/user/profile/', this.id]);
-    //   }.bind(this));
-    // }.bind(this)).then(function(data) {
-    //   console.log('Success:', data);
-    // }).catch(function(error) {
-    //   console.error('Error:', error);
-    // });
   }
 
   shuffle(array: string[]): string[] {

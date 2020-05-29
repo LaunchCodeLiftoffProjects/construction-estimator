@@ -12,6 +12,8 @@ import { FormGroup, Validators, FormControl } from '@angular/forms';
   styleUrls: ['./create-project.component.css']
 })
 export class CreateProjectComponent implements OnInit {
+  project = new Project('', 'kitchen', null, null, null);
+  form: any = {};
   id: number;
   selectedRoom: string = "kitchen";
   changedName: boolean = false;
@@ -22,6 +24,7 @@ export class CreateProjectComponent implements OnInit {
   showAdminBoard = false;
   showModeratorBoard = false;
   username: string;
+  greaterThanZero = new FormControl(0, [Validators.max(100000), Validators.min(1)]);
 
 
   constructor(private route: ActivatedRoute, private router: Router, private tokenStorageService: TokenStorageService) { }
@@ -45,10 +48,9 @@ export class CreateProjectComponent implements OnInit {
     
   }
 
-  saveProject(name: string, roomLength: number, roomWidth: number, roomHeight: number) {
-    let project = new Project(name, this.selectedRoom, roomLength, roomWidth, roomHeight);
+  saveProject() {
     let id: number;
-    console.log("saved project", project);
+    console.log("saved project", this.project);
     fetch('http://localhost:8080/api/project', {
       method: 'POST',
       headers: {
@@ -57,7 +59,7 @@ export class CreateProjectComponent implements OnInit {
         'Access-Control-Allow-Credentials': 'true',
         'Authorization': 'Barer ' + this.tokenStorageService.getToken()
       },
-      body: JSON.stringify(project),
+      body: JSON.stringify(this.project),
     }).then(function(response) {
       // get id number from response here { id: idNumber }
       response.json().then(function(json) {
@@ -65,23 +67,22 @@ export class CreateProjectComponent implements OnInit {
         this.id = Number(json.id);
         //this project.id gets changed, as it should. I tried using an id field on the component class itself, but I encountered the same issue (see below)
         console.log("json ids", this.id);
+        this.tokenStorageService.saveProject(this.id);
         this.router.navigate(['/project/add-details/', this.id]);
-
+       
       }.bind(this));
     }.bind(this)).then(function(data) {
       console.log('Success:', data);
     }).catch(function(error) {
       console.error('Error:', error);
     });
-    //This project.id gets set back to its initial value of undefined. The this.id field did the same thing - it changed and then got reset to 12 on this line.
-    // console.log('id assigned', this.project.id);
-    //this router link works when the id is given a value before running the fetch, but occassionally it will send you back to the project/create?roomType=whatever which is weird...
+    
   }
 
   //event handler for the radio button's change event
   updateProjectRoomType (event: any) {
     //update the ui
-    this.selectedRoom = event.target.value;
+    this.project.roomType = event.target.value;
   }
 
 

@@ -1,25 +1,55 @@
- 
- <div class="container">
+<div class="container">
 
-        <div class="mt-5">
-            <h2 class="text-info">All Projects</h2>
-        </div>
+    <div class="mt-5">
+        <h2 class="text-info">All Projects</h2>
+    </div>
 
-        <div *ngIf="! projects">
-            <p class="lead">Hey there! You do not have any projects yet.<br /> 
-                Why not <a class="text-info" [routerLink]="'/project/create'">create</a> one?</p>
-        </div>
-
+    <div *ngIf="! projects">
+        <p class="lead">Hey there! You do not have any projects yet.<br />
+            Why not <a class="text-info" [routerLink]="'/project/create'">create</a> one?</p>
+    </div>
+    <div class="row justify-content-between">
         <div>
-            <ul>
-                <li class="lead" *ngFor="let project of projects">{{project.name}}</li>
-            </ul>
+            <div class="col-14">
+                <div>
+                    <div *ngFor="let project of projects; let index = p">
+                        <div class="btn" (click)="selectedProject = setSelectedProject(project)">
+                            <h4 class="text"> 
+                                <u [class.text-info]="project === selectedProject">{{project.name}}</u>
+                            </h4>
+                        </div>
+                        <br>
+                    </div>
+                </div>
+                <br>
+                <h4 class="text-info"> &nbsp; &nbsp; + <a class="text-info" [routerLink]="'/project/create'">New Project</a></h4>
+            </div>
         </div>
 
+        <div class="col-8">
+            
+            
+                <div class="text-right" *ngIf="selectedProject !== null" >
+                    <h4 class="text-info mt-4"> Appliances Cost: ${{selectedProject.estimate.appliancesCost}} USD</h4>
+                    <h4 class="text-info mt-4"> Fixtures Cost: ${{selectedProject.estimate.fixturesCost}} USD</h4>
+                    <h4 class="text-info mt-4"> Finishes Cost: ${{selectedProject.estimate.finishesCost}} USD</h4>
+                    <h4 class="text-info mt-4"> Materials Cost: ${{selectedProject.estimate.materialsCost}} USD</h4>
+                    <h4 class="text-info mt-4"> Labor Cost: ${{selectedProject.estimate.laborCost}} USD</h4>
+                    <h4 class="text-info mt-4"> TOTAL ESTIMATE: ${{selectedProject.estimate.totalCost}} USD</h4>
+                    <br>
+                    <button class="btn btn-info" [routerLink]="'/project/add-details/' + selectedProject.id">Update My
+                        Project</button>
+                </div>
+           
+        </div>
     </div>
+</div>
 
-    <div class="container">
 
-        <router-outlet></router-outlet>
-    
-    </div>
+
+
+<!-- <div class="container">
+
+    <router-outlet></router-outlet>
+
+</div> -->

@@ -23,12 +23,12 @@ const routes: Routes = [
   {path: 'project/create' , component: CreateProjectComponent},
   {path: 'project/add-details/:id' , component: ProjectDetailsComponent},
   {path: 'project/list', component: ProjectListComponent},
-  {path: '**', component: PageNotFoundComponent},
-  { path: 'user', component: BoardUserComponent },
-  { path: 'mod', component: BoardModeratorComponent },
-  { path: 'admin', component: BoardAdminComponent },
-  { path: '', redirectTo: 'login', pathMatch: 'full' }
-];
+  {path: 'user', component: BoardUserComponent},
+  {path: 'mod', component: BoardModeratorComponent},
+  {path: 'admin', component: BoardAdminComponent},
+  {path: '', redirectTo: 'login', pathMatch: 'full'},
+  {path: '**', component: PageNotFoundComponent}
+]
 
 @NgModule({
   imports: [RouterModule.forRoot(routes, {

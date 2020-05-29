@@ -1,24 +1,28 @@
 [
     {
         "id": 1,
-        "name": "Hardwood",
+        "name": "Hardwood flooring",
         "room": [
             "living"
         ],
         "category": "finish",
         "type": "Flooring",
-        "price": 844
+        "price": 5,
+        "roughMaterial": 4,
+        "labor": 4
     },
     {
         "id": 2,
-        "name": "Ceramic tile",
+        "name": "Ceramic floor tile",
         "room": [
             "kitchen",
             "bath"
         ],
         "category": "finish",
         "type": "Flooring",
-        "price": 13
+        "price": 7,
+        "roughMaterial": 6,
+        "labor": 9
     },
     {
         "id": 3,
@@ -28,18 +32,22 @@
         ],
         "category": "finish",
         "type": "Flooring",
-        "price": 130
+        "price": 2,
+        "roughMaterial": 4,
+        "labor": 4
     },
     {
         "id": 4,
-        "name": "Vinyl tile or linoleum",
+        "name": "Vinyl floor tile or linoleum",
         "room": [
             "kitchen",
             "bath"
         ],
         "category": "finish",
         "type": "Flooring",
-        "price": 15
+        "price": 2,
+        "roughMaterial": 4,
+        "labor": 7
     },
     {
         "id": 5,
@@ -51,18 +59,21 @@
         ],
         "category": "finish",
         "type": "Walls",
-        "price": 134
+        "price": 1,
+        "roughMaterial": 0,
+        "labor": 3
     },
     {
         "id": 6,
-        "name": "Ceramic tile",
+        "name": "Ceramic wall tile",
         "room": [
-            "kitchen",
             "bath"
         ],
         "category": "finish",
         "type": "Walls",
-        "price": 69
+        "price": 5,
+        "roughMaterial": 6,
+        "labor": 25
     },
     {
         "id": 7,
@@ -74,7 +85,9 @@
         ],
         "category": "finish",
         "type": "Walls",
-        "price": 12
+        "price": 1,
+        "roughMaterial": 0,
+        "labor": 5
     },
     {
         "id": 8,
@@ -86,7 +99,9 @@
         ],
         "category": "fixture",
         "type": "Ceiling Light/Fan",
-        "price": 10
+        "price": 80,
+        "roughMaterial": 0,
+        "labor": 100
     },
     {
         "id": 108,
@@ -96,7 +111,9 @@
         ],
         "category": "fixture",
         "type": "Ceiling Light/Fan",
-        "price": 10
+        "price": 200,
+        "roughMaterial": 0,
+        "labor": 100
     },
     {
         "id": 9,
@@ -107,7 +124,9 @@
         ],
         "category": "fixture",
         "type": "Ceiling Light/Fan",
-        "price": 10
+        "price": 100,
+        "roughMaterial": 0,
+        "labor": 100
     },
     {
         "id": 101,
@@ -118,7 +137,9 @@
         ],
         "category": "fixture",
         "type": "Ceiling Light/Fan",
-        "price": 10
+        "price": 100,
+        "roughMaterial": 0,
+        "labor": 100
     },
     {
         "id": 10,
@@ -130,7 +151,9 @@
         ],
         "category": "fixture",
         "type": "Lighting",
-        "price": 120
+        "price": 15,
+        "roughMaterial": 0,
+        "labor": 80
     },
     {
         "id": 11,
@@ -142,7 +165,9 @@
         ],
         "category": "fixture",
         "type": "Lighting",
-        "price": 81
+        "price": 100,
+        "roughMaterial": 0,
+        "labor": 150
     },
     {
         "id": 12,
@@ -154,17 +179,21 @@
         ],
         "category": "fixture",
         "type": "Lighting",
-        "price": 1121
+        "price": 40,
+        "roughMaterial": 0,
+        "labor": 100
     },
     {
-        "id": 12,
-        "name": "Vanity bar",
+        "id": 86,
+        "name": "Vanity light",
         "room": [
             "bath"
         ],
         "category": "fixture",
         "type": "Lighting",
-        "price": 1121
+        "price": 50,
+        "roughMaterial": 0,
+        "labor": 75
     },
     {
         "id": 13,
@@ -176,7 +205,9 @@
         ],
         "category": "fixture",
         "type": "Electrical Outlets",
-        "price": 18
+        "price": 2,
+        "roughMaterial": 0,
+        "labor": 50
     },
     {
         "id": 14,
@@ -188,11 +219,13 @@
         ],
         "category": "fixture",
         "type": "Electrical Outlets",
-        "price": 616
+        "price": 10,
+        "roughMaterial": 0,
+        "labor": 50
     },
     {
         "id": 15,
-        "name": "Switches",
+        "name": "Single switch",
         "room": [
             "living",
             "kitchen",
@@ -200,7 +233,23 @@
         ],
         "category": "fixture",
         "type": "Electrical Switches",
-        "price": 1516
+        "price": 1,
+        "roughMaterial": 0,
+        "labor": 50
+    },
+    {
+        "id": 85,
+        "name": "Double switch",
+        "room": [
+            "living",
+            "kitchen",
+            "bath"
+        ],
+        "category": "fixture",
+        "type": "Electrical Switches",
+        "price": 3,
+        "roughMaterial": 0,
+        "labor": 50
     },
     {
         "id": 16,
@@ -210,7 +259,9 @@
         ],
         "category": "fixture",
         "type": "Ceiling Light/Fan",
-        "price": 6
+        "price": 150,
+        "roughMaterial": 0,
+        "labor": 100
     },
     {
         "id": 102,
@@ -220,7 +271,9 @@
         ],
         "category": "fixture",
         "type": "Ceiling Light/Fan",
-        "price": 6
+        "price": 100,
+        "roughMaterial": 0,
+        "labor": 100
     },
     {
         "id": 17,
@@ -230,7 +283,9 @@
         ],
         "category": "fixture",
         "type": "Bath & Shower",
-        "price": 10
+        "price": 400,
+        "roughMaterial": 0,
+        "labor": 1500
     },
     {
         "id": 18,
@@ -240,7 +295,9 @@
         ],
         "category": "fixture",
         "type": "Bath & Shower",
-        "price": 613
+        "price": 800,
+        "roughMaterial": 0,
+        "labor": 1800
     },
     {
         "id": 19,
@@ -250,7 +307,9 @@
         ],
         "category": "fixture",
         "type": "Bath & Shower",
-        "price": 16
+        "price": 600,
+        "roughMaterial": 0,
+        "labor": 1800
     },
     {
         "id": 20,
@@ -260,17 +319,69 @@
         ],
         "category": "fixture",
         "type": "Sink",
-        "price": 155
+        "price": 200,
+        "roughMaterial": 0,
+        "labor": 100
     },
     {
         "id": 21,
-        "name": "Stainless steel sink, divided",
+        "name": "Stainless steel sink, double",
         "room": [
             "kitchen"
         ],
         "category": "fixture",
         "type": "Sink",
-        "price": 11
+        "price": 200,
+        "roughMaterial": 0,
+        "labor": 100
+    },
+    {
+        "id": 80,
+        "name": "Kitchen faucet only",
+        "room": [
+            "kitchen"
+        ],
+        "category": "fixture",
+        "type": "Faucet",
+        "price": 150,
+        "roughMaterial": 0,
+        "labor": 100
+    },
+    {
+        "id": 81,
+        "name": "Kitchen faucet and pull-down sprayer",
+        "room": [
+            "kitchen"
+        ],
+        "category": "fixture",
+        "type": "Faucet",
+        "price": 200,
+        "roughMaterial": 0,
+        "labor": 100
+    },
+    {
+        "id": 83,
+        "name": "Bathroom faucet, center set",
+        "room": [
+            "bath"
+        ],
+        "category": "fixture",
+        "type": "Faucet",
+        "price": 50,
+        "roughMaterial": 0,
+        "labor": 100
+    },
+    {
+        "id": 84,
+        "name": "Bathroom faucet, wide set",
+        "room": [
+            "bath"
+        ],
+        "category": "fixture",
+        "type": "Faucet",
+        "price": 120,
+        "roughMaterial": 0,
+        "labor": 150
     },
     {
         "id": 22,
@@ -280,17 +391,21 @@
         ],
         "category": "fixture",
         "type": "Toilet",
-        "price": 99
+        "price": 150,
+        "roughMaterial": 20,
+        "labor": 400
     },
     {
         "id": 23,
-        "name": "Sink",
+        "name": "Bathroom sink",
         "room": [
             "bath"
         ],
         "category": "fixture",
         "type": "Sink",
-        "price": 195
+        "price": 80,
+        "roughMaterial": 0,
+        "labor": 150
     },
     {
         "id": 24,
@@ -300,7 +415,21 @@
         ],
         "category": "fixture",
         "type": "Sink",
-        "price": 186
+        "price": 160,
+        "roughMaterial": 0,
+        "labor": 120
+    },
+    {
+        "id": 130,
+        "name": "Sink/vanity combo",
+        "room": [
+            "bath"
+        ],
+        "category": "fixture",
+        "type": "Sink",
+        "price": 230,
+        "roughMaterial": 0,
+        "labor": 200
     },
     {
         "id": 25,
@@ -310,17 +439,33 @@
         ],
         "category": "appliance",
         "type": "Dishwasher",
-        "price": 1226
+        "price": 500,
+        "roughMaterial": 0,
+        "labor": 300
     },
     {
         "id": 26,
-        "name": "Refrigerator",
+        "name": "Refrigerator, top/bottom",
         "room": [
             "kitchen"
         ],
         "category": "appliance",
         "type": "Refrigerator",
-        "price": 190
+        "price": 800,
+        "roughMaterial": 0,
+        "labor": 0
+    },
+    {
+        "id": 131,
+        "name": "Refrigerator, side-by-side",
+        "room": [
+            "kitchen"
+        ],
+        "category": "appliance",
+        "type": "Refrigerator",
+        "price": 1400,
+        "roughMaterial": 0,
+        "labor": 0
     },
     {
         "id": 27,
@@ -330,7 +475,9 @@
         ],
         "category": "appliance",
         "type": "Oven/Range",
-        "price": 73
+        "price": 2000,
+        "roughMaterial": 0,
+        "labor": 0
     },
     {
         "id": 28,
@@ -340,71 +487,61 @@
         ],
         "category": "appliance",
         "type": "Oven/Range",
-        "price": 78
+        "price": 600,
+        "roughMaterial": 0,
+        "labor": 0
     },
     {
         "id": 29,
-        "name": "Range only",
+        "name": "Cooktop only",
         "room": [
             "kitchen"
         ],
         "category": "appliance",
         "type": "Oven/Range",
-        "price": 10
-    },
-    {
-        "id": 30,
-        "name": "Oven only",
-        "room": [
-            "kitchen"
-        ],
-        "category": "appliance",
-        "type": "Oven/Range",
-        "price": 120
-    },
-    {
-        "id": 31,
-        "name": "Microwave only",
-        "room": [
-            "kitchen"
-        ],
-        "category": "appliance",
-        "type": "Microwave/Hood",
-        "price": 68
+        "price": 400,
+        "roughMaterial": 0,
+        "labor": 150
     },
     {
         "id": 32,
-        "name": "Hood only",
+        "name": "Hood, wall-mount",
         "room": [
             "kitchen"
         ],
         "category": "appliance",
-        "type": "Microwave/Hood",
-        "price": 1082
+        "type": "Range Hood",
+        "price": 300,
+        "roughMaterial": 0,
+        "labor": 150
     },
     {
         "id": 33,
-        "name": "Microwave/hood combo",
+        "name": "Hood, under-cabinet",
         "room": [
             "kitchen"
         ],
         "category": "appliance",
-        "type": "Microwave/Hood",
-        "price": 1598
+        "type": "Range Hood",
+        "price": 50,
+        "roughMaterial": 0,
+        "labor": 100
     },
     {
         "id": 34,
-        "name": "Microwave & hood, separate",
+        "name": "Hood/microwave combo ",
         "room": [
             "kitchen"
         ],
         "category": "appliance",
-        "type": "Microwave/Hood",
-        "price": 186
+        "type": "Range Hood",
+        "price": 500,
+        "roughMaterial": 0,
+        "labor": 150
     },
     {
         "id": 35,
-        "name": "Vinyl double-hung & wood trim",
+        "name": "Vinyl double-hung window",
         "room": [
             "bath",
             "living",
@@ -412,11 +549,27 @@
         ],
         "category": "finish",
         "type": "Windows",
-        "price": 19
+        "price": 200,
+        "roughMaterial": 0,
+        "labor": 400
+    },
+    {
+        "id": 135,
+        "name": "Vinyl single-hung window",
+        "room": [
+            "bath",
+            "living",
+            "kitchen"
+        ],
+        "category": "finish",
+        "type": "Windows",
+        "price": 120,
+        "roughMaterial": 0,
+        "labor": 400
     },
     {
         "id": 36,
-        "name": "Wood double-hung & wood trim",
+        "name": "Wood double-hung window",
         "room": [
             "living",
             "bath",
@@ -424,7 +577,9 @@
         ],
         "category": "finish",
         "type": "Windows",
-        "price": 106
+        "price": 400,
+        "roughMaterial": 0,
+        "labor": 400
     },
     {
         "id": 37,
@@ -434,7 +589,9 @@
         ],
         "category": "appliance",
         "type": "Disposal",
-        "price": 12
+        "price": 100,
+        "roughMaterial": 30,
+        "labor": 200
     },
     {
         "id": 38,
@@ -446,11 +603,13 @@
         ],
         "category": "finish",
         "type": "Flooring",
-        "price": 189
+        "price": 2,
+        "roughMaterial": 4,
+        "labor": 4
     },
     {
         "id": 39,
-        "name": "Doors & trim",
+        "name": "Pre-hung MDF composite, solid core",
         "room": [
             "living",
             "kitchen",
@@ -458,11 +617,13 @@
         ],
         "category": "finish",
         "type": "Doors",
-        "price": 1285
+        "price": 200,
+        "roughMaterial": 0,
+        "labor": 250
     },
     {
         "id": 103,
-        "name": "Doors",
+        "name": "Pre-hung MDF composite, hollow core",
         "room": [
             "living",
             "kitchen",
@@ -470,31 +631,37 @@
         ],
         "category": "finish",
         "type": "Doors",
-        "price": 1285
+        "price": 100,
+        "roughMaterial": 0,
+        "labor": 250
     },
     {
-        "id": 40,
-        "name": "Vinyl double-hung, window only",
+        "id": 140,
+        "name": "Pre-hung MDF with glass lite(s)",
         "room": [
             "living",
             "kitchen",
             "bath"
         ],
         "category": "finish",
-        "type": "Windows",
-        "price": 9
+        "type": "Doors",
+        "price": 200,
+        "roughMaterial": 0,
+        "labor": 250
     },
     {
-        "id": 41,
-        "name": "Wood double-hung, window only",
+        "id": 141,
+        "name": "Pre-hung wood",
         "room": [
             "living",
             "kitchen",
             "bath"
         ],
         "category": "finish",
-        "type": "Windows",
-        "price": 1013
+        "type": "Doors",
+        "price": 400,
+        "roughMaterial": 0,
+        "labor": 250
     },
     {
         "id": 42,
@@ -504,7 +671,9 @@
         ],
         "category": "finish",
         "type": "Cabinets, Lower",
-        "price": 85
+        "price": 375,
+        "roughMaterial": 0,
+        "labor": 100
     },
     {
         "id": 43,
@@ -514,11 +683,13 @@
         ],
         "category": "finish",
         "type": "Cabinets, Upper",
-        "price": 15
+        "price": 100,
+        "roughMaterial": 0,
+        "labor": 100
     },
     {
         "id": 44,
-        "name": "Misc. lower cabinets",
+        "name": "Misc. lower cabinet",
         "room": [
             "living",
             "kitchen",
@@ -526,7 +697,9 @@
         ],
         "category": "finish",
         "type": "Cabinets, Lower",
-        "price": 189
+        "price": 200,
+        "roughMaterial": 0,
+        "labor": 150
     },
     {
         "id": 45,
@@ -538,7 +711,9 @@
         ],
         "category": "finish",
         "type": "Cabinets, Upper",
-        "price": 696
+        "price": 200,
+        "roughMaterial": 0,
+        "labor": 200
     },
     {
         "id": 46,
@@ -550,7 +725,9 @@
         ],
         "category": "finish",
         "type": "Countertop",
-        "price": 7
+        "price": 80,
+        "roughMaterial": 0,
+        "labor": 150
     },
     {
         "id": 47,
@@ -562,7 +739,9 @@
         ],
         "category": "finish",
         "type": "Countertop",
-        "price": 195
+        "price": 300,
+        "roughMaterial": 0,
+        "labor": 450
     },
     {
         "id": 48,
@@ -574,7 +753,9 @@
         ],
         "category": "finish",
         "type": "Countertop",
-        "price": 13
+        "price": 350,
+        "roughMaterial": 0,
+        "labor": 350
     },
     {
         "id": 49,
@@ -586,55 +767,13 @@
         ],
         "category": "finish",
         "type": "Countertop",
-        "price": 102
-    },
-    {
-        "id": 50,
-        "name": "Painted wood",
-        "room": [
-            "living"
-        ],
-        "category": "finish",
-        "type": "Countertop",
-        "price": 926
-    },
-    {
-        "id": 51,
-        "name": "Fire suppression system",
-        "room": [
-            "kitchen",
-            "bath",
-            "living"
-        ],
-        "category": "fixture",
-        "type": "Specialty",
-        "price": 139
-    },
-    {
-        "id": 52,
-        "name": "Heated flooring",
-        "room": [
-            "kitchen",
-            "bath",
-            "living"
-        ],
-        "category": "fixture",
-        "type": "Specialty",
-        "price": 685
-    },
-    {
-        "id": 53,
-        "name": "Sound system",
-        "room": [
-            "living"
-        ],
-        "category": "fixture",
-        "type": "Specialty",
-        "price": 1592
+        "price": 480,
+        "roughMaterial": 0,
+        "labor": 350
     },
     {
         "id": 54,
-        "name": "Painted wood",
+        "name": "Wood built-in, 4' wide",
         "room": [
             "living",
             "kitchen",
@@ -642,7 +781,9 @@
         ],
         "category": "finish",
         "type": "Shelving",
-        "price": 771
+        "price": 400,
+        "roughMaterial": 0,
+        "labor": 800
     },
     {
         "id": 55,
@@ -654,11 +795,13 @@
         ],
         "category": "finish",
         "type": "Shelving",
-        "price": 19
+        "price": 100,
+        "roughMaterial": 0,
+        "labor": 150
     },
     {
         "id": 56,
-        "name": "Vinyl",
+        "name": "MDF or PVC composite, standard size",
         "room": [
             "bath",
             "living",
@@ -666,11 +809,13 @@
         ],
         "category": "finish",
         "type": "Baseboards",
-        "price": 19
+        "price": 1,
+        "roughMaterial": 0,
+        "labor": 2
     },
     {
         "id": 57,
-        "name": "Wood",
+        "name": "MDF composite, 6\" to 7\"",
         "room": [
             "living",
             "bath",
@@ -678,7 +823,23 @@
         ],
         "category": "finish",
         "type": "Baseboards",
-        "price": 1535
+        "price": 2,
+        "roughMaterial": 0,
+        "labor": 2
+    },
+    {
+        "id": 157,
+        "name": "Natural wood",
+        "room": [
+            "living",
+            "bath",
+            "kitchen"
+        ],
+        "category": "finish",
+        "type": "Baseboards",
+        "price": 3,
+        "roughMaterial": 0,
+        "labor": 2
     },
     {
         "id": 58,
@@ -690,7 +851,9 @@
         ],
         "category": "finish",
         "type": "Trim",
-        "price": 139
+        "price": 2,
+        "roughMaterial": 0,
+        "labor": 2
     },
     {
         "id": 59,
@@ -701,79 +864,108 @@
         ],
         "category": "finish",
         "type": "Trim",
-        "price": 175
+        "price": 2,
+        "roughMaterial": 0,
+        "labor": 2
     },
     {
         "id": 60,
-        "name": "Chair rail & wainscoting",
+        "name": "Chair rail & wood wainscoting",
         "room": [
             "living",
             "kitchen"
         ],
         "category": "finish",
         "type": "Trim",
-        "price": 164
+        "price": 12,
+        "roughMaterial": 0,
+        "labor": 6
+    },
+    {
+        "id": 160,
+        "name": "Chair rail & MDF composite wainscoting",
+        "room": [
+            "living",
+            "kitchen"
+        ],
+        "category": "finish",
+        "type": "Trim",
+        "price": 3,
+        "roughMaterial": 0,
+        "labor": 6
     },
     {
         "id": 61,
-        "name": "Ceramic",
+        "name": "Ceramic tile backsplash",
         "room": [
             "kitchen"
         ],
         "category": "finish",
         "type": "Backsplash",
-        "price": 88
+        "price": 5,
+        "roughMaterial": 6,
+        "labor": 4
     },
     {
         "id": 62,
-        "name": "Glass",
+        "name": "Glass tile backsplash",
         "room": [
             "kitchen"
         ],
         "category": "finish",
         "type": "Backsplash",
-        "price": 16
+        "price": 9,
+        "roughMaterial": 6,
+        "labor": 25
     },
     {
         "id": 63,
-        "name": "Metallic",
+        "name": "Metal backsplash",
         "room": [
             "kitchen"
         ],
         "category": "finish",
         "type": "Backsplash",
-        "price": 122
+        "price": 122,
+        "roughMaterial": 6,
+        "labor": 25
     },
     {
         "id": 64,
-        "name": "Stone",
+        "name": "Stone tile backsplash",
         "room": [
             "kitchen"
         ],
         "category": "finish",
         "type": "Backsplash",
-        "price": 1216
+        "price": 10,
+        "roughMaterial": 6,
+        "labor": 10
     },
     {
         "id": 65,
-        "name": "Stone tile",
+        "name": "Stone floor tile",
         "room": [
             "bath",
             "kitchen"
         ],
         "category": "finish",
         "type": "Flooring",
-        "price": 16
+        "price": 10,
+        "roughMaterial": 6,
+        "labor": 7
     },
     {
         "id": 66,
-        "name": "Stone",
+        "name": "Stone wall tile",
         "room": [
             "kitchen",
             "bath"
         ],
         "category": "finish",
         "type": "Walls",
-        "price": 889
+        "price": 10,
+        "roughMaterial": 6,
+        "labor": 10
     }
 ]
