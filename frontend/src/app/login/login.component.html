@@ -1,75 +1,81 @@
+<body class="QE-bkg">
+
 <div class="container">
-    <br>
-    <h3 class="text-info mt-5">Log in to an Existing Account</h3>
-    <br>
-      <form
-       
-        name="form"
-        (ngSubmit)="f.form.valid && onSubmit()"
-        #f="ngForm"
-        novalidate
-        
-      >
-        <div class="form-group">
-          
-          <input placeholder="E-mail Address"
-            type="email"
-            class="form-control"
-            name="email"
-            [(ngModel)]="form.email"
-            required
-            pattern="^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"
-            #email="ngModel"
-          />
-          <div
-            class="alert alert-danger"
-            role="alert"
-            *ngIf="email.invalid && email.touched"
-          >
-            Email is required and must be valid email.
+
+  <div class="logo-spacer"></div>
+
+  <div class="container w-100">
+    <div class="row justify-content-between">
+
+      <!--Login block-->
+      <div class="container col-6">
+
+        <p class="lead">Welcome to Quick&bull;Est, where homeowners create custom projects and get realistic estimates 
+          for every potential cost. Whatever you can dream up &mdash; we can estimate it!</p> 
+          <p><a [routerLink]="'/about'" class="text-info">LEARN MORE >>></a></p>
+
+        <h4 class="text-info mt-5">Log in to create a project</h4>
+
+        <form name="form" (ngSubmit)="f.form.valid && onSubmit()" #f="ngForm" novalidate>
+
+          <div class="form-group">            
+            <input #email="ngModel" placeholder="E-mail Address" type="email" class="form-control form-control-sm w-100" name="email" 
+              [(ngModel)]="form.email" required pattern="^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$" />
+            <div class="alert alert-danger" role="alert" *ngIf="email.invalid && email.touched">
+              Please enter a valid e-mail address.
+            </div>
           </div>
-        </div>
-        <div class="form-group">
+
+          <div class="form-group">
+            <input #password="ngModel" placeholder="Password" type="password" class="form-control form-control-sm w-100"
+              name="password" [(ngModel)]="form.password" required minlength="6" />
+            <div class="alert alert-danger" role="alert" *ngIf="f.invalid && password.touched">
+              <div *ngIf="password.errors.required">
+                Password is required.
+              </div>
+              <div *ngIf="password.errors.minlength">
+                Password must be at least 6 characters long.
+              </div>
+            </div>
+          </div>
+
+          <div>
+              <p>Don't have an account yet? <a  class="text-info text-bold" [routerLink]="'/register'">Register here.</a></p>
+          </div>
+
+          <div class="form-group text-right">
+              <button class="btn btn-info btn-sm" type="submit" [disabled]="!f.form.valid">Log in</button>
+          </div>
           
-          <input placeholder="Password"
-            type="password"
-            class="form-control"
-            name="password"
-            [(ngModel)]="form.password"
-            required
-            minlength="6"
-            #password="ngModel"
-          />
-          <div
-            class="alert alert-danger"
-            role="alert"
-            *ngIf="f.invalid && password.touched"
-          >
-            <div *ngIf="password.errors.required">Password is required.</div>
-            <div *ngIf="password.errors.minlength">
-              Password must be at least 6 characters
+          <div class="alert alert-danger" role="alert" *ngIf="f.submitted && isLoginFailed">
+            Sorry! That e-mail and password combination is invalid.
+          </div>
+          
+        </form>
+          
+      </div>
+
+      <!--Spacer column-->
+      <div class="container col-1">
+      </div>
+
+      <!--Image block-->
+      <div class="container col-5">
+
+        <!--Carousel-->
+        <div class="mt-5" id="photos" class="carousel slide" data-ride="carousel" data-interval=4500>
+          <div class="carousel-inner">
+            <div class="carousel-item" [class.active]="i===0" *ngFor="let imagePath of imagePaths; let i=index">
+              <img class="d-block w-100" [src]=imagePaths[i] />
             </div>
           </div>
         </div>
-        <div>
-            <p>Need to register? <a  class="text-info" [routerLink]="'/register'">Register here.</a></p>
-        </div>
 
-        <div class="form-group text-right">
-            <button class="btn btn-info" type="submit" [disabled]="!f.form.valid">Log in</button>
-        </div>
-        
-          <div
-            class="alert alert-danger"
-            role="alert"
-            *ngIf="f.submitted && isLoginFailed"
-          >
-            Login Failed: Email or Password is incorrect.
-          </div>
-        
+      </div>
 
-      </form>
-  
 
-    
+    </div>
   </div>
+</div>
+
+</body>

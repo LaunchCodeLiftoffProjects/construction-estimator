@@ -1,17 +1,59 @@
-/* You can add global styles to this file, and also import other style files */
 
-.indent-left {
-    margin-left: 30px;
+/* make sure bkg image doesn't get cut off at bottom */
+html, body, app-root {
+    height: 100%;
 }
 
+/* sets background image if class is used in <body> tag on any given component */
+.QE-bkg {
+    position: relative; /* this is apparently important for carousel to play continuously in foreground */
+    background-size: 90vh;
+    background-color: white;
+    background-image: url('/assets/QE_bkg_outline.png');
+    background-repeat: no-repeat;
+    background-position: top left;
+    background-attachment: fixed;
+}
+
+/* allows for consistent spacer below the header on each page to prevent overlap with logo */
+.logo-spacer {
+    height: 100px;
+}
+
+/* quick adjustment for bolded text */
+.text-bold {
+    font-weight: bold;
+}
+
+/* change cursor to pointer for non-traditional buttons */
+.pointer {
+    cursor: pointer;
+}
+
+/* inline button spacer */
+.btn-spacer {
+    margin-right: 20px;
+}
+
+/* adjust spacing between checkboxes and their labels */
 .checkbox label, .checkbox input[type=checkbox]{
     margin-left: 30px;
 }
 
+.border-solid {
+    border-color: #1a1a1a !important;
+    border-style: solid;
+    border-width: 1px;
+  }
+
 .ng-valid[required], .ng-valid.required  {
-    border-left: 5px solid #42A948; /* green */
-}
+    border-left: 5px solid #679008; /* green */
+} 
   
 .ng-invalid:not(form)  {
-    border-left: 5px solid #a94442; /* red */
+    border-left: 5px solid #444444; /* red */
+}
+
+input.ng-invalid.ng-touched {
+    border-left: 5px solid #b9190e;
 }

@@ -7,7 +7,8 @@ import { Router, RouterModule, ActivatedRoute, ParamMap, NavigationExtras } from
 import { AuthService } from '../_services/auth.service';
 import { TokenStorageService } from '../_services/token-storage.service';
 
-
+// jsQuery needed to autoplay carousel when using Angular routing
+declare var $: any;
 
 @Component({
   selector: 'app-register',
@@ -25,7 +26,11 @@ export class RegisterComponent implements OnInit {
   id: number;
   passwordMismatch: boolean = false;
 
- constructor(private route: ActivatedRoute, private router: Router, private authService: AuthService, private tokenStorage: TokenStorageService) { }
+  imagePaths: string[] = ["/assets/examples/bath_tan.jpg", "/assets/examples/bedroom_chevron.jpg",
+                          "/assets/examples/bedroom_luxe.jpg", "/assets/examples/kitchen_grey.jpg",
+                          "/assets/examples/kitchen_white.jpg", "/assets/examples/living_industrial.jpg"];
+
+  constructor(private route: ActivatedRoute, private router: Router, private authService: AuthService, private tokenStorage: TokenStorageService) { }
 
   ngOnInit() {
 
@@ -33,9 +38,15 @@ export class RegisterComponent implements OnInit {
       this.isLoggedIn = true;
       this.tokenStorage.signOut();
       window.location.reload();
-    }
+    } 
 
-    
+    this.shuffle(this.imagePaths);
+
+    // force autoplay carousel with Angular routing
+    $(document).ready(function() {
+      $('.carousel').carousel();
+    })
+
   }
 
 
@@ -69,41 +80,29 @@ export class RegisterComponent implements OnInit {
         this.tokenStorage.saveUser(data);
         this.router.navigate(['/user/profile/']);
         
-
-       
       },
       err => {
         this.errorMessage = err.error.message;
         this.isSignUpFailed = true;
       }
     );
-    
-    // OLD FETCH POST TO SERVER
-    // fetch('http://localhost:8080/api/user', {
-    //   method: 'POST',
-    //   headers: {
-    //     'Content-Type': 'application/json',
-    //     'Access-Control-Allow-Origin': '*',
-    //     'Access-Control-Allow-Credentials': 'true'
-    //   },
-    //   body: JSON.stringify(user),
-    // }).then(function(response) {
-    //   response.json().then(function(json) {
-    //     this.id = Number(json.id);
-
-    //     console.log(this.id);
-
-    //     this.router.navigate(['/user/profile/', this.id]);
-    //   }.bind(this));
-    // }.bind(this)).then(function(data) {
-    //   console.log('Success:', data);
-    // }).catch(function(error) {
-    //   console.error('Error:', error);
-    // });
-
 
   }
 
-
+  shuffle(array: string[]): string[] {
+    let currentIndex = array.length, temporaryValue, randomIndex;
+  
+    // While there remain elements to shuffle...
+    while (0 !== currentIndex) { 
+      // Pick a remaining element...
+      randomIndex = Math.floor(Math.random() * currentIndex);
+      currentIndex -= 1;
+      // And swap it with the current element.
+      temporaryValue = array[currentIndex];
+      array[currentIndex] = array[randomIndex];
+      array[randomIndex] = temporaryValue;
+    }
+    return array;
+  }
 
 }

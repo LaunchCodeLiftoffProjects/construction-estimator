@@ -10,6 +10,7 @@ import { Router, NavigationEnd } from '@angular/router';
 })
 
 export class HeaderComponent implements OnInit {
+  
   roles: string[] = [];
   isLoggedIn = false;
   mySubscription: any;
