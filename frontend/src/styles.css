@@ -30,6 +30,11 @@ html, body, app-root {
     cursor: pointer;
 }
 
+/* inline button spacer */
+.btn-spacer {
+    margin-right: 20px;
+}
+
 /* adjust spacing between checkboxes and their labels */
 .checkbox label, .checkbox input[type=checkbox]{
     margin-left: 30px;

@@ -1,0 +1,12 @@
+table {
+    width: 75%;
+}
+
+td.category {
+    width: 65%;
+}
+
+td.amount {
+    width: 35%;
+    text-align: right;
+}

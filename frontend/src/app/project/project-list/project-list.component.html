@@ -2,50 +2,70 @@
 
     <div class="logo-spacer"></div>
 
-    <div>
-        <h2 class="text-info">All Projects</h2>
+    <div class="mb-5">
+        <h3 class="text-info">All Projects</h3>
+        <p class="lead">Click on a project name below to view the associated estimate.</p>
     </div>
 
-    <div *ngIf="! projects">
+    <div *ngIf="! projects; else projectListBlock">
         <p class="lead">Hey there! You do not have any projects yet.<br />
             Why not <a class="text-info" [routerLink]="'/project/create'">create</a> one?</p>
     </div>
-    <div class="row justify-content-between">
-        <div>
-            <div class="col-14">
-                <div>
-                    <!-- TODO: change button styling -->
-                    <div *ngFor="let project of projects; let index = p">
-                        <div class="btn" (click)="selectedProject = setSelectedProject(project)">
-                            <h4 class="text"> 
-                                <u [class.text-info]="project === selectedProject">{{project.name}}</u>
-                            </h4>
+
+    <ng-template #projectListBlock>
+        <div class="row justify-content-between mt-3">
+
+            <div class="col-4">
+                <div class="btn-group-vertical" >
+                    <button class="btn mt-2" [class.btn-outline-primary]="project !== selectedProject" [class.btn-info]="project === selectedProject" *ngFor="let project of projects; let index = p" (click)="selectedProject = setSelectedProject(project)">
+                        {{project.name}}
+                    </button>
+                    <h5 class="text-info mt-3">+ <a class="text-info" [routerLink]="'/project/create'">New Project</a></h5>
+                </div>   
+            </div>
+
+            <div class="col-8">
+                    
+                    <div class="text-left" *ngIf="selectedProject !== null" >
+                        <h4 class="text-info mb-3">Estimate for {{selectedProject.name}}</h4>
+                        <table class="lead">
+                            <tr>
+                                <td class="category">Appliances</td>
+                                <td class="amount">${{selectedProject.estimate.appliancesCost}} USD</td>
+                            </tr>
+                            <tr> 
+                                <td class="category">Fixtures</td> 
+                                <td class="amount">${{selectedProject.estimate.fixturesCost}} USD</td>
+                            </tr>
+                            <tr> 
+                                <td class="category">Finishes</td> 
+                                <td class="amount">${{selectedProject.estimate.finishesCost}} USD</td>
+                            </tr>                            <tr> 
+                                <td class="category">Rough Materials</td> 
+                                <td class="amount">${{selectedProject.estimate.materialsCost}} USD</td>
+                            </tr>                            <tr> 
+                                <td class="category">Labor</td> 
+                                <td class="amount">${{selectedProject.estimate.laborCost}} USD</td>
+                            </tr>
+                            <tr class="text-info"> 
+                                <td class="category">TOTAL</td> 
+                                <td class="amount">${{selectedProject.estimate.totalCost}} USD</td>
+                            </tr>
+                        </table>
+                        <div class="text-right w-75 mt-3">
+                            <button class="btn btn-sm btn-info" [routerLink]="'/project/add-details/' + selectedProject.id">Update Estimate</button>
                         </div>
-                        <br>
+
+                        <!-- TODO: Create ability to delete project and apply functionality to this button along with an alert to ask "are you sure? this cannot be undone" -->
+                        <div class="text-right w-75 mt-3">
+                            <p class="badge badge-primary mt-3 pointer" role="button">Delete {{selectedProject.name}}</p>
+                        </div>
+
                     </div>
-                </div>
-                <br>
-                <h4 class="text-info"> &nbsp; &nbsp; + <a class="text-info" [routerLink]="'/project/create'">New Project</a></h4>
+            
             </div>
         </div>
-
-        <div class="col-8">
-            
-            
-                <div class="text-right" *ngIf="selectedProject !== null" >
-                    <h4 class="text-info mt-4"> Appliances Cost: ${{selectedProject.estimate.appliancesCost}} USD</h4>
-                    <h4 class="text-info mt-4"> Fixtures Cost: ${{selectedProject.estimate.fixturesCost}} USD</h4>
-                    <h4 class="text-info mt-4"> Finishes Cost: ${{selectedProject.estimate.finishesCost}} USD</h4>
-                    <h4 class="text-info mt-4"> Materials Cost: ${{selectedProject.estimate.materialsCost}} USD</h4>
-                    <h4 class="text-info mt-4"> Labor Cost: ${{selectedProject.estimate.laborCost}} USD</h4>
-                    <h4 class="text-info mt-4"> TOTAL ESTIMATE: ${{selectedProject.estimate.totalCost}} USD</h4>
-                    <br>
-                    <button class="btn btn-info" [routerLink]="'/project/add-details/' + selectedProject.id">Update My
-                        Project</button>
-                </div>
-           
-        </div>
-    </div>
+    </ng-template>
 </div>
 
 
