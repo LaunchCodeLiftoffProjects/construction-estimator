@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { User } from 'src/app/user';
 import { ActivatedRoute, Router } from '@angular/router';
 // import { userInfo } from 'os';S
-import { UserDetails } from 'src/app/user-details';
+import { HomeDetails } from 'src/app/home-details';
 import { TokenStorageService } from 'src/app/_services/token-storage.service';
 
 @Component({
