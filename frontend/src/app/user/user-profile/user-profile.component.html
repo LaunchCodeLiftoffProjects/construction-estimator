@@ -35,12 +35,16 @@
 
     <div class="mt-5">
         <h4>My Projects</h4>
-        <div class="btn-group" *ngIf="user.projects">
-            <ng-container *ngFor="let project of user.projects">
-                <!-- TODO: link these to estimates on project list page -->
-                <button class="btn btn-primary mt-2 btn-spacer">{{project.name}}</button> 
-            </ng-container>        
-        </div>
-        <h5 class="text-info mt-3">+ <a class="text-info" [routerLink]="'/project/create'">New Project</a></h5>
+        <ng-container  *ngIf="user.projects">
+            <p>Click on a project name to view estimate.</p>
+            <div class="btn-group">
+                <ng-container *ngFor="let project of user.projects">
+                    <!-- TODO: link these to estimates on project list page -->
+                    <button class="btn btn-primary mt-2 btn-spacer">{{project.name}}</button> 
+                </ng-container>        
+            </div>
+        </ng-container>
+
+        <h5 class="text-info mt-3 mb-5">+ <a class="text-info" [routerLink]="'/project/create'">New Project</a></h5>
     </div>
 </div>
