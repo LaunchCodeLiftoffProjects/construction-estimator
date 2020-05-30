@@ -2,7 +2,32 @@
 /* make sure bkg image doesn't get cut off at bottom */
 html, body, app-root {
     height: 100%;
-    margin: 0;
+}
+
+/* sets background image if class is used in <body> tag on any given component */
+.QE-bkg {
+    position: relative; /* this is apparently important for carousel to play continuously in foreground */
+    background-size: 90vh;
+    background-color: white;
+    background-image: url('/assets/QE_bkg_outline.png');
+    background-repeat: no-repeat;
+    background-position: top left;
+    background-attachment: fixed;
+}
+
+/* allows for consistent spacer below the header on each page to prevent overlap with logo */
+.logo-spacer {
+    height: 100px;
+}
+
+/* quick adjustment for bolded text */
+.text-bold {
+    font-weight: bold;
+}
+
+/* change cursor to pointer for non-traditional buttons */
+.pointer {
+    cursor: pointer;
 }
 
 /* adjust spacing between checkboxes and their labels */

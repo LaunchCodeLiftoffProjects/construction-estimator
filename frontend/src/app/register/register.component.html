@@ -1,5 +1,10 @@
+<body class="QE-bkg">
+
 <div class="container">
-    <div class="container mt-5 w-100">
+
+    <div class="logo-spacer"></div>
+
+    <div class="container w-100">
         <div class="row justify-content-between">
 
             <!--Image block-->
@@ -7,7 +12,7 @@
                 <!--Carousel-->
                 <div class="mt-5" id="photos" class="carousel slide" data-ride="carousel" data-interval=4500>
                     <div class="carousel-inner">
-                        <div class="carousel-item" [class.active] = "i===0" *ngFor="let imagePath of imagePaths; let i=index">
+                        <div class="carousel-item" [class.active]="i===0" *ngFor="let imagePath of imagePaths; let i=index">
                             <img class="d-block w-100" [src]=imagePaths[i] />
                         </div>
                     </div>
@@ -69,7 +74,7 @@
                         </div>
                     </div>
                     <div>
-                        <p>Already registered? <a class="text-info" [routerLink]="'/login'">Login here.</a></p>
+                        <p>Already registered? <a class="text-info text-bold" [routerLink]="'/login'">Login here.</a></p>
                     </div>
 
                     <div class="form-group text-right">
@@ -80,3 +85,5 @@
         </div>
     </div>
 </div>
+
+</body>

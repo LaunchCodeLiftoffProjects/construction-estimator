@@ -14,7 +14,7 @@
                     <h4>{{project.name}} </h4>
                     <p class="lead">{{roomTitles[rooms.indexOf(project.roomType)]}}<br />
                     {{project.roomLength}}'L x {{project.roomWidth}}'W x {{project.roomHeight}}'H</p>
-                    <span class = "badge badge-info" (click) = "editingProject = true;" role="button" style="cursor:pointer">Edit</span>
+                    <span class = "badge badge-info pointer" (click) = "editingProject = true;" role="button">Edit</span>
                 </div>
 
                 <!--Visible only while editing name, type, and dimensions-->
@@ -44,7 +44,7 @@
                             All Room Dimensions are required and must be valid numbers greater than zero.
                         </div>
                     </div>
-                    <button class="badge badge-success" (click) = "editingProject = false; changedDimensions = 0; calcMeasurements(); createSelections();" >Done Editing</button>
+                    <span class="badge badge-success pointer" (click) = "editingProject = false; changedDimensions = 0; calcMeasurements(); createSelections();" role="button" >Done Editing</span>
                 </ng-template>
 
             </div>
