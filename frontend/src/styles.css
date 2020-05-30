@@ -35,14 +35,14 @@ html, body, app-root {
     margin-left: 30px;
 }
 
-/* TODO: adjust these colors to complement custom scheme */
-
 .ng-valid[required], .ng-valid.required  {
-    border-left: 5px solid #42A948; /* green */
+    border-left: 5px solid #679008; /* green */
 } 
   
 .ng-invalid:not(form)  {
     border-left: 5px solid #444444; /* red */
 }
 
-/* TODO: add red back for when error occurs */
+input.ng-invalid.ng-touched {
+    border-left: 5px solid #b9190e;
+}
