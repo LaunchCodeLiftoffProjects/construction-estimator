@@ -10,7 +10,6 @@ html, body, app-root {
     margin-left: 30px;
 }
 
-
 /* TODO: adjust these colors to complement custom scheme */
 
 .ng-valid[required], .ng-valid.required  {

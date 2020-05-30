@@ -60,6 +60,8 @@
                     <h4 class="mt-4">{{categoryTitles[c]}}</h4>
                     <div class="input-group mt-1" *ngFor="let selection of selectionArray[c]; let i = index">
                         <ng-container *ngIf="category === selection.category">
+                            <!-- TODO: change size of checkboxes? -->
+                            <!-- TODO: change color of checkboxes to orange -->
                             <div class="col-4">
                                 <label class="lead"><input #type="ngModel" [(ngModel)]="selectionArray[c][i].checked" (change)="changeChecked(selectionArray[c][i], i, c)" type="checkbox" /> {{selection.type}}</label>
                             </div>

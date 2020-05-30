@@ -7,7 +7,8 @@ import { Router, RouterModule, ActivatedRoute, ParamMap, NavigationExtras } from
 import { AuthService } from '../_services/auth.service';
 import { TokenStorageService } from '../_services/token-storage.service';
 
-
+// jsQuery needed to autoplay carousel when using Angular routing
+declare var $: any;
 
 @Component({
   selector: 'app-register',
@@ -27,8 +28,7 @@ export class RegisterComponent implements OnInit {
 
   imagePaths: string[] = ["/assets/examples/bath_tan.jpg", "/assets/examples/bedroom_chevron.jpg",
                           "/assets/examples/bedroom_luxe.jpg", "/assets/examples/kitchen_grey.jpg",
-                          "/assets/examples/kitchen_white.jpg", "/assets/examples/living_industrial.jpg", 
-                          "/assets/examples/living_cobalt.jpg"];
+                          "/assets/examples/kitchen_white.jpg", "/assets/examples/living_industrial.jpg"];
 
   constructor(private route: ActivatedRoute, private router: Router, private authService: AuthService, private tokenStorage: TokenStorageService) { }
 
@@ -38,9 +38,14 @@ export class RegisterComponent implements OnInit {
       this.isLoggedIn = true;
       this.tokenStorage.signOut();
       window.location.reload();
-    }
+    } 
 
     this.shuffle(this.imagePaths);
+
+    // force autoplay carousel with Angular routing
+    $(document).ready(function() {
+      $('.carousel').carousel();
+    })
 
   }
 

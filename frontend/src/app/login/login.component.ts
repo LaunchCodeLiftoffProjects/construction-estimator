@@ -5,6 +5,9 @@ import { EmailValidator } from '@angular/forms';
 import { Router, RouterModule, ActivatedRoute, ParamMap, NavigationExtras, NavigationEnd, Route, Data } from '@angular/router';
 import { HeaderComponent } from '../header/header.component';
 
+// jsQuery needed to autoplay carousel when using Angular routing
+declare var $: any;
+
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -41,6 +44,12 @@ export class LoginComponent implements OnInit {
     } 
 
     this.shuffle(this.imagePaths);
+
+    // force autoplay carousel with Angular routing
+    $(document).ready(function() {
+      $('.carousel').carousel();
+    })
+
   }
 
   ngOnDestroy() {
