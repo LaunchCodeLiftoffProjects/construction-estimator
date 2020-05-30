@@ -30,6 +30,9 @@
         <a class="nav-link" [routerLink]="'/user/profile'">MY PROFILE</a>
       </li>
       <li class="nav-item">
+        <a class="nav-link" [routerLink]="'/about'">HOW IT WORKS</a>
+      </li>
+      <li class="nav-item">
         <a class="nav-link" (click)="logout()" [routerLink]="'/login'">LOG OUT</a>
       </li>
     </ul>
@@ -41,10 +44,13 @@
         <span>&nbsp;</span>
       </li>
       <li class="nav-item">
-        <a class="nav-link" (click)="logout(); load()" [routerLink]="'/login'">LOG IN</a>
+        <a class="nav-link" [routerLink]="'/about'">HOW IT WORKS</a>
       </li>
       <li class="nav-item">
         <a class="nav-link" (click)="logout(); load()" [routerLink]="'/register'">REGISTER</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" (click)="logout(); load()" [routerLink]="'/login'">LOG IN</a>
       </li>
     </ul>
 

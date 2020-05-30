@@ -40,6 +40,12 @@ html, body, app-root {
     margin-left: 30px;
 }
 
+.border-solid {
+    border-color: #1a1a1a !important;
+    border-style: solid;
+    border-width: 1px;
+  }
+
 .ng-valid[required], .ng-valid.required  {
     border-left: 5px solid #679008; /* green */
 } 
