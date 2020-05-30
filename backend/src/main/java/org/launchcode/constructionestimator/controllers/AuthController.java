@@ -1,6 +1,7 @@
 package org.launchcode.constructionestimator.controllers;
 
 
+import org.launchcode.constructionestimator.models.HomeDetails;
 import org.launchcode.constructionestimator.models.Role;
 import org.launchcode.constructionestimator.models.User;
 import org.launchcode.constructionestimator.models.data.RoleRepository;
@@ -76,7 +77,11 @@ public class AuthController {
         Role userRole = roleRepository.findByName(ROLE_USER).get();
         roles.add(userRole);
 
+        // create an empty HomeDetails object and bind to user
+        HomeDetails homeDetails = new HomeDetails();
+
         user.setRoles(roles);
+        user.setHomeDetails(homeDetails);
         userRepository.save(user);
 
         Authentication authentication = authenticationManager.authenticate(

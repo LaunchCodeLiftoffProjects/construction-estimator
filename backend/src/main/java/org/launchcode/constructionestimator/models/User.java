@@ -24,7 +24,7 @@ public class User extends NamedEntity {
     @JoinColumn(name="user_id")
     private List<Project> projects = new ArrayList<>();
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     private HomeDetails homeDetails;
 
     @ManyToMany
