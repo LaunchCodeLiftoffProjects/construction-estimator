@@ -13,7 +13,6 @@
     <span class="navbar-toggler-icon"></span>
   </button>
 
-  <!-- TODO: fix margin of links on right -->
   <div class="collapse navbar-collapse text-right" role="navigation" id="navbar">
     <ul *ngIf="isLoggedIn" class="navbar-nav ml-auto">
 
@@ -25,7 +24,7 @@
         <a class="nav-link" [routerLink]="'/project/create'">CREATE NEW PROJECT</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" [routerLink]="'/project/list'">ALL PROJECTS</a>
+        <a class="nav-link" [routerLink]="'/project/list'">MY ESTIMATES</a>
       </li>
       <li class="nav-item">
         <a class="nav-link" [routerLink]="'/user/profile'">MY PROFILE</a>
