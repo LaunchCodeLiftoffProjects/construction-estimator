@@ -48,6 +48,8 @@ export class ProjectListComponent implements OnInit {
     }
     
     this.loadProject();
+   
+    
   }
 
   loadProject() {
@@ -78,6 +80,7 @@ export class ProjectListComponent implements OnInit {
         this.projects = refreshProject;
       }.bind(this));
     }.bind(this));
+
   }
 
 
