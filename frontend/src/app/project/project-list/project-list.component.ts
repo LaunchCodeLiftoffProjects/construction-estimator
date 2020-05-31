@@ -99,4 +99,35 @@ export class ProjectListComponent implements OnInit {
     }
   }
 
+  deleteProject(projectId:number) {
+    fetch(this.projectUrl + '/'+ projectId, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Credentials': 'true',
+        'Authorization': 'Barer ' + this.tokenStorageService.getToken()
+      }
+    }).then(function(response) {
+      response.json().then(function(json) {
+        let refreshProject: Project[] = [];
+        json.forEach(obj => {
+          
+          let project = new Project(obj.name, obj.roomType, obj.roomLength, obj.roomWidth, obj.roomHeight);
+          project.id = obj.id;
+          project.itemDetails = obj.itemDetails;
+          project.materials = obj.materials;
+          project.labor = obj.labor;
+          project.estimate = obj.estimate;
+          refreshProject.push(project);
+          if (project.id === this.projectId) {
+            this.selectedProject = project;
+          }
+        });
+        this.projects = refreshProject;
+      }.bind(this));
+    }.bind(this));
+    window.location.reload();
+  }
+
 }

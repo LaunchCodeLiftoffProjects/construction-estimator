@@ -40,7 +40,7 @@
             <div class="btn-group">
                 <ng-container *ngFor="let project of user.projects">
                     <!-- TODO: link these to estimates on project list page -->
-                    <button class="btn btn-primary mt-2 btn-spacer">{{project.name}}</button> 
+                    <button class="btn btn-primary mt-2 btn-spacer" (click)="getEstimate(project.id)">{{project.name}}</button> 
                 </ng-container>        
             </div>
         </ng-container>
