@@ -444,6 +444,8 @@ export class ProjectDetailsComponent implements OnInit {
   // TODO: need to switch over to a function that calculates the estimate totals for each category from
   // scratch every time a change is made (since continuing to add on will inflate indefinitely)
 
+  // TODO: need getSubtotal(c) specifically for three categories iterated through
+
   // build estimate object as each item is calculated
   buildEstimate(selection: Selection) {
 
