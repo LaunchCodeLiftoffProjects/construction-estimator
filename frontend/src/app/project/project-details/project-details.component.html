@@ -1,9 +1,9 @@
 <div class="container" *ngIf="dataLoaded === true">
 
     <div class="logo-spacer"></div>
-
-    <!--Nested container with divs side-by-side to move project name, type, and dimensions to top right-->
+    
     <div class="container">
+        <!--Nested container with divs side-by-side to move project name, type, and dimensions to top right-->
         <div class="row justify-content-between">
             <div class="col-6">
                 <h2 class="text-info">Project Details</h2>
@@ -45,7 +45,7 @@
                         <!-- Note from Carrie: what does the changedDimensions > 3 do? You have to change dimension field(s) at least 4 times before it warns you? -->
                         <div *ngIf="changedDimensions > 3 && (project.roomHeight < 1 || project.roomLength < 1 || project.roomWidth < 1 || (!isNumber(project.roomHeight) || !isNumber(project.roomLength) || !isNumber(project.roomWidth)))"
                             class="alert alert-danger">
-                            All Room Dimensions are required and must be valid numbers greater than zero.
+                            All room dimensions are required and must be valid numbers greater than zero.
                         </div>
                     </div>
                     <span class="badge badge-success pointer" (click) = "editingProject = false; changedDimensions = 0; calcMeasurements(); createSelections();" role="button" >Done Editing</span>
@@ -83,8 +83,7 @@
                         </ng-container>
                     </div>
                     <div class="mt-4">
-                        <!-- TODO: Need to call a new function here to get the right subtotal -->
-                        <h5 class="text-right">{{categoryTitles[c]}}: $XXXX</h5>
+                        <h4 class="text-right">{{categoryTitles[c]}}: ${{getCategorySubtotal(c)}}</h4>
                     </div>
                 </div>
             </ng-container>
@@ -93,29 +92,29 @@
         <h4 class="mt-4">Materials</h4>
         <div class="form-group">
             <p class="lead">Will you be adding or replacing any of the following?</p>
-            <label class = "checkbox"><input #plumbingSystem="ngModel" [(ngModel)]="project.materials.needPlumbingSystem" type="checkbox" /> Plumbing System</label>
-            <label class = "checkbox"><input #electricalSystem="ngModel" [(ngModel)]="project.materials.needElectricalSystem"  type="checkbox" /> Electrical System</label>
-            <label class = "checkbox"><input #framing="ngModel" [(ngModel)]="project.materials.needFraming"  type="checkbox" /> Wall Framing</label>
-            <label class = "checkbox"><input #drywall="ngModel" [(ngModel)]="project.materials.needDrywall"  type="checkbox" /> Plaster/Drywall</label>
+            <label class = "checkbox"><input #plumbingSystem="ngModel" [(ngModel)]="project.materials.needPlumbingSystem" (change)="calcEstimate()" type="checkbox" /> Plumbing System</label>
+            <label class = "checkbox"><input #electricalSystem="ngModel" [(ngModel)]="project.materials.needElectricalSystem"  (change)="calcEstimate()" type="checkbox" /> Electrical System</label>
+            <label class = "checkbox"><input #framing="ngModel" [(ngModel)]="project.materials.needFraming"  (change)="calcEstimate()" type="checkbox" /> Wall Framing</label>
+            <label class = "checkbox"><input #drywall="ngModel" [(ngModel)]="project.materials.needDrywall"  (change)="calcEstimate()" type="checkbox" /> Plaster/Drywall</label>
         </div>
         <div class="mt-4">
-            <h5 class="text-right">Materials: ${{project.estimate.materialsCost}}</h5>
+            <h4 class="text-right">Materials: ${{project.estimate.materialsCost}}</h4>
         </div>
 
         <h4 class="mt-4">Labor</h4>
         <div class="form-group">
             <p class="lead">Will you be hiring any subcontractors?</p>
-            <label class = "checkbox"><input #plumbing="ngModel" [(ngModel)]="project.labor.needPlumbingSub"  type="checkbox" /> Plumbing</label>
-            <label class = "checkbox"><input #electrical="ngModel" [(ngModel)]="project.labor.needElectricalSub"  type="checkbox" /> Electrical</label>
-            <label class = "checkbox"><input #roughCarpentry="ngModel" [(ngModel)]="project.labor.needRoughCarpentry"  type="checkbox" /> Rough Carpentry</label>
-            <label class = "checkbox"><input #finishWork="ngModel" [(ngModel)]="project.labor.needFinishWork"  type="checkbox" /> Finish Work</label>
+            <label class = "checkbox"><input #plumbing="ngModel" [(ngModel)]="project.labor.needPlumbingSub"  (change)="calcEstimate()" type="checkbox" /> Plumbing</label>
+            <label class = "checkbox"><input #electrical="ngModel" [(ngModel)]="project.labor.needElectricalSub"  (change)="calcEstimate()" type="checkbox" /> Electrical</label>
+            <label class = "checkbox"><input #roughCarpentry="ngModel" [(ngModel)]="project.labor.needRoughCarpentry"  (change)="calcEstimate()" type="checkbox" /> Rough Carpentry</label>
+            <label class = "checkbox"><input #finishWork="ngModel" [(ngModel)]="project.labor.needFinishWork"  (change)="calcEstimate()" type="checkbox" /> Finish Work</label>
         </div>
         <div class="mt-4">
-            <h5 class="text-right">Labor: ${{project.estimate.laborCost}}</h5>
+            <h4 class="text-right">Labor: ${{project.estimate.laborCost}}</h4>
         </div>
 
         <div class="mt-5">
-            <h4 class="text-right">Total Estimate: ${{project.estimate.totalCost}}</h4>
+            <h3 class="text-right text-info">Total Estimate: ${{project.estimate.totalCost}}</h3>
         </div>
 
         <div class="form-group mt-5 mb-5 text-right">

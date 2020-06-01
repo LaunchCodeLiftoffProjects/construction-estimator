@@ -902,9 +902,9 @@
         ],
         "category": "finish",
         "type": "Backsplash",
-        "price": 5,
+        "price": 20,
         "roughMaterial": 6,
-        "labor": 4
+        "labor": 25
     },
     {
         "id": 62,
@@ -914,7 +914,7 @@
         ],
         "category": "finish",
         "type": "Backsplash",
-        "price": 9,
+        "price": 36,
         "roughMaterial": 6,
         "labor": 25
     },
@@ -926,7 +926,7 @@
         ],
         "category": "finish",
         "type": "Backsplash",
-        "price": 122,
+        "price": 60,
         "roughMaterial": 6,
         "labor": 25
     },
@@ -938,9 +938,9 @@
         ],
         "category": "finish",
         "type": "Backsplash",
-        "price": 10,
+        "price": 40,
         "roughMaterial": 6,
-        "labor": 10
+        "labor": 25
     },
     {
         "id": 65,
