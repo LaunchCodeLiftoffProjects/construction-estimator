@@ -65,17 +65,16 @@
                     <div class="input-group mt-1" *ngFor="let selection of selectionArray[c]; let i = index">
                         <ng-container *ngIf="category === selection.category">
                             <div class="col-4">
-                                <label class="lead"><input #type="ngModel" [(ngModel)]="selectionArray[c][i].checked" (change)="changeChecked(selectionArray[c][i], i, c)" type="checkbox" /> {{selection.type}}</label>
+                                <label class="lead"><input #type="ngModel" [(ngModel)]="selectionArray[c][i].checked" (change)="changeChecked(i, c)" type="checkbox" /> {{selection.type}}</label>
                             </div>
                             <div class = "col-4">
-                                <!-- TODO: find a different way to have dropdown menu show blank if user has not selected the type -->
-                                <select #options="ngModel" [(ngModel)]="selectionArray[c][i].selected" class="custom-select w-100" (change)="changeSelected(selectionArray[c][i], i, c)">
-                                    <option *ngFor="let option of getOptions(selection.type)" [ngValue]="option" [selected]="option.id === selectionArray[c][i].selected.id ">{{option.name}}</option>
+                                <select #options="ngModel" [(ngModel)]="selectionArray[c][i].selected" class="custom-select w-100" (change)="changeSelected(i, c)">
+                                    <option *ngFor="let option of getOptions(selection.type)" [ngValue]="option" [selected]="selectionArray[c][i].selected !== null && option.id === selectionArray[c][i].selected.id">{{option.name}}</option>
                                 </select>
                             </div>
                             <div class="col-2">
                                 <ng-container *ngIf="calcByQuantity.includes(selection.type)">
-                                    <input #quantity="ngModel" [(ngModel)]="selectionArray[c][i].quantity" type="number" step="1" min = '0' class="form-control form-control-sm w-75 h-100" (change)="changeQuantity(selectionArray[c][i], i, c)"/>
+                                    <input #quantity="ngModel" [(ngModel)]="selectionArray[c][i].quantity" type="number" step="1" min = '0' class="form-control form-control-sm w-75 h-100" (change)="changeQuantity(i, c)"/>
                                 </ng-container>
                             </div> 
                             <div class="col-2">
