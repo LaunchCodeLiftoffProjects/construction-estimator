@@ -100,7 +100,7 @@
         "category": "fixture",
         "type": "Ceiling Light/Fan",
         "price": 80,
-        "roughMaterial": 0,
+        "roughMaterial": 10,
         "labor": 100
     },
     {
@@ -112,7 +112,7 @@
         "category": "fixture",
         "type": "Ceiling Light/Fan",
         "price": 200,
-        "roughMaterial": 0,
+        "roughMaterial": 10,
         "labor": 100
     },
     {
@@ -125,7 +125,7 @@
         "category": "fixture",
         "type": "Ceiling Light/Fan",
         "price": 100,
-        "roughMaterial": 0,
+        "roughMaterial": 10,
         "labor": 100
     },
     {
@@ -138,7 +138,7 @@
         "category": "fixture",
         "type": "Ceiling Light/Fan",
         "price": 100,
-        "roughMaterial": 0,
+        "roughMaterial": 10,
         "labor": 100
     },
     {
@@ -152,7 +152,7 @@
         "category": "fixture",
         "type": "Lighting",
         "price": 15,
-        "roughMaterial": 0,
+        "roughMaterial": 10,
         "labor": 80
     },
     {
@@ -166,7 +166,7 @@
         "category": "fixture",
         "type": "Lighting",
         "price": 100,
-        "roughMaterial": 0,
+        "roughMaterial": 10,
         "labor": 150
     },
     {
@@ -180,7 +180,7 @@
         "category": "fixture",
         "type": "Lighting",
         "price": 40,
-        "roughMaterial": 0,
+        "roughMaterial": 10,
         "labor": 100
     },
     {
@@ -192,7 +192,7 @@
         "category": "fixture",
         "type": "Lighting",
         "price": 50,
-        "roughMaterial": 0,
+        "roughMaterial": 10,
         "labor": 75
     },
     {
@@ -260,7 +260,7 @@
         "category": "fixture",
         "type": "Ceiling Light/Fan",
         "price": 150,
-        "roughMaterial": 0,
+        "roughMaterial": 10,
         "labor": 100
     },
     {
@@ -272,7 +272,7 @@
         "category": "fixture",
         "type": "Ceiling Light/Fan",
         "price": 100,
-        "roughMaterial": 0,
+        "roughMaterial": 10,
         "labor": 100
     },
     {
@@ -284,7 +284,7 @@
         "category": "fixture",
         "type": "Bath & Shower",
         "price": 400,
-        "roughMaterial": 0,
+        "roughMaterial": 15,
         "labor": 1500
     },
     {
@@ -296,7 +296,7 @@
         "category": "fixture",
         "type": "Bath & Shower",
         "price": 800,
-        "roughMaterial": 0,
+        "roughMaterial": 15,
         "labor": 1800
     },
     {
@@ -308,7 +308,7 @@
         "category": "fixture",
         "type": "Bath & Shower",
         "price": 600,
-        "roughMaterial": 0,
+        "roughMaterial": 15,
         "labor": 1800
     },
     {
@@ -320,7 +320,7 @@
         "category": "fixture",
         "type": "Sink",
         "price": 200,
-        "roughMaterial": 0,
+        "roughMaterial": 10,
         "labor": 100
     },
     {
@@ -332,7 +332,7 @@
         "category": "fixture",
         "type": "Sink",
         "price": 200,
-        "roughMaterial": 0,
+        "roughMaterial": 10,
         "labor": 100
     },
     {
@@ -440,7 +440,7 @@
         "category": "appliance",
         "type": "Dishwasher",
         "price": 500,
-        "roughMaterial": 0,
+        "roughMaterial": 25,
         "labor": 300
     },
     {
@@ -452,7 +452,7 @@
         "category": "appliance",
         "type": "Refrigerator",
         "price": 800,
-        "roughMaterial": 0,
+        "roughMaterial": 10,
         "labor": 0
     },
     {
@@ -464,7 +464,7 @@
         "category": "appliance",
         "type": "Refrigerator",
         "price": 1400,
-        "roughMaterial": 0,
+        "roughMaterial": 10,
         "labor": 0
     },
     {
@@ -476,7 +476,7 @@
         "category": "appliance",
         "type": "Oven/Range",
         "price": 2000,
-        "roughMaterial": 0,
+        "roughMaterial": 15,
         "labor": 0
     },
     {
@@ -488,7 +488,7 @@
         "category": "appliance",
         "type": "Oven/Range",
         "price": 600,
-        "roughMaterial": 0,
+        "roughMaterial": 15,
         "labor": 0
     },
     {
@@ -500,7 +500,7 @@
         "category": "appliance",
         "type": "Oven/Range",
         "price": 400,
-        "roughMaterial": 0,
+        "roughMaterial": 10,
         "labor": 150
     },
     {
@@ -512,7 +512,7 @@
         "category": "appliance",
         "type": "Range Hood",
         "price": 300,
-        "roughMaterial": 0,
+        "roughMaterial": 50,
         "labor": 150
     },
     {
@@ -524,7 +524,7 @@
         "category": "appliance",
         "type": "Range Hood",
         "price": 50,
-        "roughMaterial": 0,
+        "roughMaterial": 20,
         "labor": 100
     },
     {
@@ -536,7 +536,7 @@
         "category": "appliance",
         "type": "Range Hood",
         "price": 500,
-        "roughMaterial": 0,
+        "roughMaterial": 20,
         "labor": 150
     },
     {
