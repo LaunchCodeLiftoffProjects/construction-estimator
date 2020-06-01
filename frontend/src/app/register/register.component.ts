@@ -22,6 +22,7 @@ export class RegisterComponent implements OnInit {
   errorMessage = '';
   isLoggedIn = false;
   isLoginFailed = false;
+  roles: string[] = [];
 
   id: number;
   passwordMismatch: boolean = false;
@@ -36,8 +37,8 @@ export class RegisterComponent implements OnInit {
 
     if (this.tokenStorage.getToken()) {
       this.isLoggedIn = true;
-      this.tokenStorage.signOut();
-      window.location.reload();
+      this.roles = this.tokenStorage.getUser().roles;
+      this.router.navigate(['/user/profile']);
     } 
 
     this.shuffle(this.imagePaths);
@@ -78,6 +79,7 @@ export class RegisterComponent implements OnInit {
         this.isLoggedIn = true;
 
         this.tokenStorage.saveUser(data);
+        window.location.reload();
         this.router.navigate(['/user/profile/']);
         
       },
