@@ -37,11 +37,11 @@
                     <div class="form-group">
                         <div class = "input-group"> 
 
-                            <label><input #roomLength="ngModel" required [(ngModel)]="project.roomLength" type="number" class="form-control form-control-sm" required (change)="changedDimensions = changedDimensions + 1;" step="0.1" min='1' /> Length (ft.)</label>
-                            <label><input #roomWidth="ngModel" required [(ngModel)]="project.roomWidth" type="number" class="form-control form-control-sm" required (change)="changedDimensions = changedDimensions + 1;" step="0.1" min='1' /> Width (ft.)</label>
-                            <label><input #roomHeight="ngModel" required [(ngModel)]="project.roomHeight" type="number" class="form-control form-control-sm" required (change)="changedDimensions = changedDimensions + 1;" step="0.1" min='1' /> Ceiling Height (ft.)</label>
+                            <label><input #roomLength="ngModel" [(ngModel)]="project.roomLength" type="number" class="form-control form-control-sm" required (change)="changedDimensions = changedDimensions + 1;" step="0.1" min='1' /> Length (ft.)</label>
+                            <label><input #roomWidth="ngModel" [(ngModel)]="project.roomWidth" type="number" class="form-control form-control-sm" required (change)="changedDimensions = changedDimensions + 1;" step="0.1" min='1' /> Width (ft.)</label>
+                            <label><input #roomHeight="ngModel" [(ngModel)]="project.roomHeight" type="number" class="form-control form-control-sm" required (change)="changedDimensions = changedDimensions + 1;" step="0.1" min='1' /> Ceiling Height (ft.)</label>
                         </div>
-                        <!-- this is not working right now -->
+                        <!-- FIXME: this is not working right now -->
                         <!-- Note from Carrie: what does the changedDimensions > 3 do? You have to change dimension field(s) at least 4 times before it warns you? -->
                         <div *ngIf="changedDimensions > 3 && (project.roomHeight < 1 || project.roomLength < 1 || project.roomWidth < 1 || (!isNumber(project.roomHeight) || !isNumber(project.roomLength) || !isNumber(project.roomWidth)))"
                             class="alert alert-danger">
@@ -68,7 +68,7 @@
                                 <label class="lead"><input #type="ngModel" [(ngModel)]="selectionArray[c][i].checked" (change)="changeChecked(i, c)" type="checkbox" /> {{selection.type}}</label>
                             </div>
                             <div class = "col-4">
-                                <select #options="ngModel" [(ngModel)]="selectionArray[c][i].selected" class="custom-select w-100" (change)="changeSelected(i, c)">
+                                <select #options="ngModel" [(ngModel)]="selectionArray[c][i].selected" class="custom-select w-100" (change)="changeSelected(i, c)" [required]="selectionArray[c][i].checked">
                                     <option *ngFor="let option of getOptions(selection.type)" [ngValue]="option" [selected]="selectionArray[c][i].selected !== null && option.id === selectionArray[c][i].selected.id">{{option.name}}</option>
                                 </select>
                             </div>

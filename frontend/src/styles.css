@@ -40,20 +40,17 @@ html, body, app-root {
     margin-left: 30px;
 }
 
-.border-solid {
-    border-color: #1a1a1a !important;
-    border-style: solid;
-    border-width: 1px;
-  }
+
+/* bars to left of fields that are required, based on validity */
 
 .ng-valid[required], .ng-valid.required  {
     border-left: 5px solid #679008; /* green */
 } 
   
 .ng-invalid:not(form)  {
-    border-left: 5px solid #444444; /* red */
+    border-left: 5px solid #444444; /* charcoal */
 }
 
 input.ng-invalid.ng-touched {
-    border-left: 5px solid #b9190e;
+    border-left: 5px solid #b9190e; /* red */
 }
