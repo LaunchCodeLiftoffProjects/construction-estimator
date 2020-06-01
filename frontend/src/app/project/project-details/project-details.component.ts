@@ -242,7 +242,6 @@ export class ProjectDetailsComponent implements OnInit {
         this.selectionArray[c][i].costs = [lastSaved.costs[0],lastSaved.costs[1],lastSaved.costs[2]];
         this.saveItemDetails(this.selectionArray[c][i]); // save/update itemDetails object in project
       }
-      
     } else { // if type has just been unchecked
       this.resetSelection(selection); // but do not overwrite corresponding itemDetails object yet
     }  
@@ -250,17 +249,17 @@ export class ProjectDetailsComponent implements OnInit {
 
   // when selection is made in middle column, force checked and quantity
   changeSelected(i: number, c: number) {
-    let selection = this.selectionArray[c][i]; // existing object in array
+    let selection = this.selectionArray[c][i]; // get existing object in array
     console.log(selection.type + " selected: " + selection.selected.name); 
     if (selection.checked === false) {
       this.selectionArray[c][i].checked = true;
-    }  
-    let lastSaved: Selection = this.createSelectionObject(selection.type, selection.category); // just to check quantity
-    if (this.calcByQuantity.includes(selection.type) && lastSaved.quantity === 0) {
-      this.selectionArray[c][i].quantity = 1;
-    } else {
-      this.selectionArray[c][i].quantity = lastSaved.quantity;
-    }
+      let lastSaved: Selection = this.createSelectionObject(selection.type, selection.category); // just to check quantity
+      if (this.calcByQuantity.includes(selection.type) && lastSaved.quantity === 0) {
+        this.selectionArray[c][i].quantity = 1;
+      } else {
+        this.selectionArray[c][i].quantity = lastSaved.quantity;
+      }
+    }      
     let costs = this.calcCosts(this.selectionArray[c][i]);
     this.selectionArray[c][i].costs = [costs[0],costs[1],costs[2]];
     this.saveItemDetails(this.selectionArray[c][i]); // save/update itemDetails object in project
@@ -274,15 +273,20 @@ export class ProjectDetailsComponent implements OnInit {
         let lastSaved: Selection = this.createSelectionObject(selection.type, selection.category);
         this.selectionArray[c][i].checked = true;
         this.selectionArray[c][i].selected = lastSaved.selected; // this may be null
-        this.selectionArray[c][i].costs = [lastSaved.costs[0],lastSaved.costs[1],lastSaved.costs[2]];
-        this.saveItemDetails(this.selectionArray[c][i]); // save/update itemDetails object in project
+        if (selection.quantity < 0) {
+          this.selectionArray[c][i].quantity = lastSaved.quantity; // set back to last saved if accidentally set to negative while checked
+        }
+        if (lastSaved.selected !== null) {
+          this.selectionArray[c][i].costs = [lastSaved.costs[0],lastSaved.costs[1],lastSaved.costs[2]];
+          this.saveItemDetails(this.selectionArray[c][i]); // save/update itemDetails object in project
+        } // otherwise do not calculate costs or save itemDetails here because item has not yet been selected from options (still null)
     } else if (selection.quantity <= 0) {
         this.resetSelection(selection); // but do not overwrite corresponding itemDetails object yet
-    } else { // if quantity is being raised from 1 or more
+    } else if (selection.selected !== null) { // quantity is being raised from 1 or higher
         let costs = this.calcCosts(this.selectionArray[c][i]);
         this.selectionArray[c][i].costs = [costs[0],costs[1],costs[2]];
         this.saveItemDetails(this.selectionArray[c][i]); // update itemDetails object in project
-    }
+    } // otherwise do not calculate costs or save itemDetails here because item has not yet been selected from options (still null)
   }
  
   /***** SAVE ITEM DETAILS TO PROJECT EACH TIME VALUE IS CHANGED IN FORM *****/
@@ -298,6 +302,7 @@ export class ProjectDetailsComponent implements OnInit {
         this.project.itemDetails[index].quantity = selection.quantity; // overwrite quantity
         console.log("ItemDetails object for " + selection.type + " updated to " + selection.selected.name + " and quantity " + selection.quantity);
       } else {
+        // TODO: what happens if selection.selected is null
         let details = new ItemDetails(selection.selected.id); // create object and set itemId property
         details.quantity = selection.quantity; // set quantity
         this.project.itemDetails.push(details);
