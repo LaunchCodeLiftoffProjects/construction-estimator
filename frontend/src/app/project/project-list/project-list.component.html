@@ -57,7 +57,11 @@
                         </div>
 
                         <div class="text-right w-75 mt-3">
-                            <p class="badge badge-primary mt-3 pointer" role="button">Delete {{selectedProject.name}}</p>
+                            <p [hidden]="doDelete" class="badge badge-primary mt-3 pointer" role="button" (click)="doDelete = true" >Delete {{selectedProject.name}}</p>
+                            <br>
+                            <h5 [hidden]="!doDelete" class="text text-info">Are you sure? This cannot be undone.</h5>
+                            <h5 role="button" class="badge badge-primary mt-3 pointer" [hidden]="!doDelete" (click)="deleteProject(selectedProject.id)">Delete</h5> <br>
+                            <h5 role="button" class="badge badge-primary mt-3 pointer" [hidden]="!doDelete" (click)="doDelete = false">Never mind!</h5>
                         </div>
 
                     </div>
