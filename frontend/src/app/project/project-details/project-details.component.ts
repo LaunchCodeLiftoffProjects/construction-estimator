@@ -152,6 +152,10 @@ export class ProjectDetailsComponent implements OnInit {
         this.itemsArray.sort((a, b) => (a.type > b.type) ? 1 : -1);
         this.buildSelectionArray(); // now that project and items have been loaded
         console.log("SELECTION ARRAY FILLED");
+
+        // get estimate based on current selections
+        this.lowerCabinetAdjust();
+        this.calcEstimate();
       }.bind(this));
     }.bind(this));
   }
@@ -228,29 +232,37 @@ export class ProjectDetailsComponent implements OnInit {
       // get either last info saved in itemDetails or defaults
       let lastSaved: Selection = this.createSelectionObject(selection.type, selection.category); 
       this.selectionArray[c][i].checked = true; // because lastSaved.checked may have returned false
-      // update other properties with last saved info
+      // assign quantity
+      if (this.calcByQuantity.includes(selection.type) && lastSaved.quantity === 0) {
+        this.selectionArray[c][i].quantity = 1;
+        // do not calculate costs or save itemDetails until 
+      } else {
+        this.selectionArray[c][i].quantity = lastSaved.quantity;
+      }
+      // assign selected option or leave blank
       if (lastSaved.selected === null) {
         let options = this.getOptions(selection.type); 
         if (options.length === 1) {
           this.selectionArray[c][i].selected = options[0];
-        } 
-      } else { // TODO: re-think this logic - estimate is not always updating even when selected is not null
-        this.selectionArray[c][i].selected = lastSaved.selected; // this may still be null
-      }
-      if (this.calcByQuantity.includes(selection.type) && lastSaved.quantity === 0) {
-        this.selectionArray[c][i].quantity = 1;
-        // do not calculate costs or save itemDetails here because item has not yet been selected from options (still null)
+        } else {
+          this.selectionArray[c][i].selected = null;
+        }
       } else {
-        this.selectionArray[c][i].quantity = lastSaved.quantity;
+        this.selectionArray[c][i].selected = lastSaved.selected;
       }
       if (this.selectionArray[c][i].selected !== null) {
         this.selectionArray[c][i].costs = [lastSaved.costs[0],lastSaved.costs[1],lastSaved.costs[2]];
         this.saveItemDetails(this.selectionArray[c][i]); // save/update itemDetails object in project
         this.calcEstimate(); // recalculate estimate subtotals & total  
       }
-    } else { // if type has just been unchecked
+    } else { // if type has been unchecked
       this.resetSelection(selection); // but do not overwrite corresponding itemDetails object yet
     }  
+
+    // Special circumstance: if current type being altered is lower cabinets, it will affect countertop and backsplash as well
+    if (selection.type === "Cabinets, Lower") {
+      this.lowerCabinetAdjust();
+    }
 	}
 
   // when selection is made in middle column, force checked and quantity
@@ -270,18 +282,34 @@ export class ProjectDetailsComponent implements OnInit {
     this.selectionArray[c][i].costs = [costs[0],costs[1],costs[2]];
     this.saveItemDetails(this.selectionArray[c][i]); // save/update itemDetails object in project
     this.calcEstimate(); // recalculate estimate subtotals & total  
+
+    // Special circumstance: if current type being altered is lower cabinets, it will affect countertop and backsplash as well
+    if (selection.type === "Cabinets, Lower") {
+      this.lowerCabinetAdjust();
+    }
   }
 
-  changeQuantity(i: number, c: number) { // TODO: once logic is working in changeChecked to assign only option instead of null, add here too
+  changeQuantity(i: number, c: number) { 
     let selection = this.selectionArray[c][i]; // existing object in array
     console.log("Quantity for " + selection.type + " changed to " + selection.quantity);
       // update other properties with last saved info
       if ((selection.quantity > 0 && !selection.checked) || (selection.quantity < 0 && selection.checked)) {
         let lastSaved: Selection = this.createSelectionObject(selection.type, selection.category);
         this.selectionArray[c][i].checked = true;
-        this.selectionArray[c][i].selected = lastSaved.selected; // this may be null
+        // assign selected option or leave blank
+        if (lastSaved.selected === null) {
+          let options = this.getOptions(selection.type); 
+          if (options.length === 1) {
+            this.selectionArray[c][i].selected = options[0];
+          } else {
+            this.selectionArray[c][i].selected = null;
+          }
+        } else {
+        this.selectionArray[c][i].selected = lastSaved.selected;
+        }
+        // set back to last saved quantity if accidentally set to negative while checked
         if (selection.quantity < 0) {
-          this.selectionArray[c][i].quantity = lastSaved.quantity; // set back to last saved if accidentally set to negative while checked
+          this.selectionArray[c][i].quantity = lastSaved.quantity; 
         }
         if (lastSaved.selected !== null) {
           this.selectionArray[c][i].costs = [lastSaved.costs[0],lastSaved.costs[1],lastSaved.costs[2]];
@@ -295,19 +323,11 @@ export class ProjectDetailsComponent implements OnInit {
         this.selectionArray[c][i].costs = [costs[0],costs[1],costs[2]];
         this.saveItemDetails(this.selectionArray[c][i]); // update itemDetails object in project
         this.calcEstimate(); // recalculate estimate subtotals & total  
-    } // otherwise do not calculate costs or save itemDetails here because item has not yet been selected from options (still null)
+    }
 
     // Special circumstance: if current type being altered is lower cabinets, it will affect countertop and backsplash as well
     if (selection.type === "Cabinets, Lower") {
-      let i: number;
-      // first recalculate countertop
-      i = this.findSelectionByType("Countertop",2) 
-      this.changeChecked(i, 2);
-      // then recalculate backsplash if this is a kitchen
-      if (this.project.roomType === "kitchen") {
-        i = this.findSelectionByType("Backsplash", 2);
-        this.changeChecked(i, 2);
-      }
+      this.lowerCabinetAdjust();
     }
   }
  
@@ -427,6 +447,19 @@ export class ProjectDetailsComponent implements OnInit {
     console.log("Project measurements set from room dimensions");
   }
 
+  // special circumstance - if lower cabinet selection is changed, backsplash and countertop should be recalculated
+  lowerCabinetAdjust() {
+    let i: number;
+    // first recalculate countertop
+    i = this.findSelectionByType("Countertop",2) 
+    this.changeChecked(i, 2);
+    // then recalculate backsplash if this is a kitchen
+    if (this.project.roomType === "kitchen") {
+      i = this.findSelectionByType("Backsplash", 2);
+      this.changeChecked(i, 2);
+    }
+  }
+
   // calculate for each selected item based on quantity or measurements
   calcCosts(selection: Selection): number[] {
     let item = selection.selected;
@@ -445,11 +478,18 @@ export class ProjectDetailsComponent implements OnInit {
       console.log(item.type + " calculated by linear feet");
     } else if (this.calcByCabinet.includes(item.type)) {
       let index: number = this.findSelectionByType("Cabinets, Lower", 2);
+      if (index >=0){
       let cabinet: Selection = this.selectionArray[2][index];
-      itemCost = cabinet.quantity * item.price; // FIXME: if no lower cabinets have beens selected, this will result in 0 (for now)
-      materialCost = cabinet.quantity * item.roughMaterial;
-      laborCost = cabinet.quantity * item.labor;
-      console.log(item.type + " calculated by number of cabinets");
+        itemCost = cabinet.quantity * item.price;
+        materialCost = cabinet.quantity * item.roughMaterial;
+        laborCost = cabinet.quantity * item.labor;
+        console.log(item.type + " calculated by number of cabinets");
+      } else {
+        itemCost = 0;
+        materialCost = 0;
+        laborCost = 0;
+        console.log(item.type + "not able to be calculated until lower cabinets processed");
+      }
     } else if (item.type === "Walls") {
       itemCost = this.wallArea * item.price;
       materialCost = this.wallArea * item.roughMaterial;
@@ -519,7 +559,7 @@ export class ProjectDetailsComponent implements OnInit {
     if (this.project.materials.needFraming === true) {
       this.project.estimate.materialsCost += 10 * this.wallArea; // $10/SF of wall area
     }
-    if (this.project.materials.needDrywall === true) {
+    if (this.project.materials.needDrywall === true) { // FIXME: this rate cannot possibly be correct
       this.project.estimate.materialsCost += 25 * this.wallArea; // $25/SF of wall area
     }
     if (this.project.labor.needRoughCarpentry === true) {
