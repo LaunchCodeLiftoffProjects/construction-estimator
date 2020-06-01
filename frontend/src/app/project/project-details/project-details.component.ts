@@ -95,6 +95,15 @@ export class ProjectDetailsComponent implements OnInit {
   }
 
 
+  /************** CHECKLIST **************/
+  // 1 - load project and create selections from existing itemDetails (or defaults)
+  // 2 - run calculations per selection and add costs to selection objects
+  // 3 - run calculations for each subtotal & total and get info directly from selection objects and dimensions
+  // 4 - update both selection and itemDetails with item and quantity with each change, update project.estimate directly with each change
+  // 5 - at end, all itemDetails should already be set except for those needing reset due to deselection
+  // 6 - at end, all estimate numbers should already be set
+
+  
   /***** LOAD PROJECT FROM DATABASE *****/
 
   // includes saved information from previous session if revising an existing estimate
@@ -197,7 +206,8 @@ export class ProjectDetailsComponent implements OnInit {
       if (details.itemId !== null) { // user had it selected at last project save
         let item: Item = this.itemsArray[this.findItemById(details.itemId)];
         console.log("Created Selection object for " + type + " from last saved itemDetails");
-        return new Selection(item.category, type, true, item, details.quantity, [details.finalPrice,0,0]); 
+        // TODO: calculate costs and place into selection object below
+        return new Selection(item.category, type, true, item, details.quantity, [0,0,0]); 
       }
     } else { // project does not have an ItemDetails object for this type or it had been rendered null
       let optionOne: Item = this.getOptions(type)[0];  
@@ -287,12 +297,10 @@ export class ProjectDetailsComponent implements OnInit {
       if (index >= 0) {
         this.project.itemDetails[index].itemId = selection.selected.id; // overwrite itemId
         this.project.itemDetails[index].quantity = selection.quantity; // overwrite quantity
-        this.project.itemDetails[index].finalPrice = selection.costs[0];
         console.log("ItemDetails object for " + selection.type + " updated to " + selection.selected.name + " and quantity " + selection.quantity);
       } else {
         let details = new ItemDetails(selection.selected.id); // create object and set itemId property
         details.quantity = selection.quantity; // set quantity
-        details.finalPrice = selection.costs[0]; // set finalPrice
         this.project.itemDetails.push(details);
         console.log("ItemDetails object for " + selection.type + " added to project");
       }
@@ -333,7 +341,6 @@ export class ProjectDetailsComponent implements OnInit {
   resetItemDetails(index: number, type: string) { 
     this.project.itemDetails[index].itemId = 0;
     this.project.itemDetails[index].quantity = 0;
-    this.project.itemDetails[index].finalPrice = 0;
     console.log(type + " was deselected and all its values zeroed in project.itemDetails array");
   }
 
@@ -396,6 +403,8 @@ export class ProjectDetailsComponent implements OnInit {
   }
 
   // calculate for each selected item based on quantity or measurements
+
+  // TODO: if lower cabinets are recalculated, countertop and backsplash need to be updated too (and their respective impacts on materials and labor)
   calculateCosts(selection: Selection): number[] {
     let item = selection.selected;
     let itemCost: number = 0;
@@ -510,6 +519,7 @@ export class ProjectDetailsComponent implements OnInit {
     let selection: Selection;
     let index: number;
 
+    // TODO: right now if editing previous estimate, original selections are being lost upon save
     // reset any types that may have existed in itemDetails before but were unchecked at submission
     for (let c=0; c < 3; c++) { // once for each category subarray of selectionArray
       for (let i=0; i < this.selectionArray[c].length; i++) {

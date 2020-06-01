@@ -17,8 +17,6 @@ public class ItemDetails extends AbstractEntity {
 
     private double quantity;
 
-    private int finalPrice;
-
     public ItemDetails() {}
 
     public ItemDetails(Project project, int itemId) {
@@ -54,11 +52,4 @@ public class ItemDetails extends AbstractEntity {
         this.quantity = quantity;
     }
 
-    public int getFinalPrice() {
-        return finalPrice;
-    }
-
-    public void setFinalPrice(int finalPrice) {
-        this.finalPrice = finalPrice;
-    }
 }

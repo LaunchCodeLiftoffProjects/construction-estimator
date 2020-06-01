@@ -959,7 +959,6 @@
         "id": 66,
         "name": "Stone wall tile",
         "room": [
-            "kitchen",
             "bath"
         ],
         "category": "finish",
