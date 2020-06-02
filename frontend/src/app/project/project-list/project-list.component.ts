@@ -53,10 +53,9 @@ export class ProjectListComponent implements OnInit {
   }
 
   loadProject() {
-    fetch(this.projectUrl + "?userId=" + this.userId, {
+    fetch(this.projectUrl, {
       method: 'GET',
       headers: {
-        'Content-Type': 'application/json',
         'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Credentials': 'true',
         'Authorization': 'Barer ' + this.tokenStorageService.getToken()

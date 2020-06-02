@@ -15,6 +15,7 @@ export class CreateProjectComponent implements OnInit {
   project = new Project('', 'kitchen', null, null, null);
   form: any = {};
   id: number;
+  userId: number;
   selectedRoom: string = "kitchen";
   changedName: boolean = false;
   projectName = "testing";
@@ -35,6 +36,8 @@ export class CreateProjectComponent implements OnInit {
     if (this.isLoggedIn) {
       const user = this.tokenStorageService.getUser();
       this.roles = user.roles;
+      this.userId = user.id;
+
 
       this.showAdminBoard = this.roles.includes('ROLE_ADMIN');
       this.showModeratorBoard = this.roles.includes('ROLE_MODERATOR');
@@ -44,8 +47,8 @@ export class CreateProjectComponent implements OnInit {
       this.router.navigate(['/login']);
     }
 
-   
-    
+
+
   }
 
   saveProject() {
@@ -60,34 +63,34 @@ export class CreateProjectComponent implements OnInit {
         'Authorization': 'Barer ' + this.tokenStorageService.getToken()
       },
       body: JSON.stringify(this.project),
-    }).then(function(response) {
+    }).then(function (response) {
       // get id number from response here { id: idNumber }
-      response.json().then(function(json) {
+      response.json().then(function (json) {
         //I tried using a forEach loop and the json wasn't gathering the id. I think it's because the one object isn't stored in an array? Not sure though
         this.id = Number(json.id);
         //this project.id gets changed, as it should. I tried using an id field on the component class itself, but I encountered the same issue (see below)
         console.log("json ids", this.id);
         this.tokenStorageService.saveProject(this.id);
         this.router.navigate(['/project/add-details/', this.id]);
-       
+
       }.bind(this));
-    }.bind(this)).then(function(data) {
+    }.bind(this)).then(function (data) {
       console.log('Success:', data);
-    }).catch(function(error) {
+    }).catch(function (error) {
       console.error('Error:', error);
     });
-    
+
   }
 
   //event handler for the radio button's change event
-  updateProjectRoomType (event: any) {
+  updateProjectRoomType(event: any) {
     //update the ui
     this.project.roomType = event.target.value;
   }
 
 
   //helps validate room dimensions
-  isNumber(val): boolean { 
-    return typeof val === 'number'; 
+  isNumber(val): boolean {
+    return typeof val === 'number';
   }
 }

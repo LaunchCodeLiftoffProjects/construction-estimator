@@ -1,9 +1,7 @@
 package org.launchcode.constructionestimator.controllers;
 
-import org.launchcode.constructionestimator.models.ItemDetails;
 import org.launchcode.constructionestimator.models.Project;
 import org.launchcode.constructionestimator.models.User;
-import org.launchcode.constructionestimator.models.data.ItemDetailsRepository;
 import org.launchcode.constructionestimator.models.data.ProjectRepository;
 import org.launchcode.constructionestimator.models.data.UserRepository;
 import org.launchcode.constructionestimator.security.services.UserAuthService;
@@ -18,8 +16,7 @@ import javax.validation.constraints.NotNull;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Optional;
-
-import static org.springframework.web.bind.annotation.RequestMethod.*;
+import java.util.Set;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -33,24 +30,29 @@ public class ProjectController {
     UserRepository userRepository;
 
     @Autowired
-    ItemDetailsRepository itemDetailsRepository;
-
-    @Autowired
     UserAuthService userAuthService;
 
     @GetMapping
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<?> getProjects(@RequestParam @NotNull int userId, @RequestHeader HttpHeaders headers) {
+    public ResponseEntity<?> getProjects(@RequestHeader HttpHeaders headers) {
 
         String headerAuth = headers.getFirst("Authorization");
+        String userName = userAuthService.getUserName(headerAuth);
+        Optional<User> userOptional = userRepository.findByName(userName);
 
-        // TODO: maybe re-write this to not include the @RequestParam,
-        //  it the check vs the token is unnecessary because we should be trusting the token just
-        //  pulling the username from headers should be good enough
-        if (userAuthService.doesUserMatch(userId, headerAuth)) {
-            return new ResponseEntity<>(projectRepository.findByUserId(userId), HttpStatus.OK);
+
+        if (userOptional.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } else {
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+            User user = userOptional.get();
+            Optional<Iterable<Project>> projectsOptional = projectRepository.findByUserId(user.getId());
+
+            if(projectsOptional.isEmpty()) {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            } else {
+                return new ResponseEntity<>(projectsOptional.get(), HttpStatus.OK);
+            }
+
         }
 
     }
@@ -100,7 +102,7 @@ public class ProjectController {
         return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
 
-    @PutMapping("{/projectId}")
+    @PutMapping("/{projectId}")
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<?> updateProjectById(@RequestBody Project project, @PathVariable("projectId") int projectId,
                                              @RequestHeader HttpHeaders headers) {
@@ -113,6 +115,7 @@ public class ProjectController {
         } else if (userAuthService.doesUserMatch(projectOptional.get().getUser().getId(), headerAuth)
                 && projectOptional.get().getId() == project.getId()) {
 
+            project.setUser(projectOptional.get().getUser()); // make sure the updated entity is associated with user
             projectRepository.save(project);
 
             return new ResponseEntity<>(HttpStatus.CREATED);

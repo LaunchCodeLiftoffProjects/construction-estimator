@@ -598,7 +598,7 @@ export class ProjectDetailsComponent implements OnInit {
       }
     }
 
-    console.log(JSON.stringify(this.project.itemDetails)); // debug
+    console.log(JSON.stringify(this.project)); // debug
 
     // carry project id forward to view estimate
     if (this.project.id !== Number(this.tokenStorageService.getProject())) {
@@ -616,19 +616,16 @@ export class ProjectDetailsComponent implements OnInit {
       },
       body: JSON.stringify(this.project),
     }).then(function (response) {
-      response.json().then(function(json) {
-        
-      console.log(JSON.stringify(json));
+
       this.router.navigate(['/project/list/']);
 
-      return response;
-      }.bind(this));
-
-    }).then(function (data) {
+    }.bind(this)).then(function (data) {
       console.log('Success:', data);
     }).catch(function (error) {
       console.error('Error:', error);
     });
+
+
 
   }
 

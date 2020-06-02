@@ -10,7 +10,7 @@ import javax.persistence.ManyToOne;
 @Entity
 public class ItemDetails extends AbstractEntity {
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne
     @JoinColumn(name = "project_id", updatable = false, insertable = false)
     @JsonBackReference
     private Project project;
