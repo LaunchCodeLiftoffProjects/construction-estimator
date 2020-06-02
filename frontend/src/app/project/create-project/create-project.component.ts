@@ -54,6 +54,7 @@ export class CreateProjectComponent implements OnInit {
   saveProject() {
     let id: number;
     console.log("saved project", this.project);
+    
     fetch('http://localhost:8080/api/project', {
       method: 'POST',
       headers: {
