@@ -40,6 +40,12 @@ html, body, app-root {
     margin-left: 30px;
 }
 
+/* border for thumbnails on about page */
+.border-solid {
+    border-color: #1a1a1a !important;
+    border-style: solid;
+    border-width: 1px;
+}
 
 /* bars to left of fields that are required, based on validity */
 
