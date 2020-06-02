@@ -496,7 +496,9 @@ export class ProjectDetailsComponent implements OnInit {
   /***** CALCULATE ESTIMATE *****/
 
   calcEstimate() {
+    let estimateId = this.project.estimate.id;
     this.project.estimate = new Estimate; // reset entire object
+    this.project.estimate.id = estimateId;
     let selection: Selection;
     for (let c = 0; c < 3; c++) { // once for each category subarray of selectionArray
       for (let i = 0; i < this.selectionArray[c].length; i++) {
