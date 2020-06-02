@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { HomeDetails } from 'src/app/home-details';
 import { User } from 'src/app/user';
 import { Router } from '@angular/router';
@@ -12,6 +12,7 @@ import { TokenStorageService } from 'src/app/_services/token-storage.service';
 export class EditUserDetailsComponent implements OnInit {
 
   @Input() user: User;
+  @Output() onHouseSubmit = new EventEmitter();
   isLoggedIn = false;
   showAdminBoard = false;
   showModeratorBoard = false;
@@ -68,6 +69,10 @@ export class EditUserDetailsComponent implements OnInit {
     }).catch(function (error) {
       console.error('Error:', error);
     });
+  }
+
+  closeEdit() {
+    this.onHouseSubmit.emit(null);
   }
 
 

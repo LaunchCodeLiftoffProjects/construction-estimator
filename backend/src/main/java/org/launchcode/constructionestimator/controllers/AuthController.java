@@ -82,6 +82,7 @@ public class AuthController {
 
         user.setRoles(roles);
         user.setHomeDetails(homeDetails);
+        homeDetails.setUser(user);
         userRepository.save(user);
 
         Authentication authentication = authenticationManager.authenticate(

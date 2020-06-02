@@ -45,6 +45,8 @@ export class UserProfileComponent implements OnInit {
       this.username = user.email;
       this.userId = user.id;
 
+      console.log(this.userId);
+
       this.loadUser();
     } else {
       this.router.navigate(['/login']);
@@ -63,9 +65,12 @@ export class UserProfileComponent implements OnInit {
       },
     }).then(function(response) {
       response.json().then(function(json) {
-        this.user = new User(json.firstName, json.lastName, json.email, json.password, json.userDetails, json.projects);
+
+        console.log(JSON.stringify(json));
+        this.user = new User(json.firstName, json.lastName, json.email, json.password, json.homeDetails, json.projects);
         this.user.id = json.id;
-        console.log("user object", this.user);
+
+        console.log(JSON.stringify(this.user));
 
         this.loadCompleted = true;
       }.bind(this));
