@@ -1,34 +1,103 @@
-<div class="container text-left">
+<body class="QE-bkg">
 
-    <p class="text-danger mt-5">***** I will fancy this up with some graphics later. *****</p>
+<div class="container">
 
-    <div class="mt-4">
-        <h2 class="text-info">How does the estimator work?</h2>
+    <div class="logo-spacer"></div>
+
+    <div class="container w-100 text-left">
+
+        <h3 class="text-info">How does Quick&bull;Est work?</h3>
+
+        <div class="container mt-5">
+            <div class="row justify-content-between">
+                <div class="card border-primary mb-3 about-card" style="width: 47%">
+                    <div class="card-header lead">STEP 1</div>
+                    <div class="card-body">
+                        <h4 class="card-title">CREATE A PROJECT</h4>
+                        <p class="card-text">
+                            Master Bathroom?<br /> 
+                            Kitchen?<br />
+                            Upstairs Office?</p>
+                        <p>Set up a new project for each room you plan to renovate.</p>
+                    </div>
+                </div>
+                <div style="width: 3%">&nbsp;</div>
+                <div style="width: 50%">
+                    <img class="border-solid about-image" [src]="'/assets/01-create.png'" />
+                </div>
+            </div>
+        </div>
+
+        <div class="container mt-5">
+            <div class="row justify-content-between">
+                <div class="card border-primary mb-3 about-card" style="width: 47%">
+                    <div class="card-header lead">STEP 2</div>
+                    <div class="card-body">
+                        <h4 class="card-title">CUSTOMIZE YOUR ROOM</h4>
+                        <p class="card-text">
+                            Hardwood floors or carpet?<br /> 
+                            Classic tub or walk-in shower?<br />
+                            Are you hiring a subcontractor or is it DIY?</p>
+                        <p>Each change you make will fine-tune your estimate.</p>
+                    </div>
+                </div>
+                <div style="width: 3%">&nbsp;</div>
+                <div style="width: 50%">
+                    <img class="border-solid about-image" [src]="'/assets/02-details.png'" />
+                </div>
+            </div>
+        </div>
+
+        <div class="container mt-5">
+            <div class="row justify-content-between">
+                <div class="card border-primary mb-3 about-card" style="width: 47%">
+                    <div class="card-header lead">STEP 3</div>
+                    <div class="card-body">
+                        <h4 class="card-title">REAL-TIME CALCULATIONS</h4>
+                        <p class="card-text">
+                            We do the math so you don't have to! Watch our lightning-fast calculations update 
+                            with each change you make in the form.</p>
+                    </div>
+                </div>
+                <div style="width: 3%">&nbsp;</div>
+                <div style="width: 50%">
+                    <img class="border-solid about-image" [src]="'/assets/03-calculate.jpg'" />
+                </div>
+            </div>
+        </div>
+
+        <div class="container mt-5">
+            <div class="row justify-content-between">
+                <div class="card border-primary mb-3 about-card" style="width: 47%">
+                    <div class="card-header lead">STEP 4</div>
+                    <div class="card-body">
+                        <h4 class="card-title">SAVE YOUR ESTIMATE</h4>
+                        <p class="card-text">
+                            When you submit the form, your estimate will be saved and you can view it at any time. 
+                            If you want to make a few changes, edit the details and get an updated estimate!</p>
+                    </div>
+                </div>
+                <div style="width: 3%">&nbsp;</div>
+                <div style="width: 50%">
+                    <img class="border-solid about-image" [src]="'/assets/04-estimate.png'" />
+                </div>
+            </div>
+        </div>
+
     </div>
 
-    <div class="mt-5">
-        <p class="lead text-primary">1. Pick a room to renovate and create a project!</p>
-        <p>Master Bathroom? Kitchen? Home Office?<br /> 
-        East Wing Ballroom? <i>(What - you don't have one of those?)</i></p>
+    <div class="container text-right">
+        <div class="mt-5 mb-5">
+            <h4>Ready to get started?</h4>
+            <ng-container *ngIf="isLoggedIn">
+                <h5><a [routerLink]="'/project/create'" class="text-info">CREATE A PROJECT</a></h5>
+            </ng-container>
+            <ng-container *ngIf="!isLoggedIn">
+                <h5><a [routerLink]="'/login'" class="text-info">LOG IN</a><small> or </small><a [routerLink]="'/register'" class="text-info">REGISTER</a></h5>
+            </ng-container>
+        </div>
     </div>
 
-    <div class="mt-5">
-        <p class="lead text-primary">2. Give us a few details about how you will make your space amazing.</p>
-        <p>Hardwood floors or carpet? Jacuzzi tub or walk-in shower?<br /> 
-            Are you hiring a subcontractor or is it DIY?</p>
-    </div>
+</div> 
 
-    <div class="mt-5">
-        <p class="lead text-primary">3. We'll run some calculations behind the scenes, and...</p>
-    </div>
-
-    <div class="mt-5">
-        <p class="lead text-primary">4. You get an estimate!</p>
-    </div>
-</div>
-<div class="container text-right">
-    <div class="mt-5">
-        <h4 class="text-info">Ready to get started?</h4>
-        <h4><a href="/">LOG IN</a><small class="text-info"> or </small><a href="/register">REGISTER</a></h4>
-    </div>
-</div>
+</body>

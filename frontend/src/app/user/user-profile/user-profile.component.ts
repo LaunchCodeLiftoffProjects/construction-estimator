@@ -90,6 +90,13 @@ export class UserProfileComponent implements OnInit {
     this.editUser = false;
   }
 
+  getEstimate(projectId: number) {
+    if (projectId !== Number(this.tokenStorageService.getProject())) {
+      this.tokenStorageService.saveProject(projectId);
+    }
+    this.router.navigate(['/project/list/']);
+  }
+
 }
 
 
