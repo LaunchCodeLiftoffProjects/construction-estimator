@@ -601,13 +601,8 @@ export class ProjectDetailsComponent implements OnInit {
     console.log(JSON.stringify(this.project.itemDetails)); // debug
 
     // save project to database
-<<<<<<< HEAD
     fetch("http://localhost:8080/api/project/" + this.project.id, {
       method: 'PUT',
-=======
-    fetch("http://localhost:8080/api/project/", {
-      method: 'POST', 
->>>>>>> implement-dynamic-estimating
       headers: {
         'Content-Type': 'application/json',
         'Access-Control-Allow-Origin': '*',
