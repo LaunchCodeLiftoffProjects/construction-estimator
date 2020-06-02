@@ -3,12 +3,15 @@ package org.launchcode.constructionestimator.models;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 @Entity
 public class ItemDetails extends AbstractEntity {
 
     @ManyToOne
+    @JoinColumn(name = "project_id", updatable = false, insertable = false)
     @JsonBackReference
     private Project project;
 

@@ -16,10 +16,6 @@ public class Estimate extends AbstractEntity {
     private float laborCost;
     private float totalCost;
 
-    @OneToOne
-    @JsonBackReference
-    private Project project;
-
     public Estimate() { }
 
     public float getAppliancesCost() {
@@ -68,13 +64,5 @@ public class Estimate extends AbstractEntity {
 
     public void setTotalCost(float totalCost) {
         this.totalCost = totalCost;
-    }
-
-    public Project getProject() {
-        return project;
-    }
-
-    public void setProject(Project project) {
-        this.project = project;
     }
 }
