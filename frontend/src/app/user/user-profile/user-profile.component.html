@@ -19,12 +19,12 @@
     
     <div class="mt-5" *ngIf="!editDetails; else editDetailsBlock">
         <h4>My Home</h4>
-        <p *ngIf="user.userDetails == null; else userDetailsBlock">You have not entered any details about your home yet. Click the edit button below to get started!</p>
+        <p *ngIf="user.homeDetails == null; else userDetailsBlock">You have not entered any details about your home yet. Click the edit button below to get started!</p>
         <ng-template #userDetailsBlock>
-            <p class="lead">Year Built: {{user.userDetails.homeAge}}<br />
-            Construction: {{user.userDetails.homeBuild}}</p>
+            <p class="lead">Year Built: {{user.homeDetails.homeAge}}<br />
+            Construction: {{user.homeDetails.homeBuild}}</p>
             <p><span class="lead">Notes:</span><br /> 
-            {{user.userDetails.homeNotes}}</p>
+            {{user.homeDetails.homeNotes}}</p>
         </ng-template>
         <span (click)="editHomeDetails()" class="badge badge-info pointer" role="button">Edit Home Details</span>
     </div>

@@ -102,11 +102,7 @@ public class ProjectController {
         return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
 
-<<<<<<< HEAD
     @PutMapping("{/projectId}")
-=======
-    @PutMapping("/{projectId}")
->>>>>>> fix-project-list-first-load
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<?> updateProjectById(@RequestBody Project project, @PathVariable("projectId") int projectId,
                                              @RequestHeader HttpHeaders headers) {
