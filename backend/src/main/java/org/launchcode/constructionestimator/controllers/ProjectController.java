@@ -19,6 +19,8 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.Optional;
 
+import static org.springframework.web.bind.annotation.RequestMethod.*;
+
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api/project")
@@ -98,9 +100,9 @@ public class ProjectController {
         return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
 
-    @PostMapping("{/projectId}")
+    @PutMapping("{/projectId}")
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<?> postProjectToId(@RequestBody Project project, @PathVariable("projectId") int projectId,
+    public ResponseEntity<?> updateProjectById(@RequestBody Project project, @PathVariable("projectId") int projectId,
                                              @RequestHeader HttpHeaders headers) {
 
         String headerAuth = headers.getFirst("Authorization");
@@ -130,13 +132,12 @@ public class ProjectController {
         if (projectOptional.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } else if (userAuthService.doesUserMatch(projectOptional.get().getUser().getId(), headerAuth)) {
-            Project project = projectOptional.get();
+//            // Need to delete all ItemDetails entities associated with project
+//            // TODO: once merged, have this delete Materials and Labor entities as well
+//            for (ItemDetails itemDetails : project.getItemDetails()) {
+//                itemDetailsRepository.deleteById(itemDetails.getId());
+//            }
 
-            // Need to delete all ItemDetails entities associated with project
-            // TODO: once merged, have this delete Materials and Labor entities as well
-            for (ItemDetails itemDetails : project.getItemDetails()) {
-                itemDetailsRepository.deleteById(itemDetails.getId());
-            }
 
             // lastly delete the project
             projectRepository.deleteById(projectId);

@@ -14,10 +14,6 @@ public class Labor extends AbstractEntity {
     private boolean needRoughCarpentry;
     private boolean needFinishWork;
 
-    @OneToOne
-    @JsonBackReference
-    private Project project;
-
     public Labor() {}
 
     public boolean isNeedPlumbingSub() {
@@ -50,13 +46,5 @@ public class Labor extends AbstractEntity {
 
     public void setNeedFinishWork(boolean needFinishWork) {
         this.needFinishWork = needFinishWork;
-    }
-
-    public Project getProject() {
-        return project;
-    }
-
-    public void setProject(Project project) {
-        this.project = project;
     }
 }

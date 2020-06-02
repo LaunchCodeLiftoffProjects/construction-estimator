@@ -64,6 +64,7 @@ export class ProjectListComponent implements OnInit {
     }).then(function(response) {
       response.json().then(function(json) {
         let refreshProject: Project[] = [];
+        console.log(JSON.stringify(json));
         json.forEach(obj => {
           
           let project = new Project(obj.name, obj.roomType, obj.roomLength, obj.roomWidth, obj.roomHeight);

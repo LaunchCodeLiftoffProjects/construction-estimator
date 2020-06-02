@@ -14,10 +14,6 @@ public class Materials extends AbstractEntity {
     private boolean needFraming;
     private boolean needDrywall;
 
-    @OneToOne
-    @JsonBackReference
-    private Project project;
-
     public Materials() {}
 
     public boolean isNeedPlumbingSystem() {
@@ -50,13 +46,5 @@ public class Materials extends AbstractEntity {
 
     public void setNeedDrywall(boolean needDrywall) {
         this.needDrywall = needDrywall;
-    }
-
-    public Project getProject() {
-        return project;
-    }
-
-    public void setProject(Project project) {
-        this.project = project;
     }
 }
