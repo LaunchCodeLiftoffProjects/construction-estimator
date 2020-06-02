@@ -98,7 +98,7 @@ public class ProjectController {
         return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
 
-    @PostMapping("{/projectId}")
+    @PutMapping("{/projectId}")
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<?> postProjectToId(@RequestBody Project project, @PathVariable("projectId") int projectId,
                                              @RequestHeader HttpHeaders headers) {

@@ -16,6 +16,8 @@ public class HomeDetails extends AbstractEntity {
     @JsonBackReference
     private User user;
 
+    public HomeDetails() {}
+
     public int getHomeAge() {
         return homeAge;
     }

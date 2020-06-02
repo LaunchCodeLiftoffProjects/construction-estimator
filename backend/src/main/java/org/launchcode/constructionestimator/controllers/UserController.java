@@ -84,7 +84,7 @@ public class UserController {
         } else if (userAuthService.doesUserMatch(id, headerAuth)) {
             User user = userRepository.findById(id).get();
 
-            user.setHomeDetails(homeDetails);
+//            user.setHomeDetails(homeDetails);
             homeDetails.setUser(user);
             userDetailsRepository.save(homeDetails);
 

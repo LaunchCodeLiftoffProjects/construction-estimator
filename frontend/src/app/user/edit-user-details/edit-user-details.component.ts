@@ -1,5 +1,5 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { UserDetails } from 'src/app/user-details';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { HomeDetails } from 'src/app/home-details';
 import { User } from 'src/app/user';
 import { Router } from '@angular/router';
 import { TokenStorageService } from 'src/app/_services/token-storage.service';
@@ -12,6 +12,7 @@ import { TokenStorageService } from 'src/app/_services/token-storage.service';
 export class EditUserDetailsComponent implements OnInit {
 
   @Input() user: User;
+  @Output() onHouseSubmit = new EventEmitter();
   isLoggedIn = false;
   showAdminBoard = false;
   showModeratorBoard = false;
@@ -22,45 +23,45 @@ export class EditUserDetailsComponent implements OnInit {
   constructor(private router: Router, private tokenStorageService: TokenStorageService) { }
 
   ngOnInit() {
-    this.isLoggedIn = !!this.tokenStorageService.getToken();
-    console.log("token", this.tokenStorageService.getToken());
-    console.log("logged in", this.isLoggedIn);
+    // this.isLoggedIn = !!this.tokenStorageService.getToken();
+    // console.log("token", this.tokenStorageService.getToken());
+    // console.log("logged in", this.isLoggedIn);
 
-    if (this.isLoggedIn) {
-      const user = this.tokenStorageService.getUser();
-      this.roles = user.roles;
+    // if (this.isLoggedIn) {
+    //   const user = this.tokenStorageService.getUser();
+    //   this.roles = user.roles;
     
-      this.showAdminBoard = this.roles.includes('ROLE_ADMIN');
-      this.showModeratorBoard = this.roles.includes('ROLE_MODERATOR');
+    //   this.showAdminBoard = this.roles.includes('ROLE_ADMIN');
+    //   this.showModeratorBoard = this.roles.includes('ROLE_MODERATOR');
 
 
 
-    } else {
-      this.router.navigate(['/login']);
-    }
-    if(this.user.userDetails === null) {
-      this.user.userDetails = new UserDetails(null, null, null);
+    // } else {
+    //   this.router.navigate(['/login']);
+    // }
+    if(this.user.homeDetails === undefined) {
+      this.user.homeDetails = new HomeDetails(null, null, null);
     }
   }
 
 
   updateUserDetails(homeAge: number, homeBuild: string, homeNotes: string) {
-    this.user.userDetails.homeAge = homeAge;
-    this.user.userDetails.homeBuild = homeBuild;
-    this.user.userDetails.homeNotes = homeNotes;
+    this.user.homeDetails.homeAge = homeAge;
+    this.user.homeDetails.homeBuild = homeBuild;
+    this.user.homeDetails.homeNotes = homeNotes;
 
-    fetch(`http://localhost:8080/api/user/${this.user.id}/details`, {
-      method: 'POST',
+    fetch(`http://localhost:8080/api/user/${this.user.id}`, {
+      method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
         'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Credentials': 'true',
         'Authorization': 'Barer ' + this.tokenStorageService.getToken()
       },
-      body: JSON.stringify(this.user.userDetails),
+      body: JSON.stringify(this.user),
     }).then(function (response) {
 
-      // this.closeEdit();
+      this.closeEdit();
       return response;
 
     }.bind(this)).then(function (data) {
@@ -68,6 +69,10 @@ export class EditUserDetailsComponent implements OnInit {
     }).catch(function (error) {
       console.error('Error:', error);
     });
+  }
+
+  closeEdit() {
+    this.onHouseSubmit.emit(null);
   }
 
 

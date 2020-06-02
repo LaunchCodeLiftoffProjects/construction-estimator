@@ -601,8 +601,9 @@ export class ProjectDetailsComponent implements OnInit {
     console.log(JSON.stringify(this.project.itemDetails)); // debug
 
     // save project to database
-    fetch("http://localhost:8080/api/project/", {
-      method: 'POST', 
+
+    fetch("http://localhost:8080/api/project/" + this.project.id, {
+      method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
         'Access-Control-Allow-Origin': '*',

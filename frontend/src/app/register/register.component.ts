@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { User } from 'src/app/user'
-import { UserDetails } from '../user-details';
+import { HomeDetails } from '../home-details';
 import { Project } from 'src/app/project';
 import { EmailValidator } from '@angular/forms';
 import { Router, RouterModule, ActivatedRoute, ParamMap, NavigationExtras } from '@angular/router';
