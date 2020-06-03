@@ -72,25 +72,4 @@ public class UserController {
         }
     }
 
-    @PostMapping("/{userId}/details")
-    @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<?> postUserDetails(@PathVariable("userId") int id, @RequestBody HomeDetails homeDetails,
-                                          @RequestHeader HttpHeaders headers) {
-
-        String headerAuth = headers.getFirst("Authorization");
-
-        if (userRepository.findById(id).isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        } else if (userAuthService.doesUserMatch(id, headerAuth)) {
-            User user = userRepository.findById(id).get();
-
-//            user.setHomeDetails(homeDetails);
-            homeDetails.setUser(user);
-            userDetailsRepository.save(homeDetails);
-
-            return new ResponseEntity<>(HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-        }
-    }
 }

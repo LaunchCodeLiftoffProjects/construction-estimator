@@ -77,12 +77,7 @@ public class AuthController {
         Role userRole = roleRepository.findByName(ROLE_USER).get();
         roles.add(userRole);
 
-        // create an empty HomeDetails object and bind to user
-        HomeDetails homeDetails = new HomeDetails();
-
         user.setRoles(roles);
-        user.setHomeDetails(homeDetails);
-        homeDetails.setUser(user);
         userRepository.save(user);
 
         Authentication authentication = authenticationManager.authenticate(
