@@ -102,7 +102,7 @@ public class ProjectController {
         return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
 
-    @PutMapping("/{projectId}")
+    @PutMapping("{/projectId}")
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<?> updateProjectById(@RequestBody Project project, @PathVariable("projectId") int projectId,
                                              @RequestHeader HttpHeaders headers) {
