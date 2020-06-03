@@ -45,7 +45,7 @@
                             All room dimensions must be valid numbers greater than zero.
                         </div>
                     </div>
-                    <span class="badge badge-success pointer" (click) = "editingProject = false; changedDimensions = 0; calcMeasurements(); createSelections();" role="button" >Done Editing</span>
+                    <span class="badge badge-success pointer" (click) = "editingProject = false; changedDimensions = 0; calcMeasurements(); buildSelectionArray();" role="button" >Done Editing</span>
                 </div>
 
             </div>
@@ -66,13 +66,13 @@
                                 <label class="lead"><input #type="ngModel" [(ngModel)]="selectionArray[c][i].checked" (change)="changeChecked(i, c)" type="checkbox" /> {{selection.type}}</label>
                             </div>
                             <div class = "col-4">
-                                <select #options="ngModel" [(ngModel)]="selectionArray[c][i].selected" class="custom-select w-100" (change)="changeSelected(i, c)" [required]="selectionArray[c][i].checked">
+                                <select #options="ngModel" [(ngModel)]="selectionArray[c][i].selected" class="form-control form-control-sm w-100" (change)="changeSelected(i, c)" [required]="selectionArray[c][i].checked">
                                     <option *ngFor="let option of getOptions(selection.type)" [ngValue]="option" [selected]="selectionArray[c][i].selected !== null && option.id === selectionArray[c][i].selected.id">{{option.name}}</option>
                                 </select>
                             </div>
                             <div class="col-2">
                                 <ng-container *ngIf="calcByQuantity.includes(selection.type)">
-                                    <input #quantity="ngModel" [(ngModel)]="selectionArray[c][i].quantity" type="number" step="1" min = '0' class="form-control form-control-sm w-75 h-100" (change)="changeQuantity(i, c)"/>
+                                    <input #quantity="ngModel" [(ngModel)]="selectionArray[c][i].quantity" type="number" step="1" min = '0' class="form-control form-control-sm w-75" (change)="changeQuantity(i, c)"/>
                                 </ng-container>
                             </div> 
                             <div class="col-2">

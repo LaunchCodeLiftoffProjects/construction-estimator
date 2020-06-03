@@ -143,10 +143,6 @@ export class ProjectDetailsComponent implements OnInit {
         this.itemsArray.sort((a, b) => (a.type > b.type) ? 1 : -1);
         this.buildSelectionArray(); // now that project and items have been loaded
         console.log("SELECTION ARRAY FILLED");
-
-        // get estimate based on current selections
-        this.lowerCabinetAdjust();
-        this.calcEstimate();
       }.bind(this));
     }.bind(this));
   }
@@ -173,9 +169,15 @@ export class ProjectDetailsComponent implements OnInit {
       this.selectionArray[1].sort((a, b) => (a.type > b.type) ? 1 : -1);
       this.selectionArray[2].sort((a, b) => (a.type > b.type) ? 1 : -1);
 
+      // get estimate based on current selections
+      this.lowerCabinetAdjust();
+      this.calcEstimate();
+
       this.changedRoom = false;
       this.firstLoad = false;
       this.dataLoaded = true; // allow page to render the first time now that all data is available
+
+
     }
   }
 
