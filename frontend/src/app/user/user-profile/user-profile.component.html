@@ -19,18 +19,18 @@
     
     <div class="mt-5" *ngIf="!editDetails; else editDetailsBlock">
         <h4>My Home</h4>
-        <p *ngIf="user.userDetails == null; else userDetailsBlock">You have not entered any details about your home yet. Click the edit button below to get started!</p>
+        <p *ngIf="user.homeDetails == null; else userDetailsBlock">You have not entered any details about your home yet. Click the edit button below to get started!</p>
         <ng-template #userDetailsBlock>
-            <p class="lead">Year Built: {{user.userDetails.homeAge}}<br />
-            Construction: {{user.userDetails.homeBuild}}</p>
+            <p class="lead">Year Built: {{user.homeDetails.homeAge}}<br />
+            Construction: {{user.homeDetails.homeBuild}}</p>
             <p><span class="lead">Notes:</span><br /> 
-            {{user.userDetails.homeNotes}}</p>
+            {{user.homeDetails.homeNotes}}</p>
         </ng-template>
         <span (click)="editHomeDetails()" class="badge badge-info pointer" role="button">Edit Home Details</span>
     </div>
 
     <ng-template #editDetailsBlock>
-        <app-edit-user-details [user]="user" (onUserSubmit)="onEditDetailsClose($event)"></app-edit-user-details>
+        <app-edit-user-details [user]="user" (onHouseSubmit)="onEditDetailsClose($event)"></app-edit-user-details>
     </ng-template>
 
     <div class="mt-5">
@@ -39,7 +39,6 @@
             <p>Click on a project name to view estimate.</p>
             <div class="btn-group">
                 <ng-container *ngFor="let project of user.projects">
-                    <!-- TODO: link these to estimates on project list page -->
                     <button class="btn btn-primary mt-2 btn-spacer" (click)="getEstimate(project.id)">{{project.name}}</button> 
                 </ng-container>        
             </div>

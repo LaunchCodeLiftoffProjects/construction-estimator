@@ -53,10 +53,9 @@ export class ProjectListComponent implements OnInit {
   }
 
   loadProject() {
-    fetch(this.projectUrl + "?userId=" + this.userId, {
+    fetch(this.projectUrl, {
       method: 'GET',
       headers: {
-        'Content-Type': 'application/json',
         'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Credentials': 'true',
         'Authorization': 'Barer ' + this.tokenStorageService.getToken()
@@ -64,6 +63,7 @@ export class ProjectListComponent implements OnInit {
     }).then(function(response) {
       response.json().then(function(json) {
         let refreshProject: Project[] = [];
+        console.log(JSON.stringify(json));
         json.forEach(obj => {
           
           let project = new Project(obj.name, obj.roomType, obj.roomLength, obj.roomWidth, obj.roomHeight);

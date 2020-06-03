@@ -12,9 +12,7 @@ public class HomeDetails extends AbstractEntity {
     private String homeBuild;
     private String homeNotes;
 
-    @OneToOne
-    @JsonBackReference
-    private User user;
+    public HomeDetails() {}
 
     public int getHomeAge() {
         return homeAge;
@@ -38,13 +36,5 @@ public class HomeDetails extends AbstractEntity {
 
     public void setHomeNotes(String homeNotes) {
         this.homeNotes = homeNotes;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
     }
 }

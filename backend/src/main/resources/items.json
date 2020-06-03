@@ -73,7 +73,7 @@
         "type": "Walls",
         "price": 5,
         "roughMaterial": 6,
-        "labor": 25
+        "labor": 10
     },
     {
         "id": 7,
@@ -100,7 +100,7 @@
         "category": "fixture",
         "type": "Ceiling Light/Fan",
         "price": 80,
-        "roughMaterial": 0,
+        "roughMaterial": 10,
         "labor": 100
     },
     {
@@ -112,7 +112,7 @@
         "category": "fixture",
         "type": "Ceiling Light/Fan",
         "price": 200,
-        "roughMaterial": 0,
+        "roughMaterial": 10,
         "labor": 100
     },
     {
@@ -125,7 +125,7 @@
         "category": "fixture",
         "type": "Ceiling Light/Fan",
         "price": 100,
-        "roughMaterial": 0,
+        "roughMaterial": 10,
         "labor": 100
     },
     {
@@ -138,7 +138,7 @@
         "category": "fixture",
         "type": "Ceiling Light/Fan",
         "price": 100,
-        "roughMaterial": 0,
+        "roughMaterial": 10,
         "labor": 100
     },
     {
@@ -152,8 +152,8 @@
         "category": "fixture",
         "type": "Lighting",
         "price": 15,
-        "roughMaterial": 0,
-        "labor": 80
+        "roughMaterial": 10,
+        "labor": 50
     },
     {
         "id": 11,
@@ -166,8 +166,8 @@
         "category": "fixture",
         "type": "Lighting",
         "price": 100,
-        "roughMaterial": 0,
-        "labor": 150
+        "roughMaterial": 10,
+        "labor": 50
     },
     {
         "id": 12,
@@ -180,8 +180,8 @@
         "category": "fixture",
         "type": "Lighting",
         "price": 40,
-        "roughMaterial": 0,
-        "labor": 100
+        "roughMaterial": 10,
+        "labor": 50
     },
     {
         "id": 86,
@@ -192,8 +192,8 @@
         "category": "fixture",
         "type": "Lighting",
         "price": 50,
-        "roughMaterial": 0,
-        "labor": 75
+        "roughMaterial": 10,
+        "labor": 50
     },
     {
         "id": 13,
@@ -207,7 +207,7 @@
         "type": "Electrical Outlets",
         "price": 2,
         "roughMaterial": 0,
-        "labor": 50
+        "labor": 25
     },
     {
         "id": 14,
@@ -221,7 +221,7 @@
         "type": "Electrical Outlets",
         "price": 10,
         "roughMaterial": 0,
-        "labor": 50
+        "labor": 30
     },
     {
         "id": 15,
@@ -235,7 +235,7 @@
         "type": "Electrical Switches",
         "price": 1,
         "roughMaterial": 0,
-        "labor": 50
+        "labor": 25
     },
     {
         "id": 85,
@@ -249,7 +249,7 @@
         "type": "Electrical Switches",
         "price": 3,
         "roughMaterial": 0,
-        "labor": 50
+        "labor": 30
     },
     {
         "id": 16,
@@ -260,7 +260,7 @@
         "category": "fixture",
         "type": "Ceiling Light/Fan",
         "price": 150,
-        "roughMaterial": 0,
+        "roughMaterial": 10,
         "labor": 100
     },
     {
@@ -272,7 +272,7 @@
         "category": "fixture",
         "type": "Ceiling Light/Fan",
         "price": 100,
-        "roughMaterial": 0,
+        "roughMaterial": 10,
         "labor": 100
     },
     {
@@ -284,8 +284,8 @@
         "category": "fixture",
         "type": "Bath & Shower",
         "price": 400,
-        "roughMaterial": 0,
-        "labor": 1500
+        "roughMaterial": 15,
+        "labor": 800
     },
     {
         "id": 18,
@@ -296,8 +296,8 @@
         "category": "fixture",
         "type": "Bath & Shower",
         "price": 800,
-        "roughMaterial": 0,
-        "labor": 1800
+        "roughMaterial": 15,
+        "labor": 1200
     },
     {
         "id": 19,
@@ -308,8 +308,8 @@
         "category": "fixture",
         "type": "Bath & Shower",
         "price": 600,
-        "roughMaterial": 0,
-        "labor": 1800
+        "roughMaterial": 15,
+        "labor": 1500
     },
     {
         "id": 20,
@@ -320,7 +320,7 @@
         "category": "fixture",
         "type": "Sink",
         "price": 200,
-        "roughMaterial": 0,
+        "roughMaterial": 10,
         "labor": 100
     },
     {
@@ -332,7 +332,7 @@
         "category": "fixture",
         "type": "Sink",
         "price": 200,
-        "roughMaterial": 0,
+        "roughMaterial": 10,
         "labor": 100
     },
     {
@@ -440,7 +440,7 @@
         "category": "appliance",
         "type": "Dishwasher",
         "price": 500,
-        "roughMaterial": 0,
+        "roughMaterial": 25,
         "labor": 300
     },
     {
@@ -452,7 +452,7 @@
         "category": "appliance",
         "type": "Refrigerator",
         "price": 800,
-        "roughMaterial": 0,
+        "roughMaterial": 10,
         "labor": 0
     },
     {
@@ -464,7 +464,7 @@
         "category": "appliance",
         "type": "Refrigerator",
         "price": 1400,
-        "roughMaterial": 0,
+        "roughMaterial": 10,
         "labor": 0
     },
     {
@@ -476,7 +476,7 @@
         "category": "appliance",
         "type": "Oven/Range",
         "price": 2000,
-        "roughMaterial": 0,
+        "roughMaterial": 15,
         "labor": 0
     },
     {
@@ -488,7 +488,7 @@
         "category": "appliance",
         "type": "Oven/Range",
         "price": 600,
-        "roughMaterial": 0,
+        "roughMaterial": 15,
         "labor": 0
     },
     {
@@ -500,7 +500,7 @@
         "category": "appliance",
         "type": "Oven/Range",
         "price": 400,
-        "roughMaterial": 0,
+        "roughMaterial": 10,
         "labor": 150
     },
     {
@@ -512,7 +512,7 @@
         "category": "appliance",
         "type": "Range Hood",
         "price": 300,
-        "roughMaterial": 0,
+        "roughMaterial": 50,
         "labor": 150
     },
     {
@@ -524,7 +524,7 @@
         "category": "appliance",
         "type": "Range Hood",
         "price": 50,
-        "roughMaterial": 0,
+        "roughMaterial": 20,
         "labor": 100
     },
     {
@@ -536,7 +536,7 @@
         "category": "appliance",
         "type": "Range Hood",
         "price": 500,
-        "roughMaterial": 0,
+        "roughMaterial": 20,
         "labor": 150
     },
     {
@@ -699,7 +699,7 @@
         "type": "Cabinets, Lower",
         "price": 200,
         "roughMaterial": 0,
-        "labor": 150
+        "labor": 100
     },
     {
         "id": 45,
@@ -713,7 +713,7 @@
         "type": "Cabinets, Upper",
         "price": 200,
         "roughMaterial": 0,
-        "labor": 200
+        "labor": 150
     },
     {
         "id": 46,
@@ -727,7 +727,7 @@
         "type": "Countertop",
         "price": 80,
         "roughMaterial": 0,
-        "labor": 150
+        "labor": 100
     },
     {
         "id": 47,
@@ -741,7 +741,7 @@
         "type": "Countertop",
         "price": 300,
         "roughMaterial": 0,
-        "labor": 450
+        "labor": 250
     },
     {
         "id": 48,
@@ -755,7 +755,7 @@
         "type": "Countertop",
         "price": 350,
         "roughMaterial": 0,
-        "labor": 350
+        "labor": 250
     },
     {
         "id": 49,
@@ -769,7 +769,7 @@
         "type": "Countertop",
         "price": 480,
         "roughMaterial": 0,
-        "labor": 350
+        "labor": 150
     },
     {
         "id": 54,
@@ -902,9 +902,9 @@
         ],
         "category": "finish",
         "type": "Backsplash",
-        "price": 5,
+        "price": 20,
         "roughMaterial": 6,
-        "labor": 4
+        "labor": 25
     },
     {
         "id": 62,
@@ -914,7 +914,7 @@
         ],
         "category": "finish",
         "type": "Backsplash",
-        "price": 9,
+        "price": 36,
         "roughMaterial": 6,
         "labor": 25
     },
@@ -926,7 +926,7 @@
         ],
         "category": "finish",
         "type": "Backsplash",
-        "price": 122,
+        "price": 60,
         "roughMaterial": 6,
         "labor": 25
     },
@@ -938,9 +938,9 @@
         ],
         "category": "finish",
         "type": "Backsplash",
-        "price": 10,
+        "price": 40,
         "roughMaterial": 6,
-        "labor": 10
+        "labor": 25
     },
     {
         "id": 65,
@@ -959,7 +959,6 @@
         "id": 66,
         "name": "Stone wall tile",
         "room": [
-            "kitchen",
             "bath"
         ],
         "category": "finish",

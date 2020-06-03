@@ -3,10 +3,10 @@
 
     <form>
         <div class="form-group w-100 mb-4">
-            <label class="w-25">Year Built <input #homeAge type='number' value="2000" class="form-control form-control-sm" /></label>
-            <label class="w-50">Type of Construction <input #homeBuild type='text' placeholder="Examples: structural brick or wood frame" value="{{user.userDetails.homeBuild}}" class='form-control form-control-sm'></label>
+            <label class="w-25">Year Built <input #homeAge type='number' value="{{user.homeDetails.homeAge}}" placeholder="2000" class="form-control form-control-sm" /></label>
+            <label class="w-50">Type of Construction <input #homeBuild type='text' placeholder="Examples: structural brick or wood frame" value="{{user.homeDetails.homeBuild}}" class='form-control form-control-sm'></label>
             <label class="w-100">Project Ideas
-            <textarea #homeNotes type='text' class='form-control'>{{user.userDetails.homeNotes}}</textarea></label>
+            <textarea #homeNotes type='text' class='form-control'>{{user.homeDetails.homeNotes}}</textarea></label>
         </div>
 
         <div class="form-group">

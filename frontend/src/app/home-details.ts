@@ -1,4 +1,4 @@
-export class UserDetails {
+export class HomeDetails {
 
     id: number;
     homeAge: number;

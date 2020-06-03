@@ -3,12 +3,15 @@ package org.launchcode.constructionestimator.models;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 @Entity
 public class ItemDetails extends AbstractEntity {
 
     @ManyToOne
+    @JoinColumn(name = "project_id", updatable = false, insertable = false)
     @JsonBackReference
     private Project project;
 
@@ -16,8 +19,6 @@ public class ItemDetails extends AbstractEntity {
     private int itemId;
 
     private double quantity;
-
-    private int finalPrice;
 
     public ItemDetails() {}
 
@@ -54,11 +55,4 @@ public class ItemDetails extends AbstractEntity {
         this.quantity = quantity;
     }
 
-    public int getFinalPrice() {
-        return finalPrice;
-    }
-
-    public void setFinalPrice(int finalPrice) {
-        this.finalPrice = finalPrice;
-    }
 }

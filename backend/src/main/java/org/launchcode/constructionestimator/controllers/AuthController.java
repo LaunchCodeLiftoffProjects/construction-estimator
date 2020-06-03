@@ -1,6 +1,7 @@
 package org.launchcode.constructionestimator.controllers;
 
 
+import org.launchcode.constructionestimator.models.HomeDetails;
 import org.launchcode.constructionestimator.models.Role;
 import org.launchcode.constructionestimator.models.User;
 import org.launchcode.constructionestimator.models.data.RoleRepository;

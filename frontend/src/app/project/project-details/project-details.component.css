@@ -1,0 +1,4 @@
+/* if selection is checked but dropdown is blank (null value) */
+.ng-invalid[required] {
+    border-left: 5px solid #b9190e; /* red */
+}
