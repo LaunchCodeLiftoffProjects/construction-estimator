@@ -27,7 +27,7 @@ export class ProjectDetailsComponent implements OnInit {
   project: Project;
   projectURL = "http://localhost:8080/api/project/";
   id: string; // project ID
-  dataLoaded: boolean = false; // to prevent page from rendering before project, items, and selections are ready
+  dataLoaded: boolean = false;
   firstLoad: boolean = false;
 
   private roles: string[];
@@ -37,13 +37,13 @@ export class ProjectDetailsComponent implements OnInit {
   username: string;
   userId: number;
 
-  editingProject: boolean = false; // for editing basic project info at top right of page
+  editingProject: boolean = false;
   changedRoom: boolean = false;
   changedDimensions: number = 0;
 
   itemsArray: Item[]; // to get all possible items (serves dual purpose - info for display and data for calculations)
 
-  selectionArray: Selection[][] = [[], [], []]; // for facilitating data binding with item selections in form
+  selectionArray: Selection[][] = [[], [], []]; // 2-D for separating appliances, fixtures, and finishes
 
   rooms: string[] = ["kitchen", "bath", "living"];
   roomTitles: string[] = ["Kitchen", "Bathroom", "Bedroom/Living/Other"];
@@ -305,7 +305,7 @@ export class ProjectDetailsComponent implements OnInit {
         this.selectionArray[c][i].costs = [lastSaved.costs[0], lastSaved.costs[1], lastSaved.costs[2]];
         this.saveItemDetails(this.selectionArray[c][i]); // save/update itemDetails object in project
         this.calcEstimate(); // recalculate estimate subtotals & total  
-      } // otherwise do not calculate costs or save itemDetails here because item has not yet been selected from options (still null)
+      } 
     } else if (selection.quantity <= 0) {
       this.resetSelection(selection); // but do not overwrite corresponding itemDetails object yet
     } else if (selection.selected !== null) { // quantity is being raised from 1 or higher
@@ -328,7 +328,6 @@ export class ProjectDetailsComponent implements OnInit {
     selection.quantity = 0;
     selection.costs = [0, 0, 0];
     console.log("All input fields for " + selection.type + " reset");
-    // DO NOT save to corresponding itemDetails object
   }
 
 
@@ -351,7 +350,6 @@ export class ProjectDetailsComponent implements OnInit {
         console.log("ItemDetails object for " + selection.type + " added to project");
       }
     }
-    // unchecked items will be handled in buildProject() at form submission
   }
 
   // when changing roomType in the project edit block, reset the itemDetails objects for any selections that the user
@@ -586,10 +584,8 @@ export class ProjectDetailsComponent implements OnInit {
   // called only when submit button is clicked - processes input and sends everything to database
   saveProject() {
 
-    // TODO: make sure original selections are being retained upon save (if editing estimate)
-
     // do not need to save itemDetails of selected items because they've already been updated in project.itemDetails array
-    // BUT do need to reset any types that may have existed in itemDetails array before but are now unchecked at submission
+    // BUT do need to reset any types that maybe have been saved before but now have been unchecked
     let selection: Selection;
     let index: number;
     for (let c = 0; c < 3; c++) { // once for each category subarray of selectionArray
