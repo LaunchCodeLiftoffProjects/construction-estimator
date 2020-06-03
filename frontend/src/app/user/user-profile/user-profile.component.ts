@@ -90,6 +90,11 @@ export class UserProfileComponent implements OnInit {
     this.editUser = false;
   }
 
+  onEditDetailsClose() {
+    console.log("event recieved");
+    this.editDetails = false;
+  }
+
   getEstimate(projectId: number) {
     if (projectId !== Number(this.tokenStorageService.getProject())) {
       this.tokenStorageService.saveProject(projectId);

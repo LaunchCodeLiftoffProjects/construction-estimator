@@ -39,16 +39,20 @@ export class EditUserDetailsComponent implements OnInit {
     // } else {
     //   this.router.navigate(['/login']);
     // }
-    if(this.user.homeDetails === undefined) {
-      this.user.homeDetails = new HomeDetails(null, null, null);
-    }
+    
   }
 
 
   updateUserDetails(homeAge: number, homeBuild: string, homeNotes: string) {
-    this.user.homeDetails.homeAge = homeAge;
-    this.user.homeDetails.homeBuild = homeBuild;
-    this.user.homeDetails.homeNotes = homeNotes;
+
+    if(this.user.homeDetails === null) {
+      this.user.homeDetails = new HomeDetails(homeAge, homeBuild, homeNotes);
+    } else {
+      this.user.homeDetails.homeAge = homeAge;
+      this.user.homeDetails.homeBuild = homeBuild;
+      this.user.homeDetails.homeNotes = homeNotes;
+    }
+
 
     fetch(`http://localhost:8080/api/user/${this.user.id}`, {
       method: 'PUT',
@@ -72,6 +76,7 @@ export class EditUserDetailsComponent implements OnInit {
   }
 
   closeEdit() {
+    console.log("closing edit");
     this.onHouseSubmit.emit(null);
   }
 
