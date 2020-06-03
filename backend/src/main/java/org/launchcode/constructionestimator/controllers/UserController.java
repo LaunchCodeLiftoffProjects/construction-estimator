@@ -1,8 +1,8 @@
 package org.launchcode.constructionestimator.controllers;
 
+import org.launchcode.constructionestimator.models.Project;
 import org.launchcode.constructionestimator.models.User;
-import org.launchcode.constructionestimator.models.HomeDetails;
-import org.launchcode.constructionestimator.models.data.UserDetailsRepository;
+import org.launchcode.constructionestimator.models.data.ProjectRepository;
 import org.launchcode.constructionestimator.models.data.UserRepository;
 import org.launchcode.constructionestimator.security.services.UserAuthService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +12,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Optional;
 
 
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -23,7 +26,7 @@ public class UserController {
     UserRepository userRepository;
 
     @Autowired
-    UserDetailsRepository userDetailsRepository;
+    ProjectRepository projectRepository;
 
     @Autowired
     UserAuthService userAuthService;
@@ -62,6 +65,9 @@ public class UserController {
             } else {
                 user.setPassword(userRepository.findById(id).get().getPassword());
             }
+
+            Optional<Iterable<Project>> projectsListOpt = projectRepository.findByUserId(id);
+            projectsListOpt.ifPresent(projects -> user.setProjects((List<Project>) projects));
 
             user.setRoles(userRepository.findById(id).get().getRoles());
 
