@@ -73,7 +73,7 @@
         "type": "Walls",
         "price": 5,
         "roughMaterial": 6,
-        "labor": 25
+        "labor": 10
     },
     {
         "id": 7,
@@ -153,7 +153,7 @@
         "type": "Lighting",
         "price": 15,
         "roughMaterial": 10,
-        "labor": 80
+        "labor": 50
     },
     {
         "id": 11,
@@ -167,7 +167,7 @@
         "type": "Lighting",
         "price": 100,
         "roughMaterial": 10,
-        "labor": 150
+        "labor": 50
     },
     {
         "id": 12,
@@ -181,7 +181,7 @@
         "type": "Lighting",
         "price": 40,
         "roughMaterial": 10,
-        "labor": 100
+        "labor": 50
     },
     {
         "id": 86,
@@ -193,7 +193,7 @@
         "type": "Lighting",
         "price": 50,
         "roughMaterial": 10,
-        "labor": 75
+        "labor": 50
     },
     {
         "id": 13,
@@ -207,7 +207,7 @@
         "type": "Electrical Outlets",
         "price": 2,
         "roughMaterial": 0,
-        "labor": 50
+        "labor": 25
     },
     {
         "id": 14,
@@ -221,7 +221,7 @@
         "type": "Electrical Outlets",
         "price": 10,
         "roughMaterial": 0,
-        "labor": 50
+        "labor": 30
     },
     {
         "id": 15,
@@ -235,7 +235,7 @@
         "type": "Electrical Switches",
         "price": 1,
         "roughMaterial": 0,
-        "labor": 50
+        "labor": 25
     },
     {
         "id": 85,
@@ -249,7 +249,7 @@
         "type": "Electrical Switches",
         "price": 3,
         "roughMaterial": 0,
-        "labor": 50
+        "labor": 30
     },
     {
         "id": 16,
@@ -285,7 +285,7 @@
         "type": "Bath & Shower",
         "price": 400,
         "roughMaterial": 15,
-        "labor": 1500
+        "labor": 800
     },
     {
         "id": 18,
@@ -297,7 +297,7 @@
         "type": "Bath & Shower",
         "price": 800,
         "roughMaterial": 15,
-        "labor": 1800
+        "labor": 1200
     },
     {
         "id": 19,
@@ -309,7 +309,7 @@
         "type": "Bath & Shower",
         "price": 600,
         "roughMaterial": 15,
-        "labor": 1800
+        "labor": 1500
     },
     {
         "id": 20,
@@ -699,7 +699,7 @@
         "type": "Cabinets, Lower",
         "price": 200,
         "roughMaterial": 0,
-        "labor": 150
+        "labor": 100
     },
     {
         "id": 45,
@@ -713,7 +713,7 @@
         "type": "Cabinets, Upper",
         "price": 200,
         "roughMaterial": 0,
-        "labor": 200
+        "labor": 150
     },
     {
         "id": 46,
@@ -727,7 +727,7 @@
         "type": "Countertop",
         "price": 80,
         "roughMaterial": 0,
-        "labor": 150
+        "labor": 100
     },
     {
         "id": 47,
@@ -741,7 +741,7 @@
         "type": "Countertop",
         "price": 300,
         "roughMaterial": 0,
-        "labor": 450
+        "labor": 250
     },
     {
         "id": 48,
@@ -755,7 +755,7 @@
         "type": "Countertop",
         "price": 350,
         "roughMaterial": 0,
-        "labor": 350
+        "labor": 250
     },
     {
         "id": 49,
@@ -769,7 +769,7 @@
         "type": "Countertop",
         "price": 480,
         "roughMaterial": 0,
-        "labor": 350
+        "labor": 150
     },
     {
         "id": 54,
