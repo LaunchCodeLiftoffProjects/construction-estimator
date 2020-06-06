@@ -46,7 +46,7 @@
                     </div>
                     <div class = "form-group">
                         <input [value]="emailSaved" (input)="emailSaved = email.value" #email ngModel name="email" type='email' placeholder="E-mail Address" 
-                            class="form-control form-control-sm w-100" required pattern="^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" (change)="changedEmail = true;"/>
+                            class="form-control form-control-sm w-100" required pattern="^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$" (change)="changedEmail = true;"/>
                         <div *ngIf="changedEmail && email.validity.typeMismatch" class="alert alert-danger">
                             Please enter your e-mail address - this is what you will use to log in.
                         </div>
