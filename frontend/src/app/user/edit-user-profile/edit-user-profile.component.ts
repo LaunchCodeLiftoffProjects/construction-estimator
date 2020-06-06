@@ -19,6 +19,7 @@ export class EditUserProfileComponent implements OnInit {
   username: string;
   private roles: string[];
   id: number;
+  verify: string;
   
 
   @Output() onUserSubmit = new EventEmitter();
@@ -48,18 +49,12 @@ export class EditUserProfileComponent implements OnInit {
     this.userUrl += this.user.id;
   }
 
-  updateUser(firstName: string, lastName: string, email: string, password: string, verifyPassword: string) {
+  updateUser() {
 
-    if (password !== verifyPassword) {
+    if (this.user.password !== this.verify) {
       this.passwordMismatch = true;
       return;
     }
-
-    this.user.firstName = (firstName !== '') ? firstName : this.user.firstName;
-    this.user.lastName = (lastName !== '') ? lastName : this.user.lastName;
-    this.user.email = (email !== '') ? email : this.user.email;
-    this.user.password = (password !== '') ? password : this.user.password;
-
 
 
     fetch(this.userUrl, {
