@@ -1,36 +1,36 @@
 <div class="mt-5">
     <h5 class="mb-4">Edit Account Information</h5>  
 
-    <form>
+    <form name="form" (ngSubmit)="f.form.valid && updateUser()" #f="ngForm" novalidate>
         <p>Change Name or E-mail Address</p>
         <div class="form-group">
             <div class="input-group w-50">
-                <div><input #firstName="ngModel" [(ngModel)]="user.firstName" minlength="2" type='text' placeholder="{{user.firstName}}" class="form-control form-control-sm w-25" /></div>
-                <div [hidden]="firstName.pristine || firstName.valid" class="alert alert-danger">First Name must be at least 2 characters.</div>
+                <div><input #firstName="ngModel" [(ngModel)]="user.firstName" minlength="2" type='text' placeholder="{{user.firstName}}" class="form-control" /></div>
+                <div *ngIf="firstName.dirty && !firstName.valid" class="alert alert-danger">First Name must be at least 2 characters.</div>
                 &nbsp;&nbsp;
-                <div><input #lastName="ngModel" [(ngModel)]="user.lastName" minlength="2" type='text' placeholder="{{user.lastName}}" class="form-control form-control-sm w-25" /></div>
-                <div [hidden]="lastName.pristine || lastName.valid" class="alert alert-danger">Last Name must be at least 2 characters.</div>
+                <div><input #lastName="ngModel" [(ngModel)]="user.lastName" minlength="2" type='text' placeholder="{{user.lastName}}" class="form-control" /></div>
+                <div *ngIf="lastName.dirty && !lastName.valid" class="alert alert-danger">Last Name must be at least 2 characters.</div>
             </div>
         </div>
         <div class = "form-group mb-4">
             <input #email="ngModel" [(ngModel)]="user.email" pattern="^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" type='email' placeholder="{{user.email}}" class="form-control form-control-sm w-50"/>
-            <div [hidden]="email.pristine || email.valid" class="alert alert-danger">Email must be valid type.</div>
+            <div *ngIf="email.dirty && !email.valid" class="alert alert-danger">Email must be valid type.</div>
         </div>
         <p>Change Password <small>(Leave these fields blank to keep existing password.)</small></p>
         <div class = "form-group">
             <input #password="ngModel" [(ngModel)]="user.password" type='password' minlength="5" placeholder="Update Password" class="form-control form-control-sm w-50" [ngClass]="{ 'is-invalid': password != verifyPassword || passwordMismatch == true}"/>
         </div>
-        <div [hidden]="!(password.touched && verifyPassword.touched && password.is-invalid)" class="alert alert-danger">
+        <div *ngIf="password.touched && verifyPassword.touched && password.invalid" class="alert alert-danger">
             Password must be at least 5 characters.
         </div>
         <div class = "form-group">
             <input #verifyPassword="ngModel" [(ngModel)]="verify" type='password' minlength="5" placeholder="Verify Updated Password" class="form-control form-control-sm w-50" [ngClass]="{ 'is-invalid': password != verifyPassword}"/>
         </div>
-        <div [hidden]="!(password.touched && verifyPassword.touched && passwordMismatch == true)" class="alert alert-danger">
+        <div *ngIf="verifyPassword.dirty && password.dirty && (passwordMismatch || !password.valid)" class="alert alert-danger">
             Passwords do not match.
         </div>
         <div class="form-group mt-4">
-            <span class="badge badge-success pointer"  (click)="updateUser()" role="button">Update Account Details</span>
+            <span class="badge badge-success pointer" (click)="updateUser()" role="button">Update Account Details</span>
         </div>
     </form>
 </div>

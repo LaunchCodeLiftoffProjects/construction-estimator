@@ -20,6 +20,7 @@ export class EditUserProfileComponent implements OnInit {
   private roles: string[];
   id: number;
   verify: string;
+  form: any = {};
   
 
   @Output() onUserSubmit = new EventEmitter();
