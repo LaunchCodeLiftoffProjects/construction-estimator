@@ -21,6 +21,8 @@ export class EditUserProfileComponent implements OnInit {
   id: number;
   verify: string;
   form: any = {};
+  changedPassword: boolean = false;
+  
   
 
   @Output() onUserSubmit = new EventEmitter();
@@ -41,6 +43,7 @@ export class EditUserProfileComponent implements OnInit {
 
       this.username = user.email;
       this.id = user.id;
+      this.verify = this.user.password;
       console.log("id", this.id);
 
     } else {
@@ -51,11 +54,12 @@ export class EditUserProfileComponent implements OnInit {
   }
 
   updateUser() {
-
-    if (this.user.password !== this.verify) {
-      this.passwordMismatch = true;
-      return;
-    }
+    
+      if (this.user.password !== this.verify) {
+        this.passwordMismatch = true;
+        return;
+      }
+    
 
 
     fetch(this.userUrl, {
@@ -82,6 +86,12 @@ export class EditUserProfileComponent implements OnInit {
   closeEdit() {
     console.log("closing edit");
     this.onUserSubmit.emit(null);
+  }
+
+  checkVerify() {
+    if (this.verify == '') {
+      this.passwordMismatch = false;
+    }
   }
 
 
