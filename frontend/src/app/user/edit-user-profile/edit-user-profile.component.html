@@ -30,7 +30,7 @@
             Passwords do not match.
         </div>
         <div class="form-group mt-4">
-            <span class="badge badge-success pointer" (click)="updateUser()" role="button">Update Account Details</span>
+            <button type="submit" [disabled]="!f.form.valid || user.password != verify"><span class="badge badge-success pointer" role="button">Update Account Details</span></button>
         </div>
     </form>
 </div>
