@@ -8,10 +8,10 @@ import { Router } from '@angular/router';
   templateUrl: './edit-user-profile.component.html',
   styleUrls: ['./edit-user-profile.component.css']
 })
+
 export class EditUserProfileComponent implements OnInit {
 
   @Input() user: User;
-  passwordMismatch: boolean = false;
   userUrl = "http://localhost:8080/api/user/";
   isLoggedIn = false;
   showAdminBoard = false;
@@ -21,9 +21,8 @@ export class EditUserProfileComponent implements OnInit {
   id: number;
   verify: string;
   form: any = {};
-  changedPassword: boolean = false;
-  
-  
+  passwordMismatch: boolean = false;
+
 
   @Output() onUserSubmit = new EventEmitter();
 
@@ -53,14 +52,25 @@ export class EditUserProfileComponent implements OnInit {
     this.userUrl += this.user.id;
   }
 
+  checkVerify() {
+    if (this.verify === this.user.password) {
+      this.passwordMismatch = false;
+    } else {
+      this.passwordMismatch = true;
+    }
+  }
+
+  closeEdit() {
+    console.log("closing edit");
+    this.onUserSubmit.emit(null);
+  }
+
   updateUser() {
     
-      if (this.user.password !== this.verify) {
-        this.passwordMismatch = true;
-        return;
-      }
-    
-
+    if (this.user.password !== this.verify) {
+      this.passwordMismatch = true;
+      return;
+    }
 
     fetch(this.userUrl, {
       method: 'PUT',
@@ -81,19 +91,8 @@ export class EditUserProfileComponent implements OnInit {
     }).catch(function (error) {
       console.error('Error:', error);
     });
+    
   }
-
-  closeEdit() {
-    console.log("closing edit");
-    this.onUserSubmit.emit(null);
-  }
-
-  checkVerify() {
-    if (this.verify == '') {
-      this.passwordMismatch = false;
-    }
-  }
-
 
 }
 
