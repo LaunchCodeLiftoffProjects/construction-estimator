@@ -4,10 +4,9 @@
 
     <div class="mb-5">
         <h3 class="text-info">All Projects</h3>
-        <p class="lead">Click on a project name below to view the associated estimate.</p>
     </div>
 
-    <div *ngIf="! projects; else projectListBlock">
+    <div *ngIf="!projects; else projectListBlock">
         <p class="lead">Hey there! You do not have any projects yet.<br />
             Why not <a class="text-info" [routerLink]="'/project/create'">create</a> one?</p>
     </div>
@@ -17,7 +16,7 @@
 
             <div class="col-4">
                 <div class="btn-group-vertical" >
-                    <button class="btn mt-2" [class.btn-outline-primary]="project !== selectedProject" [class.btn-info]="project === selectedProject" *ngFor="let project of projects; let index = p" (click)="selectedProject = setSelectedProject(project)">
+                    <button class="btn mt-2" [class.btn-outline-primary]="project !== selectedProject" [class.btn-info]="project === selectedProject" *ngFor="let project of projects; let index = p" (click)="selectedProject = setSelectedProject(project); doDelete = false">
                         {{project.name}}
                     </button>
                     <h5 class="text-info mt-3">+ <a class="text-info" [routerLink]="'/project/create'">New Project</a></h5>
@@ -26,45 +25,57 @@
 
             <div class="col-8">
                     
-                    <div class="text-left" *ngIf="selectedProject !== null" >
-                        <h4 class="text-info mb-3">Estimate for {{selectedProject.name}}</h4>
-                        <table class="lead">
-                            <tr>
-                                <td class="category">Appliances</td>
-                                <td class="amount">${{selectedProject.estimate.appliancesCost}} USD</td>
-                            </tr>
-                            <tr> 
-                                <td class="category">Fixtures</td> 
-                                <td class="amount">${{selectedProject.estimate.fixturesCost}} USD</td>
-                            </tr>
-                            <tr> 
-                                <td class="category">Finishes</td> 
-                                <td class="amount">${{selectedProject.estimate.finishesCost}} USD</td>
-                            </tr>                            <tr> 
-                                <td class="category">Rough Materials</td> 
-                                <td class="amount">${{selectedProject.estimate.materialsCost}} USD</td>
-                            </tr>                            <tr> 
-                                <td class="category">Labor</td> 
-                                <td class="amount">${{selectedProject.estimate.laborCost}} USD</td>
-                            </tr>
-                            <tr class="text-info"> 
-                                <td class="category">TOTAL</td> 
-                                <td class="amount">${{selectedProject.estimate.totalCost}} USD</td>
-                            </tr>
-                        </table>
-                        <div class="text-right w-75 mt-3">
-                            <button class="btn btn-sm btn-info" [routerLink]="'/project/add-details/' + selectedProject.id">Update Estimate</button>
-                        </div>
+                <div *ngIf="projects && selectedProject === null">
+                    <p class="lead">Click on a project name to view its estimate.</p>
+                </div>
 
-                        <div class="text-right w-75 mt-3">
-                            <p [hidden]="doDelete" class="badge badge-primary mt-3 pointer" role="button" (click)="doDelete = true" >Delete {{selectedProject.name}}</p>
-                            <br>
-                            <h5 [hidden]="!doDelete" class="text text-info">Are you sure? This cannot be undone.</h5>
-                            <h5 role="button" class="badge badge-primary mt-3 pointer" [hidden]="!doDelete" (click)="deleteProject(selectedProject.id)">Delete</h5> <br>
-                            <h5 role="button" class="badge badge-primary mt-3 pointer" [hidden]="!doDelete" (click)="doDelete = false">Never mind!</h5>
-                        </div>
-
+                <div class="text-left" *ngIf="selectedProject !== null" >
+                    <h4 class="mb-3" [class.text-info]="!doDelete" [class.text-muted]="doDelete">Estimate for {{selectedProject.name}}</h4>
+                    <table class="lead" [class.text-muted]="doDelete">
+                        <tr>
+                            <td class="category">Appliances</td>
+                            <td class="amount">${{selectedProject.estimate.appliancesCost}} USD</td>
+                        </tr>
+                        <tr> 
+                            <td class="category">Fixtures</td> 
+                            <td class="amount">${{selectedProject.estimate.fixturesCost}} USD</td>
+                        </tr>
+                        <tr> 
+                            <td class="category">Finishes</td> 
+                            <td class="amount">${{selectedProject.estimate.finishesCost}} USD</td>
+                        </tr>                            <tr> 
+                            <td class="category">Rough Materials</td> 
+                            <td class="amount">${{selectedProject.estimate.materialsCost}} USD</td>
+                        </tr>                            <tr> 
+                            <td class="category">Labor</td> 
+                            <td class="amount">${{selectedProject.estimate.laborCost}} USD</td>
+                        </tr>
+                        <tr [class.text-info]="!doDelete" [class.text-muted]="doDelete"> 
+                            <td class="category">TOTAL</td> 
+                            <td class="amount">${{selectedProject.estimate.totalCost}} USD</td>
+                        </tr>
+                    </table>
+                    <div class="text-right w-75 mt-3 mb-5">
+                        <button class="btn btn-info btn-sm" [routerLink]="'/project/add-details/' + selectedProject.id" [disabled]="doDelete">Update Estimate</button>
                     </div>
+
+                    <div class="text-right w-75 mt-3">
+                        <div *ngIf="!doDelete">
+                            <p class="badge badge-primary pointer" role="button" (click)="doDelete = true">Delete {{selectedProject.name}}</p>
+                        </div>
+                        <div *ngIf="doDelete" class="mt-5">
+                            <p class="lead text-primary"><span class="text-info">WARNING!</span> Are you sure you want to delete your project?<br />
+                                This cannot be undone.</p>
+                            <div class="btn-group">
+                                <button class="btn btn-info btn-sm mr-2" (click)="deleteProject(selectedProject.id)">Yes, delete {{selectedProject.name}}</button>
+                                <button class="btn btn-primary btn-sm" (click)="doDelete = false">Never mind</button>
+                            </div>
+                        </div>
+                        
+                        
+                    </div>
+
+                </div>
             
             </div>
         </div>
