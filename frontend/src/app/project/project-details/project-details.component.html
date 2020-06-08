@@ -17,37 +17,53 @@
                     <h4>{{project.name}} </h4>
                     <p class="lead">{{roomTitles[rooms.indexOf(project.roomType)]}}<br />
                     {{project.roomLength}}'L x {{project.roomWidth}}'W x {{project.roomHeight}}'H</p>
-                    <span class = "badge badge-info pointer" (click) = "editingProject = true;" role="button">Edit</span>
+                    <button class="btn btn-info btn-sm" (click)="editingProject = true">Edit</button>
                 </div>
 
                 <!--Visible only while editing name, type, and dimensions-->
                 <div *ngIf="editingProject" class="w-100">
                     <h4>Edit Project</h4>
-                    <div class="form-group">
-                        <label class="lead w-75">Project Name <input required #name="ngModel" [(ngModel)]="project.name"
-                                type="text" class="form-control form-control-sm w-100" /></label>
-                        <br />
-                        <span class="lead">Room Type: {{roomTitles[rooms.indexOf(project.roomType)]}} </span>
-                        <div class = "form-group">
-                            <div class="form-check indent-left" *ngFor="let room of rooms; let r = index">
-                                <label class="form-check-label"><input #roomType required minlength="6" [(ngModel)]="project.roomType" (change)="changedRoom = true; saveUncheckedItems();" [value]="rooms[r]" type="radio" class = "form-check-input" />{{roomTitles[r]}}</label>
+                    <form #f="ngForm" validate>
+                        <div class="form-group row justify-content-between">
+
+                            <div class="mt-2 col-6">
+                                <span class="lead">Project Name </span>
+                                <input required #name="ngModel" name="name" [(ngModel)]="project.name" type="text" minlength="3" class="form-control form-control-sm w-100" />
+                                <div *ngIf="name.invalid" class="alert alert-danger">
+                                    Name must be at least 3 characters long.
+                                </div>
+                            </div>
+
+
+                            <div class="mt-2 col-6">
+                                <span class="lead">Room Type</span>
+                                <div class = "form-group">
+                                    <div class="form-check indent-left" *ngFor="let room of rooms; let r = index">
+                                        <label class="form-check-label">
+                                            <input #roomType name="roomType" [(ngModel)]="project.roomType" (change)="changedRoom = true; saveUncheckedItems();" [value]="rooms[r]" type="radio" class="form-check-input"/>{{roomTitles[r]}}
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="form-group">
+                            <div class = "input-group"> 
+                                <label><input #roomLength="ngModel" name="roomLength" [(ngModel)]="project.roomLength" type="number" class="form-control form-control-sm" required (change)="changedDimensions = changedDimensions + 1;" step="0.1" min='1' [appMinVal]="0.1"/> Length (ft.)</label>
+                                <label><input #roomWidth="ngModel" name="roomWidth" [(ngModel)]="project.roomWidth" type="number" class="form-control form-control-sm" required (change)="changedDimensions = changedDimensions + 1;" step="0.1" min='1' [appMinVal]="0.1"/> Width (ft.)</label>
+                                <label><input #roomHeight="ngModel" name="roomHeight" [(ngModel)]="project.roomHeight" type="number" class="form-control form-control-sm" required (change)="changedDimensions = changedDimensions + 1;" step="0.1" min='1' [appMinVal]="0.1"/> Ceiling Height (ft.)</label>
+                            </div>
+                            <div *ngIf="roomLength.invalid || roomWidth.invalid || roomHeight.invalid"
+                                class="alert alert-danger">
+                                All room dimensions must be numbers greater than zero.
                             </div>
                         </div>
-                    </div>
-                    <div class="form-group">
-                        <div class = "input-group"> 
-                            <label><input #roomLength="ngModel" [(ngModel)]="project.roomLength" type="number" class="form-control form-control-sm" required (change)="changedDimensions = changedDimensions + 1;" step="0.1" min='1' [appMinVal]="0.1"/> Length (ft.)</label>
-                            <label><input #roomWidth="ngModel" [(ngModel)]="project.roomWidth" type="number" class="form-control form-control-sm" required (change)="changedDimensions = changedDimensions + 1;" step="0.1" min='1' [appMinVal]="0.1"/> Width (ft.)</label>
-                            <label><input #roomHeight="ngModel" [(ngModel)]="project.roomHeight" type="number" class="form-control form-control-sm" required (change)="changedDimensions = changedDimensions + 1;" step="0.1" min='1' [appMinVal]="0.1"/> Ceiling Height (ft.)</label>
-                        </div>
-                        <div *ngIf="(project.roomHeight < 1 || project.roomLength < 1 || project.roomWidth < 1)"
-                            class="alert alert-danger">
-                            All room dimensions must be valid numbers greater than zero.
-                        </div>
-                    </div>
-                    <span class="badge badge-success pointer" (click) = "editingProject = false; changedDimensions = 0; calcMeasurements(); buildSelectionArray();" role="button" >Done Editing</span>
-                </div>
 
+                        <button class="btn btn-success btn-sm mr-2" (click) = "editingProject = false; changedDimensions = 0; calcMeasurements(); buildSelectionArray()" [disabled]="name.invalid || roomLength.invalid || roomWidth.invalid || roomHeight.invalid">Done Editing</button>
+
+                    </form>
+                </div>
             </div>
         </div>
     </div>
