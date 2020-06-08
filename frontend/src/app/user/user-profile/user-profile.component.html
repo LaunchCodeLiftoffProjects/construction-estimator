@@ -10,7 +10,7 @@
         <h4>Account Information</h4>  
         <p class="lead">{{user.firstName}} {{user.lastName}}<br />
         {{user.email}}</p>
-        <span (click)="editProfile()" class="badge badge-info pointer" role="button">Edit Account Details</span>
+        <button (click)="editProfile()" class="btn btn-info btn-sm">Edit Account Details</button>
     </div>
 
     <ng-template #editUserBlock>
@@ -23,10 +23,10 @@
         <ng-template #userDetailsBlock>
             <p class="lead">Year Built: {{user.homeDetails.homeAge}}<br />
             Construction: {{user.homeDetails.homeBuild}}</p>
-            <p><span class="lead">Notes:</span><br /> 
+            <p><span class="lead">Project Ideas:</span><br /> 
             {{user.homeDetails.homeNotes}}</p>
         </ng-template>
-        <span (click)="editHomeDetails()" class="badge badge-info pointer" role="button">Edit Home Details</span>
+        <button (click)="editHomeDetails()" class="btn btn-info btn-sm">Edit Home Details</button>
     </div>
 
     <ng-template #editDetailsBlock>

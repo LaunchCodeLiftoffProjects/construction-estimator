@@ -36,9 +36,9 @@
                     </div>
                     <div class="form-group">
                         <div class = "input-group"> 
-                            <label><input #roomLength="ngModel" [(ngModel)]="project.roomLength" type="number" class="form-control form-control-sm" required (change)="changedDimensions = changedDimensions + 1;" step="0.1" min='1' /> Length (ft.)</label>
-                            <label><input #roomWidth="ngModel" [(ngModel)]="project.roomWidth" type="number" class="form-control form-control-sm" required (change)="changedDimensions = changedDimensions + 1;" step="0.1" min='1' /> Width (ft.)</label>
-                            <label><input #roomHeight="ngModel" [(ngModel)]="project.roomHeight" type="number" class="form-control form-control-sm" required (change)="changedDimensions = changedDimensions + 1;" step="0.1" min='1' /> Ceiling Height (ft.)</label>
+                            <label><input #roomLength="ngModel" [(ngModel)]="project.roomLength" type="number" class="form-control form-control-sm" required (change)="changedDimensions = changedDimensions + 1;" step="0.1" min='1' [appMinVal]="0.1"/> Length (ft.)</label>
+                            <label><input #roomWidth="ngModel" [(ngModel)]="project.roomWidth" type="number" class="form-control form-control-sm" required (change)="changedDimensions = changedDimensions + 1;" step="0.1" min='1' [appMinVal]="0.1"/> Width (ft.)</label>
+                            <label><input #roomHeight="ngModel" [(ngModel)]="project.roomHeight" type="number" class="form-control form-control-sm" required (change)="changedDimensions = changedDimensions + 1;" step="0.1" min='1' [appMinVal]="0.1"/> Ceiling Height (ft.)</label>
                         </div>
                         <div *ngIf="(project.roomHeight < 1 || project.roomLength < 1 || project.roomWidth < 1)"
                             class="alert alert-danger">
