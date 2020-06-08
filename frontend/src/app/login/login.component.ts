@@ -24,10 +24,10 @@ export class LoginComponent implements OnInit {
   header: HeaderComponent;
   mySubscription: any;
 
-  imagePaths: string[] = ["/assets/examples/bath_coastal.jpg", "/assets/examples/bath_grey.jpg",
-                          "/assets/examples/bedroom_teal_yellow.jpg", "/assets/examples/kitchen_green.jpg", 
-                          "/assets/examples/living_farmhouse.jpg", "/assets/examples/living_green.jpg", 
-                          "/assets/examples/living_white.jpg"];
+  imagePaths: string[] = ["bath_coastal.jpg", "bath_grey.jpg",
+                          "bedroom_teal_yellow.jpg", "kitchen_green.jpg", 
+                          "living_farmhouse.jpg", "living_green.jpg", 
+                          "living_white.jpg"];
   
   constructor(private authService: AuthService, private tokenStorage: TokenStorageService, private router: Router) {
    

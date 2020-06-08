@@ -27,9 +27,9 @@ export class RegisterComponent implements OnInit {
   id: number;
   passwordMismatch: boolean = false;
 
-  imagePaths: string[] = ["/assets/examples/bath_tan.jpg", "/assets/examples/bedroom_chevron.jpg",
-                          "/assets/examples/bedroom_luxe.jpg", "/assets/examples/kitchen_grey.jpg",
-                          "/assets/examples/kitchen_white.jpg", "/assets/examples/living_industrial.jpg"];
+  imagePaths: string[] = ["bath_tan.jpg", "bedroom_chevron.jpg",
+                          "bedroom_luxe.jpg", "kitchen_grey.jpg",
+                          "kitchen_white.jpg", "living_industrial.jpg"];
 
   constructor(private route: ActivatedRoute, private router: Router, private authService: AuthService, private tokenStorage: TokenStorageService) { }
 

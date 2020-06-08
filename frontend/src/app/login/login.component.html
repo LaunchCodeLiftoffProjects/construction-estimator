@@ -66,7 +66,7 @@
         <div class="mt-5" id="photos" class="carousel slide" data-ride="carousel" data-interval=4500>
           <div class="carousel-inner">
             <div class="carousel-item" [class.active]="i===0" *ngFor="let imagePath of imagePaths; let i=index">
-              <img class="d-block w-100" [src]=imagePaths[i] />
+              <img class="d-block w-100" [src]="'/assets/examples/' + imagePaths[i]" />
             </div>
           </div>
         </div>
