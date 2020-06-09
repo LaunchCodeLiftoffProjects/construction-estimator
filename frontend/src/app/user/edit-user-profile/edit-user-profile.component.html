@@ -1,32 +1,36 @@
 <div class="mt-5">
     <h5 class="mb-4">Edit Account Information</h5>  
 
-    <form>
+    <form name="form" (ngSubmit)="f.form.valid && updateUser()" #f="ngForm" validate>
         <p>Change Name or E-mail Address</p>
         <div class="form-group">
             <div class="input-group w-50">
-                <input #firstName="ngModel" [(ngModel)]="user.firstName" type='text' placeholder="{{user.firstName}}" class="form-control form-control-sm w-25" />
+                <div><input #firstName="ngModel" name="firstname" [(ngModel)]="user.firstName" minlength="2" type='text' placeholder="{{user.firstName}}" class="form-control" /></div>
+                <div *ngIf="firstName.dirty && firstName.touched && !firstName.valid" class="alert alert-danger">First Name must be at least 2 characters.</div>
                 &nbsp;&nbsp;
-                <input #lastName="ngModel" [(ngModel)]="user.lastName" type='text' placeholder="{{user.lastName}}" class="form-control form-control-sm w-25" />
+                <div><input #lastName="ngModel" name="lastname" [(ngModel)]="user.lastName" minlength="2" type='text' placeholder="{{user.lastName}}" class="form-control" /></div>
+                <div *ngIf="lastName.dirty && lastName.touched && !lastName.valid" class="alert alert-danger">Last Name must be at least 2 characters.</div>
             </div>
         </div>
         <div class = "form-group mb-4">
-            <input #email="ngModel" [(ngModel)]="user.email" type='email' placeholder="{{user.email}}" class="form-control form-control-sm w-50"/>
+            <input #email="ngModel" name="email" [(ngModel)]="user.email" pattern="^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" type='email' placeholder="{{user.email}}" class="form-control form-control-sm w-50"/>
+            <div *ngIf="email.dirty && email.touched && !email.valid" class="alert alert-danger">Email must be valid type.</div>
         </div>
         <p>Change Password <small>(Leave these fields blank to keep existing password.)</small></p>
         <div class = "form-group">
-            <input #password="ngModel" [(ngModel)]="user.password" type='password' minlength="5" placeholder="Update Password" class="form-control form-control-sm w-50" [ngClass]="{ 'is-invalid': password != verifyPassword}"/>
+            <input #password="ngModel" name="password" [(ngModel)]="user.password" type='password' minlength="5" placeholder="Update Password" class="form-control form-control-sm w-50" [ngClass]="{ 'is-invalid': user.password != verify}"/>
+        </div>
+        <div *ngIf="password.touched && verifyPassword.touched && password.invalid" class="alert alert-danger">
+            Password must be at least 5 characters.
         </div>
         <div class = "form-group">
-            <input #password="ngModel" [(ngModel)]="user.password" type='password' minlength="5" placeholder="Update Password" class="form-control form-control-sm w-50" [ngClass]="{ 'is-invalid': password != verifyPassword}"/>
-            <input #verifyPassword type='password' placeholder="Verify Updated Password" class="form-control form-control-sm w-50" />
-
+            <input #verifyPassword="ngModel" name="verifypassword" (change)="checkVerify()" [(ngModel)]="verify" type='password' minlength="5" placeholder="Verify Updated Password" class="form-control form-control-sm w-50" [ngClass]="{ 'is-invalid': user.password != verify}"/>
         </div>
-        <div [hidden]="!(password.touched && verifyPassword.touched && (password.is-invalid || verifyPassword.is-invalid))" class="alert alert-danger">
+        <div [hidden]="!((verifyPassword.dirty && password.dirty && verifyPassword.touched && !password.valid) || passwordMismatch)" class="alert alert-danger">
             Passwords do not match.
         </div>
         <div class="form-group mt-4">
-            <span class="badge badge-success pointer"  (click)="updateUser(firstName.value, lastName.value, email.value, password.value, verifyPassword.value)" role="button">Update Account Details</span>
+            <button type="submit" [disabled]="!f.form.valid || user.password != verify"><span class="badge badge-success pointer" role="button">Update Account Details</span></button>
         </div>
     </form>
 </div>
