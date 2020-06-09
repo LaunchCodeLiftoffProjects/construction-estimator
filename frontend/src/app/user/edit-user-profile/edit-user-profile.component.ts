@@ -2,6 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { User } from 'src/app/user';
 import { TokenStorageService } from 'src/app/_services/token-storage.service';
 import { Router } from '@angular/router';
+import { AuthService } from 'src/app/_services/auth.service';
 
 @Component({
   selector: 'app-edit-user-profile',
@@ -19,11 +20,13 @@ export class EditUserProfileComponent implements OnInit {
   username: string;
   private roles: string[];
   id: number;
+  isLoginFailed: boolean;
+  errorMessage: string;
   
 
   @Output() onUserSubmit = new EventEmitter();
 
-  constructor(private router: Router, private tokenStorageService: TokenStorageService) { }
+  constructor(private authService: AuthService, private router: Router, private tokenStorageService: TokenStorageService) { }
 
   ngOnInit() {
     this.isLoggedIn = !!this.tokenStorageService.getToken();
@@ -81,7 +84,25 @@ export class EditUserProfileComponent implements OnInit {
     }).catch(function (error) {
       console.error('Error:', error);
     });
+
+
+  this.authService.login(this.user).subscribe(
+    data => {
+      this.tokenStorageService.saveToken(data.token);
+      this.tokenStorageService.saveUser(data);
+      console.log(data.token);
+      this.isLoginFailed = false;
+      this.isLoggedIn = true;
+
+    },
+    err => {
+      this.errorMessage = err.error.message;
+      this.isLoginFailed = true;
+    }
+  );
+
   }
+
 
   closeEdit() {
     console.log("closing edit");
