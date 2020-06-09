@@ -26,7 +26,8 @@ export class CreateProjectComponent implements OnInit {
   showModeratorBoard = false;
   username: string;
   greaterThanZero = new FormControl(0, [Validators.max(100000), Validators.min(1)]);
-
+  rooms: string[] = ["kitchen", "bath", "living"];
+  roomTitles: string[] = ["Kitchen", "Bathroom", "Bedroom/Living/Other"];
 
   constructor(private route: ActivatedRoute, private router: Router, private tokenStorageService: TokenStorageService) { }
 

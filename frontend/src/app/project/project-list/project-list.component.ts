@@ -23,7 +23,7 @@ export class ProjectListComponent implements OnInit {
   selectedProject: Project = null;
   selectedEstimate: Estimate;
   projectId: number = null;
-
+  doDelete: boolean = false;
   constructor(private tokenStorageService: TokenStorageService, private router: Router) {
     
    }
@@ -75,6 +75,9 @@ export class ProjectListComponent implements OnInit {
           refreshProject.push(project);
           if (project.id === this.projectId) {
             this.selectedProject = project;
+            if (this.selectedProject.estimate === null) {
+              this.selectedProject.estimate = new Estimate();
+            }
           }
         });
         this.projects = refreshProject;
@@ -84,7 +87,7 @@ export class ProjectListComponent implements OnInit {
   }
 
 
-  setSelectedProject(project) {
+  setSelectedProject(project: Project): Project {
     if (this.selectedProject !== project) {
       console.log('selected project', project);
       return project;
@@ -94,7 +97,7 @@ export class ProjectListComponent implements OnInit {
     
   }
 
-  checkSelection(project) {
+  checkSelection(project: Project): boolean {
     if (project === this.selectedProject) {
       return true;
     } else {
@@ -102,7 +105,7 @@ export class ProjectListComponent implements OnInit {
     }
   }
 
-  deleteProject(projectId:number) {
+  deleteProject(projectId: number) {
     fetch(this.projectUrl + '/'+ projectId, {
       method: 'DELETE',
       headers: {

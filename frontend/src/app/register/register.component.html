@@ -13,7 +13,7 @@
                 <div class="mt-5" id="photos" class="carousel slide" data-ride="carousel" data-interval=4500>
                     <div class="carousel-inner">
                         <div class="carousel-item" [class.active]="i===0" *ngFor="let imagePath of imagePaths; let i=index">
-                            <img class="d-block w-100" [src]=imagePaths[i] />
+                            <img class="d-block w-100" [src]="'/assets/examples/' + imagePaths[i]" />
                         </div>
                     </div>
                 </div>
@@ -25,63 +25,48 @@
 
             <!--Register form block-->
             <div class="container col-6">
-                <h3 class="text-info mt-5">Create an Account</h3>
-                <br />
-                <form name="userForm" (ngSubmit)='userForm.form.valid && saveUser(firstName, lastName, email.value, password, verifyPassword)' #userForm="ngForm">
-                    <br />
-                    <h5 class="mb-3">Get ready for your first project!</h5>
+                <h3 class="text-info mb-5">Create an Account</h3>
+                <h5 class="mb-3">Get ready for your first project!</h5>
+
+                <form name="form" (ngSubmit)="f.form.valid && updateUser()" #f="ngForm" validate>
+
                     <div class="form-group">
-                        <input name="firstName" [(ngModel)]="firstName" type='text' placeholder="First Name" class="form-control form-control-sm w-100" required
-                            minlength="2" (change)="changedFirst = true;" />
-                        <div *ngIf="changedFirst && (firstName == null || firstName.length < 2)" class="alert alert-danger">
-                            First name must be at least 2 characters long!
+                        <input #firstName="ngModel" name="firstName" [(ngModel)]="user.firstName" required minlength="2" type='text' placeholder="First Name" class="form-control form-control-sm w-100" />
+                        <div *ngIf="firstName.dirty && firstName.touched && firstName.invalid" class="alert alert-danger w-100">
+                            First name must be at least 2 characters.
                         </div>
                     </div>
                     <div class="form-group">
-                        <input name="lastName" [(ngModel)]="lastName" type='text' placeholder="Last Name" class="form-control form-control-sm w-100" 
-                        required (change)="changedLast = true;" minlength="2"/>
-                        <div *ngIf="changedLast && (lastName == null || lastName.length < 2)" class="alert alert-danger">
-                            Last name must be at least 2 characters long!
+                        <input #lastName="ngModel" name="lastName" [(ngModel)]="user.lastName" required minlength="2" type='text' placeholder="Last Name" class="form-control form-control-sm w-100" />
+                        <div *ngIf="lastName.dirty && lastName.touched && lastName.invalid" class="alert alert-danger w-100">
+                            Last name must be at least 2 characters.
                         </div>
                     </div>
                     <div class = "form-group">
-                        <input [value]="emailSaved" (input)="emailSaved = email.value" #email ngModel name="email" type='email' placeholder="E-mail Address" 
-                            class="form-control form-control-sm w-100" required pattern="^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" (change)="changedEmail = true;"/>
-                        <div *ngIf="changedEmail && email.validity.typeMismatch" class="alert alert-danger">
-                            Please enter your e-mail address - this is what you will use to log in.
+                        <input #email="ngModel" name="email" [(ngModel)]="user.email" required pattern="^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$" type='email' placeholder="E-mail Address" class="form-control form-control-sm w-100"/>
+                        <div *ngIf="email.dirty && email.touched && email.invalid" class="alert alert-danger w-100">
+                            Must be a valid e-mail format. <i>Example: name@domain.com</i>
                         </div>
                     </div>
                     <div class = "form-group">
-                        <input name="password" [(ngModel)]="password" type='password' placeholder="Password" class="form-control form-control-sm w-100" 
-                        required (change)="changedPassword = true;" minlength="5" [ngClass]="{ 'is-invalid': password != verifyPassword}"/>
-                        <div *ngIf="changedPassword && (password == null || password.length < 5)" class="alert alert-danger">
-                            Password is required and must be at least 5 characters long.
+                        <input #password="ngModel" name="password" [(ngModel)]="user.password" type='password' required minlength="5" placeholder="Update Password" class="form-control form-control-sm w-100" [class.is-invalid]="(password.touched && password.invalid) || passwordMismatch"/>
+                        <div *ngIf="password.touched && password.invalid" class="alert alert-danger w-100">
+                            Password must be at least 5 characters.
                         </div>
                     </div>
                     <div class = "form-group">
-                        <input name="verifypassword" [(ngModel)]="verifyPassword" type='password' placeholder="Verify Password" 
-                            class="form-control form-control-sm w-100" required (change)="changedVerifyPassword = true;" minlength="5" 
-                            [ngClass]="{'is-invalid': password != verifyPassword}" />
-                        <div *ngIf="changedVerifyPassword && changedPassword && (password != verifyPassword)" class="alert alert-danger">
+                        <input #verifyPassword="ngModel" name="verifyPassword" [(ngModel)]="verify" (change)="checkVerify()" type='password' required placeholder="Verify Updated Password" class="form-control form-control-sm w-100" [class.is-invalid]="passwordMismatch" />
+                        <div *ngIf="password.dirty && verifyPassword.dirty && passwordMismatch" class="alert alert-danger w-100">
                             Passwords do not match.
                         </div>
                     </div>
-
-                    <div class = "form-group">
-                    
-                        <div *ngIf="errorMessage.length > 0" class="alert alert-danger">
-                            {{errorMessage}}
-                        </div>
-                    </div>
-                    <div>
-                        <p>Already registered? <a class="text-info text-bold" [routerLink]="'/login'">Login here.</a></p>
-                    </div>
-
-                    <div class="form-group text-right">
-                        <button class="btn btn-info btn-sm" type="submit" [disabled]="!userForm.form.valid || password != verifyPassword">Get Started</button>
+            
+                    <div class="form-group mt-4 text-right">
+                        <button type="submit" class="btn btn-success btn-sm" [disabled]="!f.form.valid || passwordMismatch">Get Started</button>
                     </div>
                 </form>
             </div>
+
         </div>
     </div>
 </div>

@@ -10,7 +10,7 @@
       <!--Login block-->
       <div class="container col-6">
 
-        <p class="lead">Welcome to Quick&bull;Est, where homeowners create custom projects and get realistic estimates 
+        <p class="lead">Welcome to QuickEst, where homeowners create custom projects and get realistic estimates 
           for every potential cost. Whatever you can dream up &mdash; we can estimate it!</p> 
           <p><a [routerLink]="'/about'" class="text-info">LEARN MORE >>></a></p>
 
@@ -66,7 +66,7 @@
         <div class="mt-5" id="photos" class="carousel slide" data-ride="carousel" data-interval=4500>
           <div class="carousel-inner">
             <div class="carousel-item" [class.active]="i===0" *ngFor="let imagePath of imagePaths; let i=index">
-              <img class="d-block w-100" [src]=imagePaths[i] />
+              <img class="d-block w-100" [src]="'/assets/examples/' + imagePaths[i]" />
             </div>
           </div>
         </div>

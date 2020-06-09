@@ -1,13 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { User } from 'src/app/user'
-import { HomeDetails } from '../home-details';
-import { Project } from 'src/app/project';
-import { EmailValidator } from '@angular/forms';
-import { Router, RouterModule, ActivatedRoute, ParamMap, NavigationExtras } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { AuthService } from '../_services/auth.service';
 import { TokenStorageService } from '../_services/token-storage.service';
 
-// jsQuery needed to autoplay carousel when using Angular routing
+// jQuery needed to autoplay carousel when using Angular routing
 declare var $: any;
 
 @Component({
@@ -15,6 +12,7 @@ declare var $: any;
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.css']
 })
+
 export class RegisterComponent implements OnInit {
   emailSaved: string;
   isSuccessful = false;
@@ -23,13 +21,15 @@ export class RegisterComponent implements OnInit {
   isLoggedIn = false;
   isLoginFailed = false;
   roles: string[] = [];
-
   id: number;
   passwordMismatch: boolean = false;
+  user: User = new User("", "", "", "", null, []); // for ngModel binding
+  verify: string;
+  form: any = {};
 
-  imagePaths: string[] = ["/assets/examples/bath_tan.jpg", "/assets/examples/bedroom_chevron.jpg",
-                          "/assets/examples/bedroom_luxe.jpg", "/assets/examples/kitchen_grey.jpg",
-                          "/assets/examples/kitchen_white.jpg", "/assets/examples/living_industrial.jpg"];
+  imagePaths: string[] = ["bath_tan.jpg", "bedroom_chevron.jpg",
+                          "bedroom_luxe.jpg", "kitchen_grey.jpg",
+                          "kitchen_white.jpg", "living_industrial.jpg"];
 
   constructor(private route: ActivatedRoute, private router: Router, private authService: AuthService, private tokenStorage: TokenStorageService) { }
 
@@ -50,22 +50,28 @@ export class RegisterComponent implements OnInit {
 
   }
 
+  checkVerify() {
+    if (this.verify === this.user.password) {
+      this.passwordMismatch = false;
+    } else {
+      this.passwordMismatch = true;
+    }
+  }
 
   //FIGURE OUT IF YOU'RE GOING TO REPLACE THIS WITH A CALL TO AUTHSERVICE AND A RESPONSE PARSE
-  saveUser(firstName: string, lastName: string, email: string, password: string, verifyPassword: string) {
+  saveUser() {
 
     // don't submit form if passwords mismatch
-    if(password !== verifyPassword) {
+    if(this.user.password !== this.verify) {
       this.passwordMismatch = true;
       console.log("password mismatch")
       return;
     }
 
-    let user = new User(firstName, lastName, email, password, null, []);
-    console.log("saved user", user);
+    // values are already saved in user object due to ngModel binding
+    console.log("saved user", this.user);
 
-
-    this.authService.register(user).subscribe(
+    this.authService.register(this.user).subscribe(
       data => {
         console.log(data);
         
