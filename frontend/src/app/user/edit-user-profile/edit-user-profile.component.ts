@@ -74,32 +74,21 @@ export class EditUserProfileComponent implements OnInit {
         'Authorization': 'Barer ' + this.tokenStorageService.getToken()
       },
       body: JSON.stringify(this.user),
-    }).then(function (response) {
+    }).then(function (user) {
 
+     
+      this.tokenStorageService.saveToken(user.token);
+      this.tokenStorageService.saveUser(user);
+      console.log(user.token);
+      this.isLoginFailed = false;
+      this.isLoggedIn = true;
       this.closeEdit();
-      return response;
 
     }.bind(this)).then(function (data) {
       console.log('Success:', data);
     }).catch(function (error) {
       console.error('Error:', error);
     });
-
-
-  this.authService.login(this.user).subscribe(
-    data => {
-      this.tokenStorageService.saveToken(data.token);
-      this.tokenStorageService.saveUser(data);
-      console.log(data.token);
-      this.isLoginFailed = false;
-      this.isLoggedIn = true;
-
-    },
-    err => {
-      this.errorMessage = err.error.message;
-      this.isLoginFailed = true;
-    }
-  );
 
   }
 
