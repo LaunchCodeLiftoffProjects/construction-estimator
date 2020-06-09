@@ -72,6 +72,8 @@ export class EditUserProfileComponent implements OnInit {
       return;
     }
 
+    console.log(JSON.stringify(this.user)); // debug
+
     fetch(this.userUrl, {
       method: 'PUT',
       headers: {

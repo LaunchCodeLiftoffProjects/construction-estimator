@@ -7,20 +7,20 @@
         <div class="row form-group justify-content-left">
             <div class="col-4">
                 <input #firstName="ngModel" name="firstName" [(ngModel)]="user.firstName" required minlength="2" type='text' class="form-control form-control-sm w-100" />
-                <div *ngIf="firstName.dirty && firstName.touched && !firstName.valid" class="alert alert-danger">
+                <div *ngIf="firstName.dirty && firstName.touched && firstName.invalid" class="alert alert-danger">
                     First name must be at least 2 characters.
                 </div>
             </div>
             <div class="col-4">
                 <input #lastName="ngModel" name="lastName" [(ngModel)]="user.lastName" required minlength="2" type='text' class="form-control form-control-sm w-100" />
-                <div *ngIf="lastName.dirty && lastName.touched && !lastName.valid" class="alert alert-danger">
+                <div *ngIf="lastName.dirty && lastName.touched && lastName.invalid" class="alert alert-danger">
                     Last name must be at least 2 characters.
                 </div>
             </div>
         </div>
         <div class = "form-group mb-4">
             <input #email="ngModel" name="email" [(ngModel)]="user.email" required pattern="^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$" type='email' class="form-control form-control-sm w-50"/>
-            <div *ngIf="email.dirty && email.touched && !email.valid" class="alert alert-danger w-50">
+            <div *ngIf="email.dirty && email.touched && email.invalid" class="alert alert-danger w-50">
                 Must be a valid e-mail format. <i>Example: name@domain.com</i>
             </div>
         </div>
