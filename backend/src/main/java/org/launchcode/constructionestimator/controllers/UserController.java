@@ -52,7 +52,7 @@ public class UserController {
     @PutMapping("/{userId}")
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<?> updateUser(@RequestBody User user, @PathVariable("userId") int id,
-                                     @RequestHeader HttpHeaders headers) {
+                                        @RequestHeader HttpHeaders headers) {
 
         String headerAuth = headers.getFirst("Authorization");
 
@@ -60,7 +60,7 @@ public class UserController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } else if (userAuthService.doesUserMatch(id, headerAuth)) {
 
-            if(user.getPassword() != null) {
+            if (user.getPassword() != null) {
                 user.setPassword(encoder.encode(user.getPassword()));
             } else {
                 user.setPassword(userRepository.findById(id).get().getPassword());
