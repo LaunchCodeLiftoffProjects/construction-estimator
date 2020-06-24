@@ -20,7 +20,7 @@
             <h5>Select your room type:</h5>
             <div class="form-check indent-left" *ngFor="let room of rooms; let r = index">
                 <label class="form-check-label">
-                    <input #roomType name="roomType" [(ngModel)]="project.roomType" (change)="changedRoom = true; saveUncheckedItems();" [value]="rooms[r]" type="radio" class="form-check-input"/>{{roomTitles[r]}}
+                    <input #roomType name="roomType" [(ngModel)]="project.roomType" [value]="rooms[r]" type="radio" class="form-check-input"/>{{roomTitles[r]}}
                 </label>
             </div>
         </div>

@@ -36,7 +36,6 @@ html, body, app-root {
 }
 
 /* adjust spacing between checkboxes and their labels */
-/* TODO: use input-group to control this instead? */
 .checkbox label, .checkbox input[type=checkbox]{
     margin-left: 30px;
 }

@@ -35,14 +35,19 @@
 
     <div class="mt-5">
         <h4>My Projects</h4>
-        <ng-container  *ngIf="user.projects">
+
+        <div *ngIf="user.projects.length === 0">
+            <p>Hey there! You do not have any projects yet.</p>
+        </div>
+
+        <div *ngIf="user.projects.length > 0">
             <p>Click on a project name to view estimate.</p>
             <div class="btn-group">
                 <ng-container *ngFor="let project of user.projects">
                     <button class="btn btn-primary mt-2 btn-spacer" (click)="getEstimate(project.id)">{{project.name}}</button> 
                 </ng-container>        
             </div>
-        </ng-container>
+        </div>
 
         <h5 class="text-info mt-3 mb-5">+ <a class="text-info" [routerLink]="'/project/create'">New Project</a></h5>
     </div>

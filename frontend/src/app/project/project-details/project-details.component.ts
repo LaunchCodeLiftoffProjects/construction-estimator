@@ -215,6 +215,8 @@ export class ProjectDetailsComponent implements OnInit {
 
   /***** EVENT HANDLERS FOR ITEM SELECTIONS *****/
 
+  // TODO: figure out why estimate is not always updating (dishwasher, disposal)
+
   changeChecked(i: number, c: number) {
     let selection = this.selectionArray[c][i]; // existing object in array
     console.log(selection.type + (selection.checked ? " checked" : " unchecked"));
