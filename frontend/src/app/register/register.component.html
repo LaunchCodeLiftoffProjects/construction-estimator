@@ -28,7 +28,7 @@
                 <h3 class="text-info mb-5">Create an Account</h3>
                 <h5 class="mb-3">Get ready for your first project!</h5>
 
-                <form name="form" (ngSubmit)="f.form.valid && updateUser()" #f="ngForm" validate>
+                <form name="form" (ngSubmit)="f.form.valid && saveUser()" #f="ngForm" validate>
 
                     <div class="form-group">
                         <input #firstName="ngModel" name="firstName" [(ngModel)]="user.firstName" required minlength="2" type='text' placeholder="First Name" class="form-control form-control-sm w-100" />
