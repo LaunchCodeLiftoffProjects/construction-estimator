@@ -242,8 +242,14 @@ export class ProjectDetailsComponent implements OnInit {
       } else {
         this.selectionArray[c][i].selected = lastSaved.selected;
       }
+      // update costs and estimate
       if (this.selectionArray[c][i].selected !== null) {
-        this.selectionArray[c][i].costs = [lastSaved.costs[0], lastSaved.costs[1], lastSaved.costs[2]];
+        if (lastSaved.selected !== null) { 
+            this.selectionArray[c][i].costs = [lastSaved.costs[0], lastSaved.costs[1], lastSaved.costs[2]];
+        } else {
+        let costs = this.calcCosts(this.selectionArray[c][i]);
+        this.selectionArray[c][i].costs = [costs[0], costs[1], costs[2]];
+        }
         this.saveItemDetails(this.selectionArray[c][i]); // save/update itemDetails object in project
         this.calcEstimate(); // recalculate estimate subtotals & total  
       }
@@ -283,12 +289,13 @@ export class ProjectDetailsComponent implements OnInit {
 
   changeQuantity(i: number, c: number) {
     let selection = this.selectionArray[c][i]; // existing object in array
+    let costs;
     console.log("Quantity for " + selection.type + " changed to " + selection.quantity);
     // update other properties with last saved info
     if ((selection.quantity > 0 && !selection.checked) || (selection.quantity < 0 && selection.checked)) {
       let lastSaved: Selection = this.createSelectionObject(selection.type, selection.category);
       this.selectionArray[c][i].checked = true;
-      // assign selected option or leave blank
+      // assign selected option or leave blank if more than one option available
       if (lastSaved.selected === null) {
         let options = this.getOptions(selection.type);
         if (options.length === 1) {
@@ -303,15 +310,18 @@ export class ProjectDetailsComponent implements OnInit {
       if (selection.quantity < 0) {
         this.selectionArray[c][i].quantity = lastSaved.quantity;
       }
-      if (lastSaved.selected !== null) {
+      if (lastSaved.selected !== null) { 
         this.selectionArray[c][i].costs = [lastSaved.costs[0], lastSaved.costs[1], lastSaved.costs[2]];
-        this.saveItemDetails(this.selectionArray[c][i]); // save/update itemDetails object in project
-        this.calcEstimate(); // recalculate estimate subtotals & total  
-      } 
+      } else {
+        costs = this.calcCosts(this.selectionArray[c][i]);
+        this.selectionArray[c][i].costs = [costs[0], costs[1], costs[2]];
+      }
+      this.saveItemDetails(this.selectionArray[c][i]); // save/update itemDetails object in project
+      this.calcEstimate(); // recalculate estimate subtotals & total  
     } else if (selection.quantity <= 0) {
       this.resetSelection(selection); // but do not overwrite corresponding itemDetails object yet
     } else if (selection.selected !== null) { // quantity is being raised from 1 or higher
-      let costs = this.calcCosts(this.selectionArray[c][i]);
+      costs = this.calcCosts(this.selectionArray[c][i]);
       this.selectionArray[c][i].costs = [costs[0], costs[1], costs[2]];
       this.saveItemDetails(this.selectionArray[c][i]); // update itemDetails object in project
       this.calcEstimate(); // recalculate estimate subtotals & total  
